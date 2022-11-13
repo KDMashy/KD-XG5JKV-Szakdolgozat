@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Avatar from "./common/Avatar";
+import Avatar from "../common/Avatar";
 
 function Footer() {
   const [darkMode, setDarkMode] = useState(true);

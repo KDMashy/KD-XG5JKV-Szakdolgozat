@@ -13,6 +13,7 @@ interface Props {
   loading?: boolean;
   disabled?: boolean;
   target?: "_blank" | "_self" | "_parent" | "_top";
+  buttonType?: "menu_nolog" | "menu_log" | "default";
 }
 
 function Button({
@@ -27,6 +28,7 @@ function Button({
   loading = false,
   disabled = false,
   target = "_self",
+  buttonType = "default",
 }: Props) {
   const colorize = () => {
     switch (color) {
@@ -41,6 +43,17 @@ function Button({
       case "error":
         return ``;
       case "disabled":
+        return ``;
+    }
+  };
+
+  const getButtonType = () => {
+    switch (buttonType) {
+      case "default":
+        return ``;
+      case "menu_nolog":
+        return `2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px]`;
+      case "menu_log":
         return ``;
     }
   };
@@ -63,7 +76,7 @@ function Button({
               ? "rounded-md"
               : "rounded-full"
             : "rounded-md"
-        } transition ease-in-out delay-150 hover:bg-opacity-50 hover:text-light-200`}
+        } ${getButtonType()} transition ease-in-out delay-150 hover:bg-opacity-50 hover:text-light-200`}
         onMouseDown={clickHandler && handleClick}
         disabled={disabled}
       >

@@ -1,59 +1,12 @@
 import React, { useState } from "react";
-import { LoginTypes } from "../constants/LoginTypes";
-import Avatar from "./common/Avatar";
-import Button from "./common/Button";
+import { LoginTypes } from "../../constants/LoginTypes";
+import { navButtons } from "../../constants/NavButtons";
+import Avatar from "../common/Avatar";
+import Button from "../common/Button";
 
 function Navbar() {
   const [login, setLogin] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
-
-  const navButtons = [
-    {
-      label: "About us",
-      url: "/",
-      type: LoginTypes.No_Login,
-    },
-    {
-      label: "Register",
-      url: "/sign-up",
-      type: LoginTypes.No_Login,
-    },
-    {
-      label: "Login",
-      url: "/sign-in",
-      type: LoginTypes.No_Login,
-    },
-    {
-      label: "Projects",
-      url: "/projects",
-      type: LoginTypes.Login,
-    },
-    {
-      label: "Teams",
-      url: "/teams",
-      type: LoginTypes.Login,
-    },
-    {
-      label: "Profile",
-      url: "/profile",
-      type: LoginTypes.Login,
-    },
-    {
-      label: "Settings",
-      url: "/settings",
-      type: LoginTypes.Login,
-    },
-    {
-      label: "Chat",
-      url: "/chat",
-      type: LoginTypes.Login,
-    },
-    {
-      label: "Logout",
-      url: "/",
-      type: LoginTypes.Login,
-    },
-  ];
 
   const MenuButtons = () => {
     if (!login) {
@@ -65,7 +18,7 @@ function Navbar() {
               label={button?.label}
               route={button?.url}
               type={darkMode ? "dark" : "light"}
-              className="2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px]"
+              buttonType="menu_nolog"
             />
           );
       });
@@ -78,7 +31,7 @@ function Navbar() {
               label={button?.label}
               route={button?.url}
               type={darkMode ? "dark" : "light"}
-              className="2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px]"
+              buttonType="menu_log"
             />
           );
       });

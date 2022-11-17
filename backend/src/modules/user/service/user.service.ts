@@ -89,19 +89,19 @@ export class UserService {
     }
 
     async getUsers() {
-        return this.userModel.find();
+        return await this.userModel.find();
     }
 
-    async findUserByName(username: string): Promise<User>{
-        return this.userModel.findOne({ 
+    async findUserByEmail(email: string): Promise<User>{
+        return await this.userModel.findOne({ 
             where: {
-                username: username
+                email: email
             }
          });
     }
 
     async findUserById(id: number) {
-        return this.userModel.findOne({
+        return await this.userModel.findOne({
             where: {
                 id: id
             }

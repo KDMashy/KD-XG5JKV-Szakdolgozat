@@ -11,8 +11,8 @@ export class AuthService {
         private readonly jwtService: JwtService,    
     ) {}
 
-    async validateUser(username:string, password: string) {
-        const userDB = await this.userService.findUserByName(username);
+    async validateUser(email:string, password: string) {
+        const userDB = await this.userService.findUserByEmail(email);
         if(userDB){
             const matched = comparePassword(password, userDB.password);
             if (matched){
@@ -28,7 +28,10 @@ export class AuthService {
             id: user.id,
             username: user.username,
             email: user.email,
-            password: user.password,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            status: user.status
+            // password: user.password,
         };
         return {
             access_token: this.jwtService.sign(load),

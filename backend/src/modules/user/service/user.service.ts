@@ -1,3 +1,4 @@
+import { Statuses } from './../../constants/Statuses.enum';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { encodePassword } from 'src/modules/utils/bcrypt';
@@ -13,65 +14,57 @@ export class UserService {
     ) {}
 
     async createUser(user: CreateUserDto) {
-        if (
-            user.username.length > 0 &&
-            user.email.length > 0 &&
-            user.password.length > 0
-        ){
-            //Keresés, létezik-e már
-            const findUser = await this.userModel.findOne({ 
-                where: {
-                    username: user.username
-                }
-            });
-            if (findUser){
-                throw new HttpException({
-                    message: 'User already exists',
-                    status: HttpStatus.CONFLICT,
-                }, HttpStatus.CONFLICT);
+        //Keresés, létezik-e már
+        const findUser = await this.userModel.findOne({ 
+            where: {
+                username: user.username
             }
-
-            //Email Regex Check
-            var emailRegex =  /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-            if(!emailRegex.test(user.email)){
-                throw new HttpException({
-                    message: 'User email is not correct',
-                    status: HttpStatus.BAD_REQUEST,
-                }, HttpStatus.BAD_REQUEST);
-            }
-
-            //Password Regex check
-            var passwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-            if(!passwRegex.test(user.password)){
-                throw new HttpException({
-                    message: `User password is not correct, should contain: uppercase letter,  lowercase letter, special case letter, digits, and minimum length of 8`,
-                    status: HttpStatus.BAD_REQUEST,
-                }, HttpStatus.BAD_REQUEST);
-            }
-
-            //Username validation
-            if(user.username.length < 5){
-                throw new HttpException({
-                    message: 'Username is not correct',
-                    status: HttpStatus.BAD_REQUEST,
-                }, HttpStatus.BAD_REQUEST);
-            }
-
-            //Create and Save user
-            const passw = encodePassword(user.password);
-            const newUser = await this.userModel.create({
-                username: user.username,
-                email: user.email,
-                password: passw,
-            });
-            newUser.save();
-            return HttpStatus.CREATED;
-        } else {
+        });
+        if (findUser){
             throw new HttpException({
-                message: 'Missing fields from user registration',
+                message: 'User already exists',
+                status: HttpStatus.CONFLICT,
+            }, HttpStatus.CONFLICT);
+        }
+
+        //Email Regex Check
+        var emailRegex =  /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        if(!emailRegex.test(user.email)){
+            throw new HttpException({
+                message: 'User email is not correct',
                 status: HttpStatus.BAD_REQUEST,
             }, HttpStatus.BAD_REQUEST);
         }
+
+        //Password Regex check
+        var passwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        if(!passwRegex.test(user.password)){
+            throw new HttpException({
+                message: `User password is not correct, should contain: uppercase letter,  lowercase letter, special case letter, digits, and minimum length of 8`,
+                status: HttpStatus.BAD_REQUEST,
+            }, HttpStatus.BAD_REQUEST);
+        }
+
+        //Username validation
+        if(user.username.length < 5){
+            throw new HttpException({
+                message: 'Username is not correct',
+                status: HttpStatus.BAD_REQUEST,
+            }, HttpStatus.BAD_REQUEST);
+        }
+
+        //Create and Save user
+        const passw = encodePassword(user.password);
+        const newUser = await this.userModel.create({
+            username: user.username,
+            email: user.email,
+            password: passw,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            status: Statuses.PENDING
+        });
+        newUser.save();
+        return HttpStatus.CREATED;
     }
 
     async deleteUser(id: number){
@@ -112,7 +105,10 @@ export class UserService {
         var serialized = {
             id: user.id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            first_name: user.first_name,
+            last_naem: user.last_name,
+            status: user.status
         };
         return serialized;
     }

@@ -21,6 +21,16 @@ export class Team extends BaseEntity {
     })
     team_status: string
 
+    @Column({
+        type: 'bigint'
+    })
+    team_creator: number
+
+    @Column({
+        type: 'tinyint'
+    })
+    team_only_creator: number
+
     @CreateDateColumn()
     created_at: string
 

@@ -1,5 +1,3 @@
-import { Tasks } from './../entity/tasks.entity';
-import { ProjectTasks } from './../entity/project_tasks.entity';
 import { Projects } from './../entity/projects.entity';
 import { Project } from './../entity/project.entity';
 import { User } from 'src/modules/user/entity/user.entity';
@@ -16,10 +14,6 @@ export class ProjectService {
         private projectModel: Repository<Project>,
         @InjectRepository(Projects)
         private projectsModel: Repository<Projects>,
-        @InjectRepository(ProjectTasks)
-        private projectTasksModel: Repository<ProjectTasks>,
-        @InjectRepository(Tasks)
-        private tasksModel: Repository<Tasks>,
     ) {}
 
     async index(id: number) {

@@ -10,12 +10,22 @@ export class Badge extends BaseEntity {
     @Column({
         type: 'varchar'
     })
-    label: string
+    badge_label: string
 
     @Column({
         type: 'varchar'
     })
-    status: string
+    badge_status: string
+
+    @Column({
+        type: 'bigint'
+    })
+    badge_creator: number
+    
+    @Column({
+        type: 'tinyint'
+    })
+    badge_only_creator: number
 
     @CreateDateColumn()
     created_at: string

@@ -29,6 +29,16 @@ export class Project extends BaseEntity {
     })
     project_status: string
 
+    @Column({
+        type: 'bigint'
+    })
+    project_creator: number
+
+    @Column({
+        type: 'tinyint'
+    })
+    project_only_creator: number
+
     @CreateDateColumn()
     created_at: string
 

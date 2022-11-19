@@ -12,6 +12,16 @@ export class Tasks extends BaseEntity {
     })
     task_name: string
 
+    @Column({
+        type: 'bigint'
+    })
+    task_creator: number
+
+    @Column({
+        type: 'tinyint'
+    })
+    task_only_creator: number
+
     @OneToMany(() => ProjectTasks, projTasks => projTasks.task, {onDelete: 'CASCADE'})
     project: ProjectTasks[]
 

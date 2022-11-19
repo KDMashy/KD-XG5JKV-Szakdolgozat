@@ -10,13 +10,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { ProjectController } from './controller/project.controller';
 import { ProjectService } from './service/project.service';
+import { BadgeController } from './controller/badge/badge.controller';
+import { TaskController } from './controller/task/task.controller';
+import { BadgeService } from './service/badge/badge.service';
+import { TaskService } from './service/task/task.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Projects, Project, ProjectTasks, Tasks, User, Badge, TaskBadges, ProjectBadge])
   ],
-  controllers: [ProjectController],
-  providers: [ProjectService],
-  exports: [ProjectService]
+  controllers: [ProjectController, BadgeController, TaskController],
+  providers: [ProjectService, BadgeService, TaskService],
+  exports: [ProjectService, BadgeService, TaskService]
 })
 export class ProjectModule {}

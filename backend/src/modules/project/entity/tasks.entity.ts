@@ -1,3 +1,4 @@
+import { UserTasks } from './user_task.entity';
 import { TaskBadges } from './task_badge.entity';
 import { ProjectTasks } from './project_tasks.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -33,4 +34,7 @@ export class Tasks extends BaseEntity {
 
     @OneToMany(() => TaskBadges, taskBadges => taskBadges.task)
     badge: TaskBadges[]
+
+    @OneToMany(() => UserTasks, userTasks => userTasks.task, {onDelete: 'CASCADE'})
+    joined_user: UserTasks[]
 }

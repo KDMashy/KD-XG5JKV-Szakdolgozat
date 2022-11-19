@@ -1,7 +1,9 @@
+import { Statuses } from './../../constants/Statuses.enum';
+import { CreateProjectDto, UpdateProjectDto } from './../dto/project.dto';
 import { Projects } from './../entity/projects.entity';
 import { Project } from './../entity/project.entity';
 import { User } from 'src/modules/user/entity/user.entity';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Body } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -16,7 +18,90 @@ export class ProjectService {
         private projectsModel: Repository<Projects>,
     ) {}
 
-    async index(id: number) {
+    async getAll() {
+        return await this.projectModel.find({
+            relations: [
+                'user_projects',
+                'tasks',
+                'badges',
+                'team',
+                'team.team',
+                'user_projects.user',
+                'badges.badge',
+                'tasks.task',
+                'tasks.task.badge',
+                'tasks.task.badge.badge',
+                'tasks.task.joined_user'
+            ]
+        })
+    }
+    
+    async getProjectById(id: number) {
+        return await this.projectModel.findOne({
+            where: { id: id },
+            relations: [
+                'user_projects',
+                'tasks',
+                'badges',
+                'team',
+                'team.team',
+                'user_projects.user',
+                'badges.badge',
+                'tasks.task',
+                'tasks.task.badge',
+                'tasks.task.badge.badge',
+                'tasks.task.joined_user'
+            ]
+        })
+    }
+
+    async createProject (project: CreateProjectDto) {
+        const newProject = await this.projectModel.create({
+            project_name: project.project_name,
+            project_description: project.project_description,
+            project_creator: project.project_creator,
+            project_only_creator: project.project_only_creator,
+            project_img_url: "",
+            project_status: Statuses.OPEN
+        })
+        let response: Project = await newProject.save()
+
+        if(response) {
+            await this.projectsModel.create({
+                user: project.project_creator,
+                project: response.id
+            }).save() 
+        }
+        return await this.userModel.find({
+            where: {id: project.project_creator},
+            relations: [
+                'projects',
+                'projects.project'
+            ]
+        })
+    }
+
+    async updateProject(project: UpdateProjectDto, id:number) {
+        const editProject: Project = await this.projectModel.findOne({ where: { id: id}})
+        editProject.project_name = project.project_name
+        editProject.project_description = project.project_description
+        editProject.project_only_creator = project.project_only_creator
+        if(project.project_creator) editProject.project_creator = project.project_creator
+        if(project.status) editProject.project_status = project.status === "open" ? Statuses.OPEN : Statuses.CLOSED
+        let response = await editProject.save()
+        return response
+    }
+
+    async deleteProject(id: number) {
+        return await this.projectModel
+            .createQueryBuilder()
+            .delete()
+            .from(Project)
+            .where('id = :id', { id: id })
+            .execute()
+    }
+
+    async getAllUserInfoById(id: number) {
         if(isNaN(id)) throw new HttpException({
             message: 'The given ID is not correct',
             status: HttpStatus.BAD_REQUEST,
@@ -38,40 +123,5 @@ export class ProjectService {
                     'projects.project.team.team'
                 ]
             })
-
-            // .query(`
-            // SELECT
-            //     users.id AS user_id,
-            //     users.email AS user_email,
-            //     users.username AS username,
-            //     users.first_name AS user_first_name,
-            //     users.last_name AS user_last_name,
-            //     users.status AS user_status,
-            //     project.id AS project_id,
-            //     project.project_name AS project_name,
-            //     tasks.id AS task_id
-            // FROM
-            //     users
-            // INNER JOIN projects ON users.id = projects.user_id
-            // INNER JOIN project ON projects.project_id = project.id
-            // INNER JOIN project_tasks ON project.id = project_tasks.project_id
-            // INNER JOIN tasks ON project_tasks.task_id = tasks.id
-            // WHERE
-            //     users.id = ${id}`)
-                
-            // .createQueryBuilder()
-            // .select('users.id')
-            // .addSelect('users.email')
-            // .addSelect('users.first_name')
-            // .addSelect('users.last_name')
-            // .addSelect('users.status')
-            // .select('project.id', 'project_id')
-            // .select('tasks.id', 'task_id')
-            // .innerJoin('projects', 'projects.user_id = users.id')
-            // .innerJoin('project', 'project.id = projects.project_id')
-            // .innerJoin('project_tasks', 'project_tasks.project_id = project.id')
-            // .innerJoin('tasks', 'tasks.id = project_tasks.task_id')
-            // .where('users.id = :id', { id: id})
-            // .getRawMany()
     }
 }

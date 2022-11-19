@@ -1,5 +1,7 @@
 export enum Statuses {
     PENDING = 'pending',
     VERIFIED = 'verified',
-    BANNED = 'banned'
+    BANNED = 'banned',
+    OPEN = 'open',
+    CLOSED = 'closed',
 }

@@ -1,3 +1,4 @@
+import { UserTasks } from './../../project/entity/user_task.entity';
 import { Teams } from './../../team/entity/teams.entity';
 import { Projects } from './../../project/entity/projects.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -49,4 +50,7 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Teams, teams => teams.user, {onDelete: 'CASCADE'})
     teams: Teams[]
+
+    @OneToMany(() => UserTasks, userTasks => userTasks.user, {onDelete: 'CASCADE'})
+    tasks: UserTasks[]
 }

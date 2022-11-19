@@ -8,6 +8,11 @@ import { SessionEntity } from './modules/session/session.entity';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    allowedHeaders: '*',
+    origin: '*',
+    credentials: true
+  });
   // const sessionRepository = getRepository(SessionEntity);
   app.use(session({
     name: process.env.SESSION_NAME,

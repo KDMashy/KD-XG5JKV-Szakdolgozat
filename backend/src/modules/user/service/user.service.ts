@@ -27,28 +27,17 @@ export class UserService {
             }, HttpStatus.CONFLICT);
         }
 
-        //Email Regex Check
-        var emailRegex =  /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-        if(!emailRegex.test(user.email)){
-            throw new HttpException({
-                message: 'User email is not correct',
-                status: HttpStatus.BAD_REQUEST,
-            }, HttpStatus.BAD_REQUEST);
-        }
-
-        //Password Regex check
-        var passwRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
-        if(!passwRegex.test(user.password)){
-            throw new HttpException({
-                message: `User password is not correct, should contain: uppercase letter,  lowercase letter, special case letter, digits, and minimum length of 8`,
-                status: HttpStatus.BAD_REQUEST,
-            }, HttpStatus.BAD_REQUEST);
-        }
-
         //Username validation
         if(user.username.length < 5){
             throw new HttpException({
                 message: 'Username is not correct',
+                status: HttpStatus.BAD_REQUEST,
+            }, HttpStatus.BAD_REQUEST);
+        }
+
+        if(user.password !== user.confirmation){
+            throw new HttpException({
+                message: 'Passwords does not match',
                 status: HttpStatus.BAD_REQUEST,
             }, HttpStatus.BAD_REQUEST);
         }

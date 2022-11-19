@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, Length, IsString } from 'class-validator';
+import { IsNotEmpty, IsEmail, Length, IsString, Matches } from 'class-validator';
 import { Exclude } from 'class-transformer';
 
 export class CreateUserDto {
@@ -12,7 +12,13 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsString()
+    @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)
     password: string;
+
+    @IsNotEmpty()
+    @IsString()
+    @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/)
+    confirmation: string
 
     @IsNotEmpty()
     @IsString()
@@ -28,6 +34,7 @@ export interface IUser {
     username: string;
     email: string;
     password: string;
+    confirmation?: string;
     first_name?: string;
     last_name?: string;
     status?: string;

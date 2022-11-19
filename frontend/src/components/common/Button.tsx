@@ -3,7 +3,14 @@ import React from "react";
 
 interface Props {
   label?: string;
-  color?: "primary" | "secondary" | "disabled" | "succes" | "error" | "warning";
+  color?:
+    | "primary"
+    | "secondary"
+    | "disabled"
+    | "succes"
+    | "error"
+    | "warning"
+    | "switch";
   clickHandler?: any;
   className?: string;
   circuclar?: boolean;
@@ -14,6 +21,7 @@ interface Props {
   disabled?: boolean;
   target?: "_blank" | "_self" | "_parent" | "_top";
   buttonType?: "menu_nolog" | "menu_log" | "default";
+  clickType?: "button" | "submit";
 }
 
 function Button({
@@ -29,6 +37,7 @@ function Button({
   disabled = false,
   target = "_self",
   buttonType = "default",
+  clickType = "button",
 }: Props) {
   const colorize = () => {
     switch (color) {
@@ -44,6 +53,8 @@ function Button({
         return ``;
       case "disabled":
         return ``;
+      case "switch":
+        return `${type === "dark" ? "bg-dark-300" : "bg-light-400"}`;
     }
   };
 
@@ -70,7 +81,9 @@ function Button({
   const ButtonRender = () => {
     return (
       <button
-        className={`px-10 py-3 ${className} ${colorize()} ${
+        className={`px-10 py-3 ${className} ${colorize()} text-dark-100 ${
+          loading || disabled ? "bg-dark-400 text-dark-600" : ""
+        } ${
           circuclar
             ? circuclar && label
               ? "rounded-md"
@@ -78,9 +91,11 @@ function Button({
             : "rounded-md"
         } ${getButtonType()} transition ease-in-out delay-150 hover:bg-opacity-50 hover:text-light-200`}
         onMouseDown={clickHandler && handleClick}
-        disabled={disabled}
+        disabled={disabled || loading}
+        type={clickType}
       >
         {label}
+
         {icon && <></>}
       </button>
     );

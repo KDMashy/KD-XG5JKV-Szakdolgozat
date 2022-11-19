@@ -96,7 +96,7 @@ export class UserService {
             username: user.username,
             email: user.email,
             first_name: user.first_name,
-            last_naem: user.last_name,
+            last_name: user.last_name,
             status: user.status
         };
         return serialized;

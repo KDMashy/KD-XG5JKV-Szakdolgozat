@@ -1,3 +1,5 @@
+import { TeamModule } from './modules/team/team.module';
+import { ProjectModule } from './modules/project/project.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
@@ -12,6 +14,8 @@ import { UserModule } from './modules/user/user.module';
   imports: [
 
     UserModule,
+    ProjectModule,
+    TeamModule,
 
     ConfigModule.forRoot({
       isGlobal: true,

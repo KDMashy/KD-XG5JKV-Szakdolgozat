@@ -1,5 +1,6 @@
-import { Statuses } from './../../constants/Statuses.enum';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Teams } from './../../team/entity/teams.entity';
+import { Projects } from './../../project/entity/projects.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 @Entity('users')
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -36,4 +37,16 @@ export class User extends BaseEntity {
         type: 'varchar',
     })
     status: string
+
+    @CreateDateColumn()
+    created_at: string
+
+    @UpdateDateColumn({ type: "timestamp"})
+    updated_at: number
+
+    @OneToMany(() => Projects, projects => projects.user, {onDelete: 'CASCADE'})
+    projects: Projects[]
+
+    @OneToMany(() => Teams, teams => teams.user, {onDelete: 'CASCADE'})
+    teams: Teams[]
 }

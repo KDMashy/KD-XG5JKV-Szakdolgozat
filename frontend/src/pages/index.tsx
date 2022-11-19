@@ -1,16 +1,14 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
 import { useState } from "react";
 import Divider from "../components/common/Divider";
 import PageSubTitle from "../components/common/PageSubTitle";
 import PageTitle from "../components/common/PageTitle";
 import Paragraph from "../components/common/Paragraph";
 import Container from "../components/Container";
-import styles from "../styles/Home.module.css";
+import { useDarkMode } from "../hooks/useDarkMode";
 
 const Home: NextPage = () => {
-  const [darkMode, setDarkMode] = useState(true);
+  const { darkMode } = useDarkMode();
 
   const GenerateInformations = (list: string[]) => {
     return list.map((item, index) => (

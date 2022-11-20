@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Req, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { AuthenticatedGuard } from 'src/modules/auth/utils/guards/local.guard';
 import { CreateUserDto } from '../dto/user.dto';
 import { UserService } from '../service/user.service';
@@ -9,10 +9,11 @@ export class UserController {
         private readonly userService: UserService
     ) {}
 
-    @Post('register')
-    @HttpCode(201)
-    createUser(@Body() user: CreateUserDto){
-        return this.userService.createUser(user);
+    @UseGuards(AuthenticatedGuard)
+    @Get('')
+    @HttpCode(200)
+    user(@Req() req) {
+        return this.userService.getUser(req)
     }
 
     @UseGuards(AuthenticatedGuard)
@@ -20,6 +21,12 @@ export class UserController {
     @HttpCode(200)
     getUserProfile(@Req() req) {
         return this.userService.getProfile(req.user);
+    }
+
+    @Post('register')
+    @HttpCode(201)
+    createUser(@Body() user: CreateUserDto){
+        return this.userService.createUser(user);
     }
 
     @UseGuards(AuthenticatedGuard)

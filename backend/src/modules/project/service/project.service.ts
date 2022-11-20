@@ -108,7 +108,7 @@ export class ProjectService {
         }, HttpStatus.BAD_REQUEST)
 
         return await this.userModel
-            .find({
+            .findOne({
                 where: {id: id},
                 relations: [
                     'projects', 

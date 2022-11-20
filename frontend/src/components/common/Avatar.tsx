@@ -14,7 +14,7 @@ function Avatar({
   width = "w-[45px]",
   height = "h-[45px]",
   circular = true,
-  image_url = "/assets/images/avatar_placeholder.png",
+  image_url = "",
   user_data = null,
   route,
 }: Props) {
@@ -29,7 +29,11 @@ function Avatar({
           <a>
             <AvatarImage
               key={"user_data_image"}
-              src={image_url}
+              src={
+                image_url === ""
+                  ? "/assets/images/avatar_placeholder.png"
+                  : image_url
+              }
               alt={user_data?.user_name}
             />
           </a>
@@ -39,7 +43,11 @@ function Avatar({
           <a>
             <AvatarImage
               key={"avatar_noData_image"}
-              src={image_url}
+              src={
+                image_url === ""
+                  ? "/assets/images/avatar_placeholder.png"
+                  : image_url
+              }
               alt={"Avatar_image"}
             />
           </a>
@@ -47,7 +55,11 @@ function Avatar({
       ) : (
         <AvatarImage
           key={"avatar_noData_image"}
-          src={image_url}
+          src={
+            image_url === ""
+              ? "/assets/images/avatar_placeholder.png"
+              : image_url
+          }
           alt={"Avatar_image"}
         />
       )}

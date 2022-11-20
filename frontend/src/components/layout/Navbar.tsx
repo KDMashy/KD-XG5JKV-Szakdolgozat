@@ -4,14 +4,19 @@ import { LoginTypes } from "../../constants/LoginTypes";
 import { navButtons } from "../../constants/NavButtons";
 import { API_URL } from "../../constants/url";
 import { useAuth } from "../../hooks/useAuth";
+import { useDarkMode } from "../../hooks/useDarkMode";
 import Avatar from "../common/Avatar";
 import Button from "../common/Button";
 
 function Navbar() {
   const [login, setLogin] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
 
-  const { user } = useAuth();
+  const { darkMode } = useDarkMode();
+
+  const { user } = useAuth({
+    middleware: "guest",
+    redirectIfAuthenticated: false,
+  });
 
   useEffect(() => {
     if (user) {

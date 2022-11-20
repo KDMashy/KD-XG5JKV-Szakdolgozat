@@ -11,6 +11,9 @@ export class CreateBadgeDto {
     @IsNotEmpty()
     badge_only_creator: number
 
+    @IsNotEmpty()
+    badge_color: string
+
     project?: number
     
     task?: number
@@ -22,6 +25,8 @@ export class UpdateBadgeDto {
     badge_creator?: number
 
     badge_only_creator?: number
+
+    badge_color?: string
 
     project?: number
 

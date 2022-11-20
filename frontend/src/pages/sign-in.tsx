@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
+import { useRouter } from "next/router";
 import Loading from "../components/common/Loading";
 import PageTitle from "../components/common/PageTitle";
 import Container from "../components/Container";
@@ -9,11 +10,13 @@ import Button from "../components/common/Button";
 import axios from "axios";
 import CustomForm from "../components/common/form/CustomForm";
 import { useDarkMode } from "../hooks/useDarkMode";
+import { API_URL } from "../constants/url";
 
 function SignIn() {
   const { darkMode } = useDarkMode();
 
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const initialValues = {
     username: "",
@@ -22,15 +25,27 @@ function SignIn() {
 
   const submit = async (values: any) => {
     setLoading(true);
+    let token = "";
     await axios
-      .post(`http://localhost:8000/auth/login`, values)
+      .post(`http://localhost:8000/auth/login`, values, {
+        withCredentials: true,
+      })
       .then((res) => {
         values.username = "";
         values.password = "";
         localStorage.setItem("JWT", res.data?.access_token);
+        token = res.data.access_token;
+        console.log(res);
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
+
+    await axios
+      .get(`${API_URL}/user`, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      })
+      .then((res) => router.push("/auth/projects"));
   };
 
   return (
@@ -53,7 +68,10 @@ function SignIn() {
               touched,
             }) => {
               return (
-                <CustomForm className="container grid grid-cols-6 grid-rows-2 gap-9">
+                <CustomForm
+                  className="container grid grid-cols-6 grid-rows-2 gap-9"
+                  handleSubmit={() => handleSubmit()}
+                >
                   <div className="col-span-4 row-start-1">
                     <CustomInput
                       label="Email"

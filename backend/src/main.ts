@@ -9,11 +9,10 @@ import { SessionEntity } from './modules/session/session.entity';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    allowedHeaders: '*',
-    origin: '*',
+    origin: 'http://localhost:3000',
     credentials: true
   });
-  // const sessionRepository = getRepository(SessionEntity);
+  const sessionRepository = getRepository(SessionEntity);
   app.use(session({
     name: process.env.SESSION_NAME,
     secret: process.env.SESSION_SECRET,
@@ -22,7 +21,7 @@ async function bootstrap() {
     cookie: {
       maxAge: 6000000,
     },
-    // store: new TypeormStore().connect(sessionRepository),
+    store: new TypeormStore().connect(sessionRepository),
   }));
   app.use(passport.initialize());
   app.use(passport.session());

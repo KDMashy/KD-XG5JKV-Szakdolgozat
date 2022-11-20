@@ -18,27 +18,27 @@ export const navButtons = [
   },
   {
     label: "Projects",
-    url: "/projects",
+    url: "/auth/projects",
     type: LoginTypes.Login,
   },
   {
     label: "Teams",
-    url: "/teams",
+    url: "/auth/teams",
     type: LoginTypes.Login,
   },
   {
     label: "Profile",
-    url: "/profile",
+    url: "/auth/profile",
     type: LoginTypes.Login,
   },
   {
     label: "Settings",
-    url: "/settings",
+    url: "/auth/settings",
     type: LoginTypes.Login,
   },
   {
     label: "Chat",
-    url: "/chat",
+    url: "/auth/chat",
     type: LoginTypes.Login,
   },
   {

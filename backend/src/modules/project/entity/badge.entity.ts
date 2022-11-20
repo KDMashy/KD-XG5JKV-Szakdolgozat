@@ -27,6 +27,11 @@ export class Badge extends BaseEntity {
     })
     badge_only_creator: number
 
+    @Column({
+        type: 'varchar'
+    })
+    badge_color: string
+
     @CreateDateColumn()
     created_at: string
 

@@ -4,28 +4,22 @@ import Avatar from "../common/Avatar";
 import Button from "../common/Button";
 
 function Footer() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState<Boolean | any>(null);
 
   const router = useRouter();
 
   useEffect(() => {
-    let mode = localStorage.getItem("darkMode");
-    if (mode) {
-      if (mode === "true") {
+    if (localStorage.getItem("darkMode")) {
+      if (darkMode === true) {
+        localStorage.setItem("darkMode", "true");
         setDarkMode(true);
-      } else {
+      } else if (darkMode === false) {
+        localStorage.setItem("darkMode", "false");
         setDarkMode(false);
+      } else {
+        localStorage.setItem("darkMode", "true");
+        setDarkMode(true);
       }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (darkMode === true) {
-      localStorage.setItem("darkMode", "true");
-      setDarkMode(true);
-    } else {
-      localStorage.setItem("darkMode", "false");
-      setDarkMode(false);
     }
   }, [darkMode]);
 

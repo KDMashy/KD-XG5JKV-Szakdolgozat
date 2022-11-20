@@ -45,6 +45,7 @@ export class BadgeService {
             badge_label: badge.badge_label,
             badge_creator: badge.badge_creator,
             badge_only_creator: badge.badge_only_creator,
+            badge_color: badge.badge_color
         })
         let response: Badge = await newBadge.save()
         if(response) {
@@ -85,6 +86,7 @@ export class BadgeService {
         editBadge.badge_label = badge.badge_label
         editBadge.badge_creator = badge.badge_creator
         editBadge.badge_only_creator = badge.badge_only_creator
+        editBadge.badge_color = badge.badge_color
         let response = await editBadge.save()
         return response
     }

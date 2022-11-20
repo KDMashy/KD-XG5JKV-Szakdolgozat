@@ -1,12 +1,35 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { LoginTypes } from "../../constants/LoginTypes";
 import { navButtons } from "../../constants/NavButtons";
+import { API_URL } from "../../constants/url";
+import { useAuth } from "../../hooks/useAuth";
 import Avatar from "../common/Avatar";
 import Button from "../common/Button";
 
 function Navbar() {
   const [login, setLogin] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      setLogin(true);
+    }
+  }, [user]);
+
+  const logout = async () => {
+    await axios
+      .get(`${API_URL}/auth/logout`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("JWT")}` },
+        withCredentials: true,
+      })
+      .then(() => {
+        localStorage.removeItem("JWT");
+        setLogin(false);
+      });
+  };
 
   const MenuButtons = () => {
     if (!login) {
@@ -32,6 +55,9 @@ function Navbar() {
               route={button?.url}
               type={darkMode ? "dark" : "light"}
               buttonType="menu_log"
+              clickHandler={
+                button?.label === "Logout" ? () => logout() : () => {}
+              }
             />
           );
       });
@@ -39,17 +65,40 @@ function Navbar() {
   };
 
   return (
-    <header className="flex justify-between py-7 pl-7">
-      {!login ? (
-        <>
-          <Avatar width="w-[130px]" height="w-[130px]" circular route="/" />
-          <div className="2xl:w-[100vh] xl:w-[90vh] lg:w-[80vh] w-[70vh] bg-dark-100 xl:pl-24 xl:pr-8 pl-20 pr-5 max-h-[80px] rounded-tl-[50px] rounded-bl-[200px] flex items-center justify-between">
-            {MenuButtons()}
+    <header
+      className={`flex justify-between ${
+        !login
+          ? "py-7 pl-7"
+          : `px-2 h-[180px] overflow-hidden mb-10 ${
+              darkMode ? "bg-dark-700 bg-opacity-30 text-light-400" : ""
+            }`
+      }`}
+    >
+      <>
+        {!login ? (
+          <>
+            <Avatar width="w-[130px]" height="w-[130px]" circular route="/" />
+            <div className="2xl:w-[100vh] xl:w-[90vh] lg:w-[80vh] w-[70vh] bg-dark-100 xl:pl-24 xl:pr-8 pl-20 pr-5 max-h-[80px] rounded-tl-[50px] rounded-bl-[200px] flex items-center justify-between">
+              {MenuButtons()}
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col w-full">
+            <div className="h-[40px] mb-10 flex justify-between">
+              <div className="h-[40px] w-[330px] bg-dark-100 pl-3 rounded-br-[20px]">
+                <h1 className="text-lg font-noto font-bold -mt-1">
+                  {user?.username} - {`${user?.first_name} ${user?.last_name}`}
+                </h1>
+                <h2 className="font-noto font-semibold -mt-2">{user?.email}</h2>
+              </div>
+              <div className="h-[40px] w-[400px] bg-dark-100 rounded-bl-[20px] font-noto text-lg font-bold text-center items-center flex justify-center">
+                NOTIFICATIONS PLACEHOLDER
+              </div>
+            </div>
+            <div className="flex justify-between mb-5">{MenuButtons()}</div>
           </div>
-        </>
-      ) : (
-        <></>
-      )}
+        )}
+      </>
     </header>
   );
 }

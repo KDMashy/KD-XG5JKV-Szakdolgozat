@@ -60,7 +60,10 @@ function SignUp() {
               touched,
             }) => {
               return (
-                <CustomForm className="container grid grid-cols-6 grid-rows-5 gap-9">
+                <CustomForm
+                  className="container grid grid-cols-6 grid-rows-5 gap-9"
+                  handleSubmit={() => handleSubmit()}
+                >
                   <div className="col-span-2 row-start-1">
                     <CustomInput
                       label="Username"

@@ -33,6 +33,18 @@ export const useAuth = ({
     }
   });
 
+  const logout = async () => {
+    await axios
+      .get(`${API_URL}/auth/logout`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("JWT")}` },
+        withCredentials: true,
+      })
+      .then(() => {
+        localStorage.removeItem("JWT");
+        mutate();
+      });
+  };
+
   useEffect(() => {
     if (
       middleware === "guest" &&
@@ -53,5 +65,6 @@ export const useAuth = ({
   return {
     user,
     login,
+    logout,
   };
 };

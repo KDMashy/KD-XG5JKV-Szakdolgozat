@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Formik } from "formik";
+import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
 import Button from "../components/common/Button";
 import CustomForm from "../components/common/form/CustomForm";
@@ -14,6 +15,8 @@ function SignUp() {
   const { darkMode } = useDarkMode();
 
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const initialValues = {
     username: "",
@@ -35,6 +38,7 @@ function SignUp() {
         values.email = "";
         values.password = "";
         values.confirmation = "";
+        router.push("sign-in");
       })
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));

@@ -63,9 +63,11 @@ function Button({
       case "default":
         return ``;
       case "menu_nolog":
-        return `2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px]`;
+        return `2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px] text-dark-100`;
       case "menu_log":
         return `xl:w-[200px] lg:w-[160px] md:w-[120px] w-[100px] h-[70px] text-lg rounded-md bg-dark-100 text-light-400 text-center`;
+      default:
+        return ``;
     }
   };
 
@@ -81,7 +83,7 @@ function Button({
   const ButtonRender = () => {
     return (
       <button
-        className={`md:px-10 md:py-3 ${className} ${colorize()} text-dark-100 ${
+        className={`md:px-10 md:py-3 ${className} ${colorize()}  ${
           loading || disabled ? "bg-dark-400 text-dark-600" : ""
         } ${
           circuclar

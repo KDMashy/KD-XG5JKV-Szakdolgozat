@@ -4,40 +4,27 @@ import { LoginTypes } from "../../constants/LoginTypes";
 import { navButtons } from "../../constants/NavButtons";
 import { API_URL } from "../../constants/url";
 import { useAuth } from "../../hooks/useAuth";
+import { useRouter } from "next/router";
 import { useDarkMode } from "../../hooks/useDarkMode";
 import Avatar from "../common/Avatar";
 import Button from "../common/Button";
 
 function Navbar() {
-  const [login, setLogin] = useState(false);
-
   const { darkMode } = useDarkMode();
 
-  const { user } = useAuth({
+  const router = useRouter();
+
+  const { user, logout } = useAuth({
     middleware: "guest",
     redirectIfAuthenticated: false,
   });
 
   useEffect(() => {
-    if (user) {
-      setLogin(true);
-    }
+    console.log(user);
   }, [user]);
 
-  const logout = async () => {
-    await axios
-      .get(`${API_URL}/auth/logout`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("JWT")}` },
-        withCredentials: true,
-      })
-      .then(() => {
-        localStorage.removeItem("JWT");
-        setLogin(false);
-      });
-  };
-
   const MenuButtons = () => {
-    if (!login) {
+    if (!user) {
       return navButtons.map((button, index) => {
         if (button?.type === LoginTypes.No_Login)
           return (
@@ -72,7 +59,7 @@ function Navbar() {
   return (
     <header
       className={`flex justify-between ${
-        !login
+        !user
           ? "py-7 pl-7"
           : `px-2 h-[180px] overflow-hidden mb-10 ${
               darkMode ? "bg-dark-700 bg-opacity-30 text-light-400" : ""
@@ -80,7 +67,7 @@ function Navbar() {
       }`}
     >
       <>
-        {!login ? (
+        {!user ? (
           <>
             <Avatar width="w-[130px]" height="w-[130px]" circular route="/" />
             <div className="2xl:w-[100vh] xl:w-[90vh] lg:w-[80vh] w-[70vh] bg-dark-100 xl:pl-24 xl:pr-8 pl-20 pr-5 max-h-[80px] rounded-tl-[50px] rounded-bl-[200px] flex items-center justify-between">

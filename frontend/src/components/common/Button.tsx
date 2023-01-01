@@ -28,7 +28,7 @@ function Button({
   label,
   color = "primary",
   clickHandler,
-  className,
+  className = "",
   circuclar,
   icon,
   type = "dark",

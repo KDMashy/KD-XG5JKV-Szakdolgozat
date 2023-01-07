@@ -8,6 +8,7 @@ import { CustomInput } from "../components/common/form/CustomInput";
 import Loading from "../components/common/Loading";
 import PageTitle from "../components/common/PageTitle";
 import Container from "../components/Container";
+import { API_URL } from "../constants/url";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { registrationValidation } from "../validations";
 
@@ -30,7 +31,7 @@ function SignUp() {
   const submit = async (values: any) => {
     setLoading(true);
     await axios
-      .post(`http://localhost:8000/user/register`, values)
+      .post(`${API_URL}/user/register`, values)
       .then((res) => {
         values.username = "";
         values.first_name = "";

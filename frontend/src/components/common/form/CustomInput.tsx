@@ -43,6 +43,8 @@ interface Props {
   labelClass?: string;
   error?: string | number | boolean | any;
   touched?: boolean;
+  textArea?: boolean;
+  darkMode?: "dark" | "light";
 }
 
 export const CustomInput = ({
@@ -66,11 +68,11 @@ export const CustomInput = ({
   labelClass,
   error,
   touched,
+  textArea,
+  darkMode = "dark",
 }: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [val, setVal] = useState(value);
-
-  const [darkMode, setDarkMode] = useState(true);
 
   const darkModeClass = `text-dark-200 ${
     error ? "border-error-300" : "border-dark-200"
@@ -98,27 +100,55 @@ export const CustomInput = ({
 
   return (
     <div className="flex flex-col">
-      <label className={`${labelClass} ${darkMode ? "text-dark-200" : ""}`}>
+      <label
+        className={`${labelClass} ${
+          darkMode === "dark" ? "text-dark-200" : ""
+        }`}
+      >
         {label}
       </label>
-      <input
-        type={type}
-        className={`h-[50px] pl-3 ${className} overflow-hidden border-2 rounded-xl ${
-          darkMode ? darkModeClass : lightModeClass
-        }`}
-        onClick={specialType ? () => setShowModal(!showModal) : onClick}
-        ref={ref}
-        id={id}
-        defaultValue={defaultValue}
-        maxLength={maxLength}
-        minLength={minLength}
-        value={shownValue()}
-        name={name}
-        checked={checked}
-        onChange={onChange ? (e) => onChange(e) : (e) => setVal(e.target.value)}
-        disabled={disabled}
-        placeholder={placeholder}
-      />
+      {!textArea ? (
+        <input
+          type={type}
+          className={`${
+            type !== "checkbox" ? "h-[50px]" : "h-[25px]"
+          } pl-3 ${className} overflow-hidden border-2 rounded-xl ${
+            darkMode === "dark" ? darkModeClass : lightModeClass
+          }`}
+          onClick={specialType ? () => setShowModal(!showModal) : onClick}
+          ref={ref}
+          id={id}
+          defaultValue={defaultValue}
+          maxLength={maxLength}
+          minLength={minLength}
+          value={shownValue()}
+          name={name}
+          checked={checked}
+          onChange={
+            onChange ? (e) => onChange(e) : (e) => setVal(e.target.value)
+          }
+          disabled={disabled}
+          placeholder={placeholder}
+        />
+      ) : (
+        <textarea
+          ref={ref}
+          id={id}
+          className={`pl-3 ${className} overflow-hidden border-2 rounded-xl ${
+            darkMode === "dark" ? darkModeClass : lightModeClass
+          }`}
+          defaultValue={defaultValue}
+          maxLength={maxLength}
+          minLength={minLength}
+          value={shownValue()}
+          name={name}
+          onChange={
+            onChange ? (e) => onChange(e) : (e) => setVal(e.target.value)
+          }
+          disabled={disabled}
+          placeholder={placeholder}
+        ></textarea>
+      )}
       {error && touched ? (
         <p className="text-error-300 text-base px-3 pt-1 pb-2">{error}</p>
       ) : (

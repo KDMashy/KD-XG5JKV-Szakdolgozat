@@ -37,4 +37,9 @@ const loginValidation = yup.object().shape({
     ),
 });
 
-export { registrationValidation, loginValidation };
+const newProjectValidation = yup.object().shape({
+  project_name: yup.string().required("Project name is required"),
+  project_description: yup.string().required("Project description is required"),
+});
+
+export { registrationValidation, loginValidation, newProjectValidation };

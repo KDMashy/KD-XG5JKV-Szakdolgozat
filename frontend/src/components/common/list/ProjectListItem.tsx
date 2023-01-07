@@ -17,7 +17,7 @@ export const ListItem = ({
   darkMode: boolean;
 }) => {
   return (
-    <div className="bg-light-600 text-light-400 w-full h-[120px] rounded-2xl flex items-center my-10">
+    <div className="bg-light-600 w-full h-[120px] rounded-2xl flex items-center my-10">
       <div className="w-[130px] flex justify-center">
         <Avatar image_url={url} width="w-[90px]" height="h-[90px]" />
       </div>

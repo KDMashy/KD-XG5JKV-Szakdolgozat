@@ -27,7 +27,7 @@ function SignIn() {
     setLoading(true);
     let token = "";
     await axios
-      .post(`http://localhost:8000/auth/login`, values, {
+      .post(`${API_URL}/auth/login`, values, {
         withCredentials: true,
       })
       .then((res) => {

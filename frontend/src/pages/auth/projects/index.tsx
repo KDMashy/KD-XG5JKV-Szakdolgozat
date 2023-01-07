@@ -26,7 +26,7 @@ function Projects() {
     const cancelToken = axios.CancelToken.source();
     if (user) {
       setInit(false);
-      getData(cancelToken);
+      if (projects?.length === 0) getData(cancelToken);
     } else {
       setInit(true);
     }
@@ -78,7 +78,7 @@ function Projects() {
         </Container>
         <Container
           type={darkMode ? "dark" : "light"}
-          className="col-span-5 max-h-[450px] overflow-y-scroll py-0"
+          className="col-span-5 max-h-[650px] overflow-y-scroll py-0"
         >
           <>
             {projects.length > 0 &&

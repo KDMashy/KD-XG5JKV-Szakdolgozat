@@ -12,9 +12,12 @@ import { API_URL } from "../../../constants/url";
 import { useAuth } from "../../../hooks/useAuth";
 import { useDarkMode } from "../../../hooks/useDarkMode";
 import { newProjectValidation } from "../../../validations";
+import { useRouter } from "next/router";
 
 function NewProject() {
   const { darkMode } = useDarkMode();
+
+  const router = useRouter();
 
   const { user } = useAuth({
     middleware: "auth",
@@ -43,7 +46,7 @@ function NewProject() {
     setLoading(true);
     await axios
       .post(`${API_URL}/project`, project, { withCredentials: true })
-      .then((res) => console.log(res.data))
+      .then((res) => router.push("/auth/projects"))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   };
@@ -117,6 +120,7 @@ function NewProject() {
                         type={darkMode ? "dark" : "light"}
                         clickType="submit"
                         loading={loading}
+                        disabled={loading}
                       />
                     </div>
                   </div>

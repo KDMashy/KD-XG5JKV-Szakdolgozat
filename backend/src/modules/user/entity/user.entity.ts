@@ -1,7 +1,10 @@
 import { UserTasks } from './../../project/entity/user_task.entity';
 import { Teams } from './../../team/entity/teams.entity';
-import { Projects } from './../../project/entity/projects.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Project } from 'src/modules/project/entity/project.entity';
+import { Team } from 'src/modules/team/entity/team.entity';
+import { Tasks } from 'src/modules/project/entity/tasks.entity';
+import { Badge } from 'src/modules/project/entity/badge.entity';
 @Entity('users')
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -45,12 +48,21 @@ export class User extends BaseEntity {
     @UpdateDateColumn({ type: "timestamp"})
     updated_at: number
 
-    @OneToMany(() => Projects, projects => projects.user, {onDelete: 'CASCADE'})
-    projects: Projects[]
+    @OneToMany(() => Project, project => project.project_creator, {onDelete: 'CASCADE'})
+    created_projects: Project[]
 
     @OneToMany(() => Teams, teams => teams.user, {onDelete: 'CASCADE'})
-    teams: Teams[]
+    team_member: Teams[]
+
+    @OneToMany(() => Team, team => team.team_creator, {onDelete: 'CASCADE'})
+    created_teams: Team[]
 
     @OneToMany(() => UserTasks, userTasks => userTasks.user, {onDelete: 'CASCADE'})
     tasks: UserTasks[]
+
+    @OneToMany(() => Tasks, tasks => tasks.task_creator)
+    created_tasks: Tasks[]
+
+    @OneToMany(() => Badge, badge => badge.badge_creator)
+    created_badges: Badge[]
 }

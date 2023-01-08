@@ -7,9 +7,9 @@ export class UserTasks extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => User, user => user.tasks)
+    @ManyToOne(() => User, user => user.tasks, {onDelete: 'CASCADE'})
     user: number
 
-    @ManyToOne(() => Tasks, tasks => tasks.joined_user)
+    @ManyToOne(() => Tasks, tasks => tasks.joined_user, {onDelete: 'CASCADE'})
     task: number
 }

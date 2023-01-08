@@ -7,19 +7,16 @@ import { BaseEntity, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn
 export class Teams extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
+
+    @ManyToOne(() => User, user => user.team_member, {onDelete: 'CASCADE'})
+    user: number
+
+    @ManyToOne(() => Team, team => team.membership, {onDelete: 'CASCADE'})
+    team: number
     
     @CreateDateColumn({ select: false })
     created_at: string
 
     @UpdateDateColumn({ type: "timestamp", select: false })
     updated_at: number
-
-    @ManyToOne(() => User, user => user.teams)
-    user: number
-
-    @ManyToOne(() => Project, project => project.team)
-    project: number
-
-    @ManyToOne(() => Team, team => team.project, {onDelete: 'CASCADE'})
-    team: number
 }

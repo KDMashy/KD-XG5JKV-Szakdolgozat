@@ -1,8 +1,9 @@
 import { Teams } from './../../team/entity/teams.entity';
-import { ProjectTasks } from './project_tasks.entity';
-import { Projects } from './projects.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ProjectBadge } from './project_badge.entity';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { User } from 'src/modules/user/entity/user.entity';
+import { Tasks } from './tasks.entity';
+import { ProjectTeams } from './project_teams.entity';
+import { Badge } from './badge.entity';
 
 @Entity('project')
 export class Project extends BaseEntity {
@@ -29,9 +30,7 @@ export class Project extends BaseEntity {
     })
     project_status: string
 
-    @Column({
-        type: 'bigint'
-    })
+    @ManyToOne(() => User, user => user.created_projects)
     project_creator: number
 
     @Column({
@@ -45,15 +44,12 @@ export class Project extends BaseEntity {
     @UpdateDateColumn({ type: "timestamp"})
     updated_at: number
 
-    @OneToMany(() => Projects, projects => projects.project, {onDelete: 'CASCADE'})
-    user_projects: Projects[]
+    @OneToMany(() => Tasks, tasks => tasks.project, {onDelete: 'CASCADE'})
+    tasks: Tasks[]
 
-    @OneToMany(() => ProjectTasks, projTasks => projTasks.project, {onDelete: 'CASCADE'})
-    tasks: ProjectTasks[]
+    @OneToMany(() => Badge, badge => badge.project, {onDelete: 'CASCADE'})
+    badges: Badge[]
 
-    @OneToMany(() => ProjectBadge, projBadge => projBadge.project, {onDelete: 'CASCADE'})
-    badges: ProjectBadge[]
-
-    @OneToMany(() => Teams, teams => teams.project, {onDelete: 'CASCADE'})
-    team: Teams[]
+    @OneToMany(() => ProjectTeams, projTeams => projTeams.project, {onDelete: 'CASCADE'})
+    teams: ProjectTeams[]
 }

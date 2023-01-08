@@ -1,6 +1,7 @@
 import { CreateProjectDto, UpdateProjectDto } from './../dto/project.dto';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req } from '@nestjs/common';
 import { ProjectService } from '../service/project.service';
+import { Request } from 'express';
 
 @Controller('project')
 export class ProjectController {
@@ -26,6 +27,11 @@ export class ProjectController {
     @Post('')
     create(@Body() project: CreateProjectDto) {
         return this.projectService.createProject(project)
+    }
+
+    @Post('add-team')
+    addTeamForProject(@Req() req: Request) {
+        return this.projectService.addProjectTeam(req.query)
     }
 
     @Put(':id')

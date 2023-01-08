@@ -1,5 +1,7 @@
 import { Teams } from './teams.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { User } from 'src/modules/user/entity/user.entity';
+import { ProjectTeams } from 'src/modules/project/entity/project_teams.entity';
 
 @Entity('team')
 export class Team extends BaseEntity {
@@ -21,9 +23,7 @@ export class Team extends BaseEntity {
     })
     team_status: string
 
-    @Column({
-        type: 'bigint'
-    })
+    @ManyToOne(() => User, user => user.created_teams)
     team_creator: number
 
     @Column({
@@ -38,5 +38,8 @@ export class Team extends BaseEntity {
     updated_at: number
 
     @OneToMany(() => Teams, teams => teams.team, {onDelete: 'CASCADE'})
-    project: Teams[]
+    membership: Teams[]
+
+    @OneToMany(() => ProjectTeams, projTeams => projTeams.team, {onDelete: 'CASCADE'})
+    projects: ProjectTeams[]
 }

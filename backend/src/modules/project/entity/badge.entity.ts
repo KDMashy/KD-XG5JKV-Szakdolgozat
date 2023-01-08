@@ -1,6 +1,7 @@
 import { TaskBadges } from './task_badge.entity';
-import { ProjectBadge } from './project_badge.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { User } from 'src/modules/user/entity/user.entity';
+import { Project } from './project.entity';
 
 @Entity('badge')
 export class Badge extends BaseEntity {
@@ -17,9 +18,7 @@ export class Badge extends BaseEntity {
     })
     badge_status: string
 
-    @Column({
-        type: 'bigint'
-    })
+    @ManyToOne(() => User, user => user.created_badges)
     badge_creator: number
     
     @Column({
@@ -38,8 +37,8 @@ export class Badge extends BaseEntity {
     @UpdateDateColumn({ type: "timestamp"})
     updated_at: number
 
-    @OneToMany(() => ProjectBadge, projBadge => projBadge.badge, {onDelete: 'CASCADE'})
-    project: ProjectBadge[]
+    @ManyToOne(() => Project, project => project.badges, {onDelete: 'CASCADE'})
+    project: number
 
     @OneToMany(() => TaskBadges, taskBadges => taskBadges.badge, {onDelete: 'CASCADE'})
     task: TaskBadges[]

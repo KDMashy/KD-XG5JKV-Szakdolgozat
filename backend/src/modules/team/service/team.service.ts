@@ -19,34 +19,40 @@ export class TeamService {
     ) {}
 
     async index() {
-        return await this.teamsModel
+        return await this.teamModel
             .find({
                 relations: [
-                    "user",
-                    "project",
-                    "team"
+                    "team_creator",
+                    "projects",
+                    "projects.project",
+                    "membership",
+                    "membership.user"
                 ]
             })
     }
 
     async getAllForUser(id: number) {
-        return await this.teamsModel.find({
-            where: { user: id },
+        return await this.teamModel.find({
+            where: { team_creator: id },
             relations: [
-                'user',
-                'team',
-                'project'
+                "team_creator",
+                "projects",
+                "projects.project",
+                "membership",
+                "membership.user"
             ]
         })
     }
 
     async getOneById(id: number) {
-        return await this.teamsModel.findOne({
-            where: { user: id },
+        return await this.teamModel.findOne({
+            where: { id: id },
             relations: [
-                'user',
-                'team',
-                'project'
+                "team_creator",
+                "projects",
+                "projects.project",
+                "membership",
+                "membership.user"
             ]
         })
     }
@@ -60,19 +66,18 @@ export class TeamService {
             team_status: Statuses.OPEN
         })
         let response: Team = await newTeam.save()
+
         if(response) {
             await this.teamsModel.create({
                 user: team.team_creator,
-                project: team.project,
                 team: response.id
             }).save()
         }
-        return await this.teamsModel.findOne({
+
+        return await this.teamModel.findOne({
             where: { id: response.id },
             relations: [
-                'user',
-                'project',
-                'team'
+                'team_creator',
             ]
         })
     }
@@ -81,25 +86,13 @@ export class TeamService {
         const editTeam: Team = await this.teamModel.findOne({
             where: { id: id }
         })
-        const teamConnect: Teams = await this.teamsModel.findOne({
-            where: { team: id }
-        })
         editTeam.team_name = team.team_name
         editTeam.team_description = team.team_description
         editTeam.team_creator = team.team_creator
         editTeam.team_only_creator = team.team_only_creator
         editTeam.team_status = team.team_status
-        teamConnect.project = team.project
-        await editTeam.save()
-        await teamConnect.save()
-        return await this.teamsModel.findOne({
-            where: { team: id },
-            relations: [
-                'user',
-                'team',
-                'project'
-            ]
-        })
+        let response = await editTeam.save()
+        return response
     }
 
     async deleteTeam(id: number) {

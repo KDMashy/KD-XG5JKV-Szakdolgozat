@@ -13,9 +13,9 @@ export class TaskBadges extends BaseEntity {
     @UpdateDateColumn({ type: "timestamp", select: false })
     updated_at: number
 
-    @ManyToOne(() => Badge, badge => badge.task)
+    @ManyToOne(() => Badge, badge => badge.task, {onDelete: 'CASCADE'})
     badge: number
 
-    @ManyToOne(() => Tasks, tasks => tasks.badge)
+    @ManyToOne(() => Tasks, tasks => tasks.badge, {onDelete: 'CASCADE'})
     task: number
 }

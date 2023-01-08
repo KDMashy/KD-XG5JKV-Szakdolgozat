@@ -1,11 +1,12 @@
 import { Statuses } from './../../constants/Statuses.enum';
 import { CreateProjectDto, UpdateProjectDto } from './../dto/project.dto';
-import { Projects } from './../entity/projects.entity';
 import { Project } from './../entity/project.entity';
 import { User } from 'src/modules/user/entity/user.entity';
 import { Injectable, HttpException, HttpStatus, Body } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Team } from 'src/modules/team/entity/team.entity';
+import { ProjectTeams } from '../entity/project_teams.entity';
 
 @Injectable()
 export class ProjectService {
@@ -14,24 +15,20 @@ export class ProjectService {
         private userModel: Repository<User>,
         @InjectRepository(Project)
         private projectModel: Repository<Project>,
-        @InjectRepository(Projects)
-        private projectsModel: Repository<Projects>,
+        @InjectRepository(Team)
+        private teamModel: Repository<Team>,
+        @InjectRepository(ProjectTeams)
+        private projectTeamsModel: Repository<ProjectTeams>
     ) {}
 
     async getAll() {
         return await this.projectModel.find({
             relations: [
-                'user_projects',
+                'project_creator',
                 'tasks',
                 'badges',
-                'team',
-                'team.team',
-                'user_projects.user',
-                'badges.badge',
-                'tasks.task',
-                'tasks.task.badge',
-                'tasks.task.badge.badge',
-                'tasks.task.joined_user'
+                'teams',
+                'teams.team'
             ]
         })
     }
@@ -40,17 +37,11 @@ export class ProjectService {
         return await this.projectModel.findOne({
             where: { id: id },
             relations: [
-                'user_projects',
+                'project_creator',
                 'tasks',
                 'badges',
-                'team',
-                'team.team',
-                'user_projects.user',
-                'badges.badge',
-                'tasks.task',
-                'tasks.task.badge',
-                'tasks.task.badge.badge',
-                'tasks.task.joined_user'
+                'teams',
+                'teams.team'
             ]
         })
     }
@@ -66,19 +57,37 @@ export class ProjectService {
         })
         let response: Project = await newProject.save()
 
-        if(response) {
-            await this.projectsModel.create({
-                user: project.project_creator,
-                project: response.id
-            }).save() 
-        }
-        return await this.userModel.find({
-            where: {id: project.project_creator},
+        return await this.projectModel.find({
+            where: {id: response.id},
             relations: [
-                'projects',
-                'projects.project'
+                'project_creator',
+                'teams',
+                'teams.team'
             ]
         })
+    }
+
+    async addProjectTeam (req: any) {
+        const teamSearch = await this.teamModel.find({ where: {id: req.team}})
+        if(!teamSearch) 
+            throw new HttpException({
+                message: 'The given team id is not valid',
+                status: HttpStatus.BAD_REQUEST
+            }, HttpStatus.BAD_REQUEST)
+        
+        const projectSearch = await this.projectModel.find({ where: {id: req.project}})
+        if(!projectSearch) 
+            throw new HttpException({
+                message: 'The given project id is not valid',
+                status: HttpStatus.BAD_REQUEST
+            }, HttpStatus.BAD_REQUEST)
+
+        let response: any = await this.projectTeamsModel.create({
+            project: req.project,
+            team: req.team
+        }).save()
+
+        return response
     }
 
     async updateProject(project: UpdateProjectDto, id:number) {
@@ -111,16 +120,30 @@ export class ProjectService {
             .findOne({
                 where: {id: id},
                 relations: [
-                    'projects', 
-                    'projects.project', 
-                    'projects.project.tasks', 
-                    'projects.project.tasks.task',
-                    'projects.project.tasks.task.badge',
-                    'projects.project.tasks.task.badge.badge',
-                    'projects.project.badges',
-                    'projects.project.badges.badge',
-                    'projects.project.team',
-                    'projects.project.team.team'
+                    'created_projects',
+                    'created_projects.tasks',
+                    'created_projects.badges',
+                    'created_projects.badges.task',
+                    'created_projects.badges.task.task',
+                    'created_projects.teams',
+                    'created_projects.teams.team',
+                    'created_teams',
+                    'created_teams.membership',
+                    'created_teams.projects',
+                    'created_teams.projects.project',
+                    'created_tasks',
+                    'created_tasks.project',
+                    'created_tasks.joined_user',
+                    'created_tasks.joined_user.user',
+                    'created_badges',
+                    'created_badges.project',
+                    'created_badges.task',
+                    'created_badges.task.task',
+                    'team_member',
+                    'team_member.team',
+                    'team_member.team.projects',
+                    'team_member.team.projects.project',
+                    'tasks',
                 ]
             })
     }

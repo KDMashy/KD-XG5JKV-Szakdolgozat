@@ -1,7 +1,8 @@
 import { UserTasks } from './user_task.entity';
 import { TaskBadges } from './task_badge.entity';
-import { ProjectTasks } from './project_tasks.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { User } from 'src/modules/user/entity/user.entity';
+import { Project } from './project.entity';
 
 @Entity('tasks')
 export class Tasks extends BaseEntity {
@@ -13,28 +14,26 @@ export class Tasks extends BaseEntity {
     })
     task_name: string
 
-    @Column({
-        type: 'bigint'
-    })
+    @ManyToOne(() => User, user => user.created_tasks)
     task_creator: number
 
     @Column({
         type: 'tinyint'
     })
     task_only_creator: number
+    
+    @ManyToOne(() => Project, project => project.tasks, {onDelete: 'CASCADE'})
+    project: number
 
-    @OneToMany(() => ProjectTasks, projTasks => projTasks.task, {onDelete: 'CASCADE'})
-    project: ProjectTasks[]
+    @OneToMany(() => TaskBadges, taskBadges => taskBadges.task, {onDelete: 'CASCADE'})
+    badge: TaskBadges[]
 
+    @OneToMany(() => UserTasks, userTasks => userTasks.task, {onDelete: 'CASCADE'})
+    joined_user: UserTasks[]
+    
     @CreateDateColumn()
     created_at: string
 
     @UpdateDateColumn({ type: "timestamp"})
     updated_at: number
-
-    @OneToMany(() => TaskBadges, taskBadges => taskBadges.task)
-    badge: TaskBadges[]
-
-    @OneToMany(() => UserTasks, userTasks => userTasks.task, {onDelete: 'CASCADE'})
-    joined_user: UserTasks[]
 }

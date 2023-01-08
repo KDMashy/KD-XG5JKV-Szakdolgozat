@@ -42,8 +42,24 @@ function Projects() {
         cancelToken: cancelToken.token,
       })
       .then((res) => {
-        res.data.projects.map((item: any) => {
-          setProjects((prev: any) => [...prev, item.project]);
+        res.data?.created_projects.map((item: any) => {
+          setProjects((prev: any) => [...prev, item]);
+        });
+        res.data?.team_member.map((membership: any) => {
+          membership?.team?.projects.map((member_projects: any) => {
+            let found = false;
+
+            for (let item of res.data?.created_projects) {
+              if (item?.id === member_projects?.project?.id) {
+                found = true;
+                break;
+              }
+            }
+
+            if (!found) {
+              setProjects((prev: any) => [...prev, member_projects?.project]);
+            }
+          });
         });
       })
       .catch((error) => {

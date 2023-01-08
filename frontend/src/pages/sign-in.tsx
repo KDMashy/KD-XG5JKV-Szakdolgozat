@@ -11,12 +11,18 @@ import axios from "axios";
 import CustomForm from "../components/common/form/CustomForm";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { API_URL } from "../constants/url";
+import { useAuth } from "../hooks/useAuth";
 
 function SignIn() {
   const { darkMode } = useDarkMode();
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  const { user } = useAuth({
+    middleware: "guest",
+    redirectIfAuthenticated: true,
+  });
 
   const initialValues = {
     username: "",

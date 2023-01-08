@@ -5,10 +5,16 @@ import PageSubTitle from "../components/common/PageSubTitle";
 import PageTitle from "../components/common/PageTitle";
 import Paragraph from "../components/common/Paragraph";
 import Container from "../components/Container";
+import { useAuth } from "../hooks/useAuth";
 import { useDarkMode } from "../hooks/useDarkMode";
 
 const Home: NextPage = () => {
   const { darkMode } = useDarkMode();
+
+  const { user } = useAuth({
+    middleware: "guest",
+    redirectIfAuthenticated: true,
+  });
 
   const GenerateInformations = (list: string[]) => {
     return list.map((item, index) => (

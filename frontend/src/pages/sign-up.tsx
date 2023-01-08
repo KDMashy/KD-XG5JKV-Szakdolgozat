@@ -9,6 +9,7 @@ import Loading from "../components/common/Loading";
 import PageTitle from "../components/common/PageTitle";
 import Container from "../components/Container";
 import { API_URL } from "../constants/url";
+import { useAuth } from "../hooks/useAuth";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { registrationValidation } from "../validations";
 
@@ -18,6 +19,11 @@ function SignUp() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
+  const { user } = useAuth({
+    middleware: "guest",
+    redirectIfAuthenticated: true,
+  });
 
   const initialValues = {
     username: "",

@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Team } from 'src/modules/team/entity/team.entity';
 import { ProjectTeams } from '../entity/project_teams.entity';
+import { Row } from '../entity/row.entity';
+import { CreateRowDto } from '../dto/row.dto';
 
 @Injectable()
 export class ProjectService {
@@ -18,7 +20,9 @@ export class ProjectService {
         @InjectRepository(Team)
         private teamModel: Repository<Team>,
         @InjectRepository(ProjectTeams)
-        private projectTeamsModel: Repository<ProjectTeams>
+        private projectTeamsModel: Repository<ProjectTeams>,
+        @InjectRepository(Row)
+        private rowModel: Repository<Row>
     ) {}
 
     async getAll() {
@@ -41,7 +45,24 @@ export class ProjectService {
                 'tasks',
                 'badges',
                 'teams',
-                'teams.team'
+                'teams.team',
+                'rows'
+            ]
+        })
+    }
+
+    async createRow (row: CreateRowDto) {
+        const newRow = await this.rowModel.create({
+            row_name: row.row_name,
+            project: row.project
+        })
+        let response: Row = await newRow.save()
+
+        return await this.rowModel.findOne({
+            where: {id: response.id},
+            relations: [
+                'project',
+                'tasks'
             ]
         })
     }

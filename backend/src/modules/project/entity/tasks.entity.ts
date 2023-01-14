@@ -3,6 +3,7 @@ import { TaskBadges } from './task_badge.entity';
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from 'src/modules/user/entity/user.entity';
 import { Project } from './project.entity';
+import { Row } from './row.entity';
 
 @Entity('tasks')
 export class Tasks extends BaseEntity {
@@ -21,6 +22,9 @@ export class Tasks extends BaseEntity {
         type: 'tinyint'
     })
     task_only_creator: number
+
+    @ManyToOne(() => Row, row => row.tasks, {onDelete: 'CASCADE'})
+    row: number
     
     @ManyToOne(() => Project, project => project.tasks, {onDelete: 'CASCADE'})
     project: number

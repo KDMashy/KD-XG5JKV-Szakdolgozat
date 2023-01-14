@@ -4,6 +4,7 @@ import { User } from 'src/modules/user/entity/user.entity';
 import { Tasks } from './tasks.entity';
 import { ProjectTeams } from './project_teams.entity';
 import { Badge } from './badge.entity';
+import { Row } from './row.entity';
 
 @Entity('project')
 export class Project extends BaseEntity {
@@ -52,4 +53,7 @@ export class Project extends BaseEntity {
 
     @OneToMany(() => ProjectTeams, projTeams => projTeams.project, {onDelete: 'CASCADE'})
     teams: ProjectTeams[]
+
+    @OneToMany(() => Row, row => row.project, {onDelete: 'CASCADE'})
+    rows: Row[]
 }

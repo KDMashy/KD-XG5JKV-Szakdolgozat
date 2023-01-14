@@ -13,10 +13,11 @@ import { BadgeService } from './service/badge/badge.service';
 import { TaskService } from './service/task/task.service';
 import { Team } from '../team/entity/team.entity';
 import { ProjectTeams } from './entity/project_teams.entity';
+import { Row } from './entity/row.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Project, ProjectTeams, Team, Tasks, User, Badge, TaskBadges])
+    TypeOrmModule.forFeature([Project, ProjectTeams, Team, Tasks, User, Badge, TaskBadges, Row])
   ],
   controllers: [ProjectController, BadgeController, TaskController],
   providers: [ProjectService, BadgeService, TaskService],

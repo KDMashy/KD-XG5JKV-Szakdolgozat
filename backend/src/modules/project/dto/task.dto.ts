@@ -13,6 +13,9 @@ export class CreateTaskDto {
 
     @IsNotEmpty()
     task_only_creator: number
+
+    @IsNotEmpty()
+    row: number
 }
 
 export class UpdateTaskDto {

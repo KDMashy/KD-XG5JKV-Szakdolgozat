@@ -1,14 +1,17 @@
 import { CreateTaskDto, UpdateTaskDto } from './../../dto/task.dto';
 import { Tasks } from './../../entity/tasks.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Body } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Row } from '../../entity/row.entity';
 
 @Injectable()
 export class TaskService {
     constructor (
         @InjectRepository(Tasks)
         private tasksModel: Repository<Tasks>,
+        @InjectRepository(Row)
+        private rowModel: Repository<Row>,
     ) {}
 
     async getTasks() {
@@ -36,11 +39,20 @@ export class TaskService {
     }
 
     async createTask(task: CreateTaskDto) {
+        let searchRow = await this.rowModel.findOne({where: {id: task.row}})
+
+        if(!searchRow) 
+            throw new HttpException({
+                message: 'The given row id is not valid',
+                status: HttpStatus.BAD_REQUEST
+            }, HttpStatus.BAD_REQUEST)
+
         const newTask = this.tasksModel.create({
             task_name: task.task_name,
             task_creator: task.task_creator,
             task_only_creator: task.task_only_creator,
-            project: task.project_id
+            project: task.project_id,
+            row: task.row
         })
         let response: Tasks = await newTask.save()
 
@@ -49,7 +61,8 @@ export class TaskService {
             relations: [
                 'task_creator',
                 'project',
-                'badge'
+                'badge',
+                'row'
             ]
         })
     }

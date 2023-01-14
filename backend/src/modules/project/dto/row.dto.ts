@@ -6,4 +6,6 @@ export class CreateRowDto {
     row_name: string
 
     project?: number
+
+    count?: number
 }

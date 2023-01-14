@@ -54,7 +54,8 @@ export class ProjectService {
     async createRow (row: CreateRowDto) {
         const newRow = await this.rowModel.create({
             row_name: row.row_name,
-            project: row.project
+            project: row.project,
+            row_count: row.count
         })
         let response: Row = await newRow.save()
 

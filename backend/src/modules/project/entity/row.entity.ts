@@ -16,6 +16,11 @@ export class Row extends BaseEntity {
     })
     row_name: string
 
+    @Column({
+        type: 'int'
+    })
+    row_count: number
+
     @CreateDateColumn()
     created_at: string
 

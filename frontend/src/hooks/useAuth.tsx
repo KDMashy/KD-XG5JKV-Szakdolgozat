@@ -29,7 +29,8 @@ export const useAuth = ({
         .then((res) => {
           setLogin(true);
           return res.data;
-        });
+        })
+        .catch((error) => localStorage.removeItem("JWT"));
     }
   });
 

@@ -43,10 +43,12 @@ export class ProjectService {
             relations: [
                 'project_creator',
                 'tasks',
+                'tasks.row',
                 'badges',
                 'teams',
                 'teams.team',
-                'rows'
+                'rows',
+                'rows.tasks'
             ]
         })
     }

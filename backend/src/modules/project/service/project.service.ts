@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { Team } from 'src/modules/team/entity/team.entity';
 import { ProjectTeams } from '../entity/project_teams.entity';
 import { Row } from '../entity/row.entity';
-import { CreateRowDto } from '../dto/row.dto';
+import { CreateRowDto, UpdateRowDto } from '../dto/row.dto';
 
 @Injectable()
 export class ProjectService {
@@ -68,6 +68,24 @@ export class ProjectService {
                 'tasks'
             ]
         })
+    }
+
+    async updateRow(column: UpdateRowDto, id:number) {
+        const editCol: Row = await this.rowModel.findOne({ where: { id: id}})
+        editCol.row_name = column.row_name
+        editCol.project = column.project
+        editCol.row_count = column.count
+        let response = await editCol.save()
+        return response
+    }
+
+    async deleteRow(id: number) {
+        return await this.rowModel
+            .createQueryBuilder()
+            .delete()
+            .from(Project)
+            .where('id = :id', { id: id })
+            .execute()
     }
 
     async createProject (project: CreateProjectDto) {

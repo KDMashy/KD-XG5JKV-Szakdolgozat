@@ -16,6 +16,8 @@ export class CreateTaskDto {
 
     @IsNotEmpty()
     row: number
+
+    count?: number
 }
 
 export class UpdateTaskDto {
@@ -26,4 +28,8 @@ export class UpdateTaskDto {
     project_id?: number
 
     task_only_creator?: number
+
+    row?: number
+
+    count?: number
 }

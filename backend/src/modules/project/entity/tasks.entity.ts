@@ -23,6 +23,11 @@ export class Tasks extends BaseEntity {
     })
     task_only_creator: number
 
+    @Column({
+        type: 'int'
+    })
+    count: number
+
     @ManyToOne(() => Row, row => row.tasks, {onDelete: 'CASCADE'})
     row: number
     

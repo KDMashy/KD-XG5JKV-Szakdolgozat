@@ -9,3 +9,11 @@ export class CreateRowDto {
 
     count?: number
 }
+
+export class UpdateRowDto {
+    row_name?: string
+
+    project?: number
+
+    count?: number
+}

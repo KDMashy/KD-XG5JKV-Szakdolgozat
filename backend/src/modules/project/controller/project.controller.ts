@@ -2,7 +2,7 @@ import { CreateProjectDto, UpdateProjectDto } from './../dto/project.dto';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req } from '@nestjs/common';
 import { ProjectService } from '../service/project.service';
 import { Request } from 'express';
-import { CreateRowDto } from '../dto/row.dto';
+import { CreateRowDto, UpdateRowDto } from '../dto/row.dto';
 
 @Controller('project')
 export class ProjectController {
@@ -35,7 +35,7 @@ export class ProjectController {
         return this.projectService.addProjectTeam(req.query)
     }
 
-    @Post('create-row')
+    @Post('row')
     addRowForProject(@Body() row: CreateRowDto) {
         return this.projectService.createRow(row)
     }
@@ -45,8 +45,18 @@ export class ProjectController {
         return this.projectService.updateProject(project, id)
     }
 
+    @Put('row/:id')
+    updateRowForProject(@Body() row: UpdateRowDto, @Param('id', ParseIntPipe) id: number) {
+        return this.projectService.updateRow(row, id)
+    }
+
     @Delete(':id')
     delete(@Param('id', ParseIntPipe) id: number) {
         return this.projectService.deleteProject(id)
+    }
+
+    @Delete('row/:id')
+    deleteRow(@Param('id', ParseIntPipe) id: number) {
+        return this.projectService.deleteRow(id)
     }
 }

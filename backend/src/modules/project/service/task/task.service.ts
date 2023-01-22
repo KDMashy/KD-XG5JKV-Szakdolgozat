@@ -52,7 +52,8 @@ export class TaskService {
             task_creator: task.task_creator,
             task_only_creator: task.task_only_creator,
             project: task.project_id,
-            row: task.row
+            row: task.row,
+            count: task.count
         })
         let response: Tasks = await newTask.save()
 
@@ -72,6 +73,8 @@ export class TaskService {
         editTask.task_name = task.task_name
         editTask.task_creator = task.task_creator
         editTask.task_only_creator = task.task_only_creator
+        editTask.row = task.row
+        editTask.count = task.count
         let response = await editTask.save()
         return response
     }

@@ -1,9 +1,11 @@
 import { CreateBadgeDto, UpdateBadgeDto } from './../../dto/badge.dto';
 import { Controller, ParseIntPipe } from '@nestjs/common';
-import { Body, Delete, Get, Param, Post, Put } from '@nestjs/common/decorators';
+import { Body, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common/decorators';
 import { BadgeService } from '../../service/badge/badge.service';
+import { AuthenticatedGuard } from 'src/modules/auth/utils/guards/local.guard';
 
 @Controller('badge')
+@UseGuards(AuthenticatedGuard)
 export class BadgeController {
     constructor (
         private readonly badgeService: BadgeService

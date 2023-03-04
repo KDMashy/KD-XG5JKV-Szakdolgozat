@@ -3,8 +3,11 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Req } fr
 import { ProjectService } from '../service/project.service';
 import { Request } from 'express';
 import { CreateRowDto, UpdateRowDto } from '../dto/row.dto';
+import { AuthenticatedGuard } from 'src/modules/auth/utils/guards/local.guard';
+import { UseGuards } from '@nestjs/common/decorators';
 
 @Controller('project')
+@UseGuards(AuthenticatedGuard)
 export class ProjectController {
     constructor (
         private readonly projectService: ProjectService

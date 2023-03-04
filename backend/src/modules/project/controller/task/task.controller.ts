@@ -1,9 +1,11 @@
 import { CreateTaskDto, UpdateTaskDto } from './../../dto/task.dto';
 import { Body, Controller, ParseIntPipe, Post } from '@nestjs/common';
 import { TaskService } from '../../service/task/task.service';
-import { Delete, Get, Param, Put } from '@nestjs/common/decorators';
+import { Delete, Get, Param, Put, UseGuards } from '@nestjs/common/decorators';
+import { AuthenticatedGuard } from 'src/modules/auth/utils/guards/local.guard';
 
 @Controller('task')
+@UseGuards(AuthenticatedGuard)
 export class TaskController {
     constructor (
         private readonly taskService: TaskService

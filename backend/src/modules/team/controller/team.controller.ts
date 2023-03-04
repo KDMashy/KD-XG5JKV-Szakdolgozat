@@ -1,10 +1,12 @@
 import { CreateTeamDto, UpdateTeamDto } from './../dto/team.dto';
-import { Controller, Get, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Delete, Post, Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
 import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
 import { TeamService } from '../service/team.service';
+import { AuthenticatedGuard } from 'src/modules/auth/utils/guards/local.guard';
 
 @Controller('team')
+@UseGuards(AuthenticatedGuard)
 export class TeamController {
     constructor (
         private readonly teamService: TeamService

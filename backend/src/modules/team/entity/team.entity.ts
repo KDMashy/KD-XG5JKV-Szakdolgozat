@@ -31,10 +31,10 @@ export class Team extends BaseEntity {
     })
     team_only_creator: number
 
-    @CreateDateColumn()
+    @CreateDateColumn({select: false})
     created_at: string
 
-    @UpdateDateColumn({ type: "timestamp"})
+    @UpdateDateColumn({ type: "timestamp", select: false})
     updated_at: number
 
     @OneToMany(() => Teams, teams => teams.team, {onDelete: 'CASCADE'})

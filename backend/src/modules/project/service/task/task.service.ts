@@ -70,6 +70,12 @@ export class TaskService {
 
     async updateTask(task: UpdateTaskDto, id: number) {
         const editTask: Tasks = await this.tasksModel.findOne({ where: { id: id }})
+        if(!editTask) 
+            throw new HttpException({
+                message: 'The given id is not valid',
+                status: HttpStatus.BAD_REQUEST
+            }, HttpStatus.BAD_REQUEST);
+            
         editTask.task_name = task.task_name
         editTask.task_creator = task.task_creator
         editTask.task_only_creator = task.task_only_creator

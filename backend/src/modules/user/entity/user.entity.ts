@@ -42,10 +42,10 @@ export class User extends BaseEntity {
     })
     status: string
 
-    @CreateDateColumn()
+    @CreateDateColumn({select: false})
     created_at: string
 
-    @UpdateDateColumn({ type: "timestamp"})
+    @UpdateDateColumn({ type: "timestamp", select: false})
     updated_at: number
 
     @OneToMany(() => Project, project => project.project_creator, {onDelete: 'CASCADE'})

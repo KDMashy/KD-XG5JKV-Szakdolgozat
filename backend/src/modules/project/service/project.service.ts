@@ -49,7 +49,7 @@ export class ProjectService {
                 'teams.team',
                 'rows',
                 'rows.tasks'
-            ]
+            ],
         })
     }
 
@@ -72,6 +72,11 @@ export class ProjectService {
 
     async updateRow(column: UpdateRowDto, id:number) {
         const editCol: Row = await this.rowModel.findOne({ where: { id: id}})
+        if(!editCol) 
+            throw new HttpException({
+                message: 'The given id is not valid',
+                status: HttpStatus.BAD_REQUEST
+            }, HttpStatus.BAD_REQUEST);
         editCol.row_name = column.row_name
         editCol.project = column.project
         editCol.row_count = column.count

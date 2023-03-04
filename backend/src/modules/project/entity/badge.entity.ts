@@ -31,10 +31,10 @@ export class Badge extends BaseEntity {
     })
     badge_color: string
 
-    @CreateDateColumn()
+    @CreateDateColumn({select: false})
     created_at: string
 
-    @UpdateDateColumn({ type: "timestamp"})
+    @UpdateDateColumn({ type: "timestamp", select: false})
     updated_at: number
 
     @ManyToOne(() => Project, project => project.badges, {onDelete: 'CASCADE'})

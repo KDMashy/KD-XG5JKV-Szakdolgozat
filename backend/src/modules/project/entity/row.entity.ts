@@ -21,10 +21,10 @@ export class Row extends BaseEntity {
     })
     row_count: number
 
-    @CreateDateColumn()
+    @CreateDateColumn({select: false})
     created_at: string
 
-    @UpdateDateColumn({ type: "timestamp"})
+    @UpdateDateColumn({ type: "timestamp", select: false})
     updated_at: number
 
     @OneToMany(() => Tasks, tasks => tasks.row, {onDelete: 'CASCADE'})

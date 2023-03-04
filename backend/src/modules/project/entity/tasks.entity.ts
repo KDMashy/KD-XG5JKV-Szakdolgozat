@@ -40,9 +40,9 @@ export class Tasks extends BaseEntity {
     @OneToMany(() => UserTasks, userTasks => userTasks.task, {onDelete: 'CASCADE'})
     joined_user: UserTasks[]
     
-    @CreateDateColumn()
+    @CreateDateColumn({select: false})
     created_at: string
 
-    @UpdateDateColumn({ type: "timestamp"})
+    @UpdateDateColumn({ type: "timestamp", select: false})
     updated_at: number
 }

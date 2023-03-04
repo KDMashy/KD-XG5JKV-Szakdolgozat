@@ -7,11 +7,11 @@ import Container from "../components/Container";
 import { loginValidation } from "../validations";
 import { CustomInput } from "../components/common/form/CustomInput";
 import Button from "../components/common/Button";
-import axios from "axios";
 import CustomForm from "../components/common/form/CustomForm";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { API_URL } from "../constants/url";
 import { useAuth } from "../hooks/useAuth";
+import { axios } from "../lib/axios";
 
 function SignIn() {
   const { darkMode } = useDarkMode();
@@ -32,26 +32,24 @@ function SignIn() {
   const submit = async (values: any) => {
     setLoading(true);
     let token = "";
-    await axios
-      .post(`${API_URL}/auth/login`, values, {
-        withCredentials: true,
-      })
-      .then((res) => {
+    await axios(
+      "post",
+      `${API_URL}/auth/login`,
+      null,
+      values,
+      (res: any) => {
         values.username = "";
         values.password = "";
         localStorage.setItem("JWT", res.data?.access_token);
         token = res.data.access_token;
         console.log(res);
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
-
-    await axios
-      .get(`${API_URL}/user`, {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
-      })
-      .then((res) => router.push("/auth/projects"));
+      },
+      null,
+      setLoading(false)
+    );
+    await axios("get", `${API_URL}/user`, null, null, (res: any) =>
+      router.push("/auth/projects")
+    );
   };
 
   return (

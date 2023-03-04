@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
@@ -11,6 +10,7 @@ import Container from "../components/Container";
 import { API_URL } from "../constants/url";
 import { useAuth } from "../hooks/useAuth";
 import { useDarkMode } from "../hooks/useDarkMode";
+import { axios } from "../lib/axios";
 import { registrationValidation } from "../validations";
 
 function SignUp() {
@@ -36,9 +36,12 @@ function SignUp() {
 
   const submit = async (values: any) => {
     setLoading(true);
-    await axios
-      .post(`${API_URL}/user/register`, values)
-      .then((res) => {
+    await axios(
+      "post",
+      `${API_URL}/user/register`,
+      null,
+      values,
+      (res: any) => {
         values.username = "";
         values.first_name = "";
         values.last_name = "";
@@ -46,9 +49,10 @@ function SignUp() {
         values.password = "";
         values.confirmation = "";
         router.push("sign-in");
-      })
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+      },
+      null,
+      setLoading(false)
+    );
   };
 
   return (

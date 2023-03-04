@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { API_URL } from "../constants/url";
 import { useRouter } from "next/router";
+import { axios } from "../lib/axios";
 
 export const useAuth = ({
   middleware,
@@ -21,29 +21,28 @@ export const useAuth = ({
     mutate,
   } = useSWR(`${API_URL}/user`, async () => {
     if (localStorage.getItem("JWT")) {
-      return await axios
-        .get(`${API_URL}/user`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("JWT")}` },
-          withCredentials: true,
-        })
-        .then((res) => {
+      return await axios(
+        "get",
+        `${API_URL}/user`,
+        null,
+        null,
+        (res: any) => {
           setLogin(true);
           return res.data;
-        })
-        .catch((error) => localStorage.removeItem("JWT"));
+        },
+        (error: any) => {
+          localStorage.removeItem("JWT");
+          router.push("/");
+        }
+      );
     }
   });
 
   const logout = async () => {
-    await axios
-      .get(`${API_URL}/auth/logout`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("JWT")}` },
-        withCredentials: true,
-      })
-      .then(() => {
-        localStorage.removeItem("JWT");
-        mutate();
-      });
+    await axios("get", `${API_URL}/auth/logout`, null, null, (res: any) => {
+      localStorage.removeItem("JWT");
+      mutate();
+    });
   };
 
   useEffect(() => {
@@ -51,16 +50,19 @@ export const useAuth = ({
       middleware === "guest" &&
       localStorage.getItem("JWT") &&
       redirectIfAuthenticated
-    ) {
-      router.push("/auth/projects");
-    }
+    )
+      if (typeof redirectIfAuthenticated === "string") {
+        router.push(redirectIfAuthenticated);
+      } else router.push("/auth/projects");
+
     if (
       middleware === "auth" &&
       !localStorage.getItem("JWT") &&
       redirectIfAuthenticated
-    ) {
-      router.push("/sign-in");
-    }
+    )
+      if (typeof redirectIfAuthenticated === "string") {
+        router.push(redirectIfAuthenticated);
+      } else router.push("/sign-in");
   }, [user, error]);
 
   return {

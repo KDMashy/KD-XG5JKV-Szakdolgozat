@@ -34,7 +34,7 @@ export function ListItem({
       onDragEnter={(e) => (dragOverItem.current = index)}
       onDragEnd={handleSort}
       onDragOver={(e) => e.preventDefault()}
-      className="bg-slate-100 text-light-900 h-[50px] my-3 flex justify-center items-center text-center"
+      className="bg-slate-100 text-light-900 h-[50px] my-3 flex justify-center items-center text-center hover:bg-slate-200 transition-all ease-in-out delay-100 rounded-md"
     >
       {name}
     </animated.div>

@@ -56,12 +56,12 @@ function Footer() {
           >
             CopyRight
           </span>
-          <Button
+          {/* <Button
             label={darkMode ? "Dark mode" : "Light mode"}
             clickHandler={() => setDarkMode(!darkMode)}
             type={darkMode ? "dark" : "light"}
             color="switch"
-          />
+          /> */}
         </div>
       </div>
     </footer>

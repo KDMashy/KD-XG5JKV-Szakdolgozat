@@ -1,8 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { LoginTypes } from "../../constants/LoginTypes";
 import { navButtons } from "../../constants/NavButtons";
-import { API_URL } from "../../constants/url";
 import { useAuth } from "../../hooks/useAuth";
 import { useRouter } from "next/router";
 import { useDarkMode } from "../../hooks/useDarkMode";
@@ -61,7 +59,7 @@ function Navbar() {
       className={`flex justify-between ${
         !user
           ? "py-7 pl-7"
-          : `px-2 h-[180px] overflow-hidden mb-10 ${
+          : `px-2 h-[160px] overflow-hidden mb-10 ${
               darkMode ? "bg-dark-700 bg-opacity-30 text-light-400" : ""
             }`
       }`}

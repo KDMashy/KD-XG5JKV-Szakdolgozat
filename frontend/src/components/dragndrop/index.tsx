@@ -1,15 +1,23 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Button from "../common/Button";
 import { ListItem } from "./ListItem";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { sendColData, sendTaskData } from "../../api/ProjectTable";
+import NewListItem from "./NewListItem";
+import Modal from "../common/modal/Modal";
+import NewList from "./NewList";
+import { useScrollContainer } from "react-indiana-drag-scroll";
 
 function DragNDropTable({ cols, tasks, setCols }) {
   const dragItem = useRef<any>(null);
   const dragOverItem = useRef<any>(null);
   const colPosition = useRef<any>(null);
   const taskIndex = useRef<any>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [type, setType] = useState<"item" | "list" | null>(null);
+
+  const scrollContainer = useScrollContainer();
 
   const handleSort = async () => {
     let colIndex: any = null;
@@ -61,7 +69,7 @@ function DragNDropTable({ cols, tasks, setCols }) {
       await sendTaskData(
         searchedTask,
         colIndex,
-        wasIndex,
+        newIndex,
         (res) => {},
         (error) => (fail = true)
       );
@@ -113,14 +121,22 @@ function DragNDropTable({ cols, tasks, setCols }) {
       });
   };
 
+  const addNewTask = async () => {};
+
+  const addNewCol = async () => {};
+
   return (
-    <div className="flex w-full justify-between" id="project-tasks">
+    <div
+      className="flex w-full justify-between md:flex-row flex-col overflow-x-scroll pb-10"
+      id="project-tasks"
+      //   ref={scrollContainer.ref}
+    >
       {cols.map((item: any, index) => (
         // <ListItem key={item.name} id={item.id} name={item.name} />
         <div
           key={`${item?.row_name}-${item?.id}`}
           onDragEnter={(e) => (colPosition.current = item?.id)}
-          className="w-[45%] bg-slate-700 p-3 text-center"
+          className="min-w-[400px] max-w-[400px] md:mx-3 mx-auto bg-slate-700 p-3 text-center"
         >
           <div className="flex justify-between">
             <Button
@@ -137,22 +153,44 @@ function DragNDropTable({ cols, tasks, setCols }) {
               disabled={index >= cols?.length - 1}
             />
           </div>
-          {returnSortedCol(item?.tasks).map((task: any, index: number) => (
-            <ListItem
-              key={`${task?.task_name}-${task?.id}`}
-              id={task?.id}
-              index={index}
-              name={task?.task_name}
-              dragItem={dragItem}
-              dragOverItem={dragOverItem}
-              handleSort={handleSort}
-              taskIndex={taskIndex}
-              // bindDrag={bindDrag}
-              // springStyle={{ x, y }}
+          <div>
+            {returnSortedCol(item?.tasks).map((task: any, index: number) => (
+              <ListItem
+                key={`${task?.task_name}-${task?.id}`}
+                id={task?.id}
+                index={index}
+                name={task?.task_name}
+                dragItem={dragItem}
+                dragOverItem={dragOverItem}
+                handleSort={handleSort}
+                taskIndex={taskIndex}
+                // bindDrag={bindDrag}
+                // springStyle={{ x, y }}
+              />
+            ))}
+          </div>
+          <div className="">
+            <NewListItem
+              clickHandler={() => {
+                setIsOpen(true);
+                setType("item");
+              }}
             />
-          ))}
+          </div>
         </div>
       ))}
+      <NewList
+        clickHandler={() => {
+          setIsOpen(true);
+          setType("list");
+        }}
+      />
+      <Modal
+        isOpen={isOpen}
+        onSetIsOpen={setIsOpen}
+        closable
+        content={<div className="text-light-400"></div>}
+      />
     </div>
   );
 }

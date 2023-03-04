@@ -1,5 +1,8 @@
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "react-indiana-drag-scroll/dist/style.css";
 import type { AppProps } from "next/app";
 import Navbar from "../components/layout/Navbar";
 import Content from "../components/layout/Content";

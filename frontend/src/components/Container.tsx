@@ -6,6 +6,7 @@ interface Props {
   height?: string | any;
   type?: "light" | "dark";
   children: React.ReactNode;
+  padding?: string;
 }
 
 function Container({
@@ -14,12 +15,13 @@ function Container({
   height,
   children,
   type = "dark",
+  padding = " p-6",
 }: Props) {
   return (
     <div
       className={`${className} ${width} ${height} ${
         type === "dark" ? "bg-dark-700 bg-opacity-25" : ""
-      } p-6`}
+      } ${padding}`}
     >
       {children}
     </div>

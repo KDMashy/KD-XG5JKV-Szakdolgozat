@@ -10,7 +10,8 @@ interface Props {
     | "succes"
     | "error"
     | "warning"
-    | "switch";
+    | "switch"
+    | "alternative";
   clickHandler?: any;
   className?: string;
   circular?: boolean;
@@ -53,6 +54,8 @@ function Button({
         return ``;
       case "disabled":
         return ``;
+      case "alternative":
+        return `${type === "dark" ? "bg-light-300" : "bg-dark-400"}`;
       case "switch":
         return `${type === "dark" ? "bg-dark-300" : "bg-light-400"}`;
     }

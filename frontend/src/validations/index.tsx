@@ -29,12 +29,8 @@ const loginValidation = yup.object().shape({
     .required("Email is required"),
   password: yup
     .string()
-    .min(10, ({ min }) => `Enter at least ${min} characters`)
-    .required("Password is required")
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/,
-      "Password must contain at least one uppercase and one lowercase character"
-    ),
+    .min(10, ({ min }) => {})
+    .required("Password is required"),
 });
 
 const newProjectValidation = yup.object().shape({
@@ -42,4 +38,13 @@ const newProjectValidation = yup.object().shape({
   project_description: yup.string().required("Project description is required"),
 });
 
-export { registrationValidation, loginValidation, newProjectValidation };
+const newColumnValidation = yup.object().shape({
+  row_name: yup.string().required("Column name is required"),
+});
+
+export {
+  registrationValidation,
+  loginValidation,
+  newProjectValidation,
+  newColumnValidation,
+};

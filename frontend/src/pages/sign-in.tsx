@@ -80,8 +80,11 @@ function SignIn() {
                     <CustomInput
                       label="Email"
                       value={values?.username}
-                      onChange={handleChange("username")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("username", e?.target?.value);
+                        setFieldTouched("username", true);
+                      }}
+                      touched={touched?.username}
                       error={errors?.username}
                     />
                   </div>
@@ -89,8 +92,11 @@ function SignIn() {
                     <CustomInput
                       label="Password"
                       value={values?.password}
-                      onChange={handleChange("password")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("password", e?.target?.value);
+                        setFieldTouched("password", true);
+                      }}
+                      touched={touched?.password}
                       error={errors?.password}
                       type={"password"}
                     />

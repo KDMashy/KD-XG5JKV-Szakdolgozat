@@ -83,8 +83,11 @@ function SignUp() {
                     <CustomInput
                       label="Username"
                       value={values?.username}
-                      onChange={handleChange("username")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("username", e?.target?.value);
+                        setFieldTouched("username", true);
+                      }}
+                      touched={touched?.username}
                       error={errors?.username}
                       minLength={5}
                       maxLength={16}
@@ -94,8 +97,11 @@ function SignUp() {
                     <CustomInput
                       label="Email"
                       value={values?.email}
-                      onChange={handleChange("email")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("email", e?.targeT?.value);
+                        setFieldTouched("email", true);
+                      }}
+                      touched={touched?.email}
                       error={errors?.email}
                     />
                   </div>
@@ -103,8 +109,11 @@ function SignUp() {
                     <CustomInput
                       label="First name"
                       value={values?.first_name}
-                      onChange={handleChange("first_name")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("first_name", e?.target?.value);
+                        setFieldTouched("first_name", true);
+                      }}
+                      touched={touched?.first_name}
                       error={errors?.first_name}
                     />
                   </div>
@@ -112,8 +121,11 @@ function SignUp() {
                     <CustomInput
                       label="Last name"
                       value={values?.last_name}
-                      onChange={handleChange("last_name")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("last_name", e?.target?.value);
+                        setFieldTouched("last_name", true);
+                      }}
+                      touched={touched?.last_name}
                       error={errors?.last_name}
                     />
                   </div>
@@ -121,8 +133,11 @@ function SignUp() {
                     <CustomInput
                       label="Password"
                       value={values?.password}
-                      onChange={handleChange("password")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("password", e?.target?.value);
+                        setFieldTouched("password", true);
+                      }}
+                      touched={touched?.password}
                       error={errors?.password}
                       type={"password"}
                     />
@@ -131,8 +146,11 @@ function SignUp() {
                     <CustomInput
                       label="Password Confirmation"
                       value={values?.confirmation}
-                      onChange={handleChange("confirmation")}
-                      touched
+                      onChange={(e) => {
+                        setFieldValue("confirmation", e?.target?.value);
+                        setFieldTouched("confirmation", true);
+                      }}
+                      touched={touched?.confirmation}
                       error={errors?.confirmation}
                       type={"password"}
                     />

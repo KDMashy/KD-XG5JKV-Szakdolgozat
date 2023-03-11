@@ -8,14 +8,20 @@ import NewListItem from "./NewListItem";
 import Modal from "../common/modal/Modal";
 import NewList from "./NewList";
 import { useScrollContainer } from "react-indiana-drag-scroll";
+import AddNewList from "../common/modal/AddNewList";
 
-function DragNDropTable({ cols, tasks, setCols }) {
+function DragNDropTable({
+  cols,
+  tasks,
+  setCols,
+  setType,
+  setIsOpen,
+  setTaskData,
+}) {
   const dragItem = useRef<any>(null);
   const dragOverItem = useRef<any>(null);
   const colPosition = useRef<any>(null);
   const taskIndex = useRef<any>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [type, setType] = useState<"item" | "list" | null>(null);
 
   const scrollContainer = useScrollContainer();
 
@@ -121,13 +127,9 @@ function DragNDropTable({ cols, tasks, setCols }) {
       });
   };
 
-  const addNewTask = async () => {};
-
-  const addNewCol = async () => {};
-
   return (
     <div
-      className="flex w-full justify-between md:flex-row flex-col overflow-x-scroll pb-10"
+      className="flex w-full justify-between md:flex-row flex-col overflow-x-scroll pb-10 items-start"
       id="project-tasks"
       //   ref={scrollContainer.ref}
     >
@@ -136,7 +138,7 @@ function DragNDropTable({ cols, tasks, setCols }) {
         <div
           key={`${item?.row_name}-${item?.id}`}
           onDragEnter={(e) => (colPosition.current = item?.id)}
-          className="min-w-[400px] max-w-[400px] md:mx-3 mx-auto bg-slate-700 p-3 text-center"
+          className="min-w-[400px] max-w-[400px] md:mx-3 mx-auto bg-slate-700 p-3 text-center rounded-md bg-opacity-80"
         >
           <div className="flex justify-between">
             <Button
@@ -164,6 +166,10 @@ function DragNDropTable({ cols, tasks, setCols }) {
                 dragOverItem={dragOverItem}
                 handleSort={handleSort}
                 taskIndex={taskIndex}
+                setType={setType}
+                setIsOpen={setIsOpen}
+                setTaskData={setTaskData}
+                task={task}
                 // bindDrag={bindDrag}
                 // springStyle={{ x, y }}
               />
@@ -184,12 +190,6 @@ function DragNDropTable({ cols, tasks, setCols }) {
           setIsOpen(true);
           setType("list");
         }}
-      />
-      <Modal
-        isOpen={isOpen}
-        onSetIsOpen={setIsOpen}
-        closable
-        content={<div className="text-light-400"></div>}
       />
     </div>
   );

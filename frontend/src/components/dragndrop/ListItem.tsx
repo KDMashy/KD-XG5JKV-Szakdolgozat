@@ -11,6 +11,10 @@ export function ListItem({
   taskIndex,
   bindDrag,
   springStyle,
+  setType,
+  setIsOpen,
+  setTaskData,
+  task,
 }: {
   id?: number;
   name?: string;
@@ -21,6 +25,10 @@ export function ListItem({
   taskIndex?: any;
   bindDrag?: any;
   springStyle?: any;
+  setType?: any;
+  setIsOpen?: any;
+  setTaskData?: any;
+  task?: any;
 }) {
   return (
     <animated.div
@@ -34,7 +42,12 @@ export function ListItem({
       onDragEnter={(e) => (dragOverItem.current = index)}
       onDragEnd={handleSort}
       onDragOver={(e) => e.preventDefault()}
-      className="bg-slate-100 text-light-900 h-[50px] my-3 flex justify-center items-center text-center hover:bg-slate-200 transition-all ease-in-out delay-100 rounded-md"
+      className="bg-slate-100 text-light-900 h-[50px] my-3 flex justify-center items-center text-center hover:bg-slate-200 transition-all ease-in-out delay-100 rounded-md hover:cursor-pointer"
+      onClick={() => {
+        setType("task");
+        setIsOpen(true);
+        setTaskData(task);
+      }}
     >
       {name}
     </animated.div>

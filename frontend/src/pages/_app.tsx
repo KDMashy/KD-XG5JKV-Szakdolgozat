@@ -9,6 +9,7 @@ import Content from "../components/layout/Content";
 import Footer from "../components/layout/Footer";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
+import { ChatProvider } from "../contexts/ChatProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const toastContext = {
@@ -26,9 +27,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Navbar />
-      <Content>
-        <Component {...pageProps} />
-      </Content>
+      <ChatProvider>
+        <Content>
+          <Component {...pageProps} />
+        </Content>
+      </ChatProvider>
       <Footer />
 
       <ToastContainer

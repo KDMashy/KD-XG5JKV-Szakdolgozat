@@ -43,17 +43,25 @@ function Button({
   const colorize = () => {
     switch (color) {
       case "primary":
-        return `${type === "dark" ? "bg-dark-700" : "bg-light-400"}`;
+        return `${
+          type === "dark"
+            ? "bg-dark-700 text-light-200"
+            : "bg-light-400 text-dark-700"
+        }`;
       case "secondary":
-        return `${type === "dark" ? "bg-dark-600" : "bg-light-300"}`;
+        return `${
+          type === "dark"
+            ? "bg-dark-600 text-light-200"
+            : "bg-light-300 text-dark-600"
+        }`;
       case "succes":
-        return ``;
+        return `bg-success-300 text-light-100`;
       case "warning":
-        return ``;
+        return `bg-warning-300 text-light-100`;
       case "error":
-        return ``;
+        return `bg-error-500 text-light-100`;
       case "disabled":
-        return ``;
+        return `bg-dark-700 text-light-300`;
       case "alternative":
         return `${type === "dark" ? "bg-light-300" : "bg-dark-400"}`;
       case "switch":

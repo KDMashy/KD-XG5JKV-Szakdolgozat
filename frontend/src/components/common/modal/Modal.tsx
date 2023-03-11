@@ -97,7 +97,7 @@ const Modal: React.FC<Props> = ({
     <>
       {isOpen && (
         <div
-          className={`fixed top-[100px] md:top-[200px] p-6 z-[100] inset-0 overflow-auto w-full h-[calc(100vh-72px)] md:h-[calc(100vh-80px)] flex justify-center ${center} ${shareTop}`}
+          className={`fixed top-[100px] md:top-[200px] p-6 z-[200] inset-0 overflow-auto w-full h-[calc(100vh-72px)] md:h-[calc(100vh-80px)] flex justify-center ${center} ${shareTop}`}
         >
           <div
             className={`flex items-center h-fit ${

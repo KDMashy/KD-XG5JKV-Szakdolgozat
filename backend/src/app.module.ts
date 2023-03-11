@@ -9,6 +9,17 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { User } from './modules/user/entity/user.entity';
+import { Team } from './modules/team/entity/team.entity';
+import { Teams } from './modules/team/entity/teams.entity';
+import { Badge } from './modules/project/entity/badge.entity';
+import { ProjectTeams } from './modules/project/entity/project_teams.entity';
+import { Project } from './modules/project/entity/project.entity';
+import { Row } from './modules/project/entity/row.entity';
+import { TaskBadges } from './modules/project/entity/task_badge.entity';
+import { Tasks } from './modules/project/entity/tasks.entity';
+import { UserTasks } from './modules/project/entity/user_task.entity';
+import { ChatGateway } from './chat.gateway';
 
 @Module({
   imports: [
@@ -28,7 +39,18 @@ import { UserModule } from './modules/user/user.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+      entities: [
+        User,
+        Team,
+        Teams,
+        Badge,
+        ProjectTeams,
+        Project,
+        Row,
+        TaskBadges,
+        Tasks,
+        UserTasks
+      ],
       synchronize: true,
     }),
     AuthModule,
@@ -38,6 +60,6 @@ import { UserModule } from './modules/user/user.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}

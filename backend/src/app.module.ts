@@ -20,6 +20,9 @@ import { TaskBadges } from './modules/project/entity/task_badge.entity';
 import { Tasks } from './modules/project/entity/tasks.entity';
 import { UserTasks } from './modules/project/entity/user_task.entity';
 import { ChatGateway } from './chat.gateway';
+import { AdminModule } from './modules/admin/admin.module';
+import { Admin } from './modules/admin/entity/admin.entity';
+import { AdminSession } from './modules/admin/entity/admin_session.entity';
 
 @Module({
   imports: [
@@ -41,6 +44,8 @@ import { ChatGateway } from './chat.gateway';
       database: process.env.DATABASE_NAME,
       entities: [
         User,
+        Admin,
+        AdminSession,
         Team,
         Teams,
         Badge,
@@ -54,6 +59,7 @@ import { ChatGateway } from './chat.gateway';
       synchronize: true,
     }),
     AuthModule,
+    AdminModule,
 
     PassportModule.register({
       session: true,

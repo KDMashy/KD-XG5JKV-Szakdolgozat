@@ -7,10 +7,12 @@ import { JwtStrategy } from './utils/strategy/jwt.strategy';
 import { LocalStrategy } from './utils/strategy/local.strategy';
 import { SessionSerializer } from './utils/session.serializer';
 import { jwtConfig } from './utils/config/jwt.config';
+import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
     UserModule,
+    AdminModule,
     JwtModule.registerAsync(jwtConfig)
   ],
   controllers: [AuthController],

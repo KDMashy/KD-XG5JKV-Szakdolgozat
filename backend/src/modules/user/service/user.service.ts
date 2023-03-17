@@ -60,6 +60,14 @@ export class UserService {
         return HttpStatus.CREATED;
     }
 
+    async getUserModel(id: number) {
+        return await this.userModel
+            .createQueryBuilder('users')
+            .select('users.group')
+            .where("id = :id", {id: id})
+            .getOne();
+    }
+
     async deleteUser(id: number){
         try{
             await this.userModel

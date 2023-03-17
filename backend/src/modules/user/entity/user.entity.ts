@@ -5,6 +5,7 @@ import { Project } from 'src/modules/project/entity/project.entity';
 import { Team } from 'src/modules/team/entity/team.entity';
 import { Tasks } from 'src/modules/project/entity/tasks.entity';
 import { Badge } from 'src/modules/project/entity/badge.entity';
+import { AdminSession } from 'src/modules/admin/entity/admin_session.entity';
 @Entity('users')
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -15,6 +16,13 @@ export class User extends BaseEntity {
         unique: true
     })
     username: string;
+
+    @Column({
+        type: 'varchar',
+        select: false,
+        default: 'user'
+    })
+    group: string
 
     @Column({
         type: 'varchar',
@@ -65,4 +73,7 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Badge, badge => badge.badge_creator)
     created_badges: Badge[]
+
+    @OneToMany(() => AdminSession, session => session.user)
+    sessions: AdminSession[]
 }

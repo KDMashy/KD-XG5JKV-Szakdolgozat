@@ -42,7 +42,6 @@ function SignIn() {
         values.password = "";
         localStorage.setItem("JWT", res.data?.access_token);
         token = res.data.access_token;
-        console.log(res);
       },
       null,
       setLoading(false)

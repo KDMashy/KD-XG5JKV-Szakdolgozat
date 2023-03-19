@@ -23,6 +23,8 @@ import { AdminModule } from './modules/admin/admin.module';
 import { Admin } from './modules/admin/entity/admin.entity';
 import { AdminSession } from './modules/admin/entity/admin_session.entity';
 import { ChatModule } from './modules/chat/chat.module';
+import { Channel } from './modules/chat/entity/channel.entity';
+import { Message } from './modules/chat/entity/message.entity';
 
 @Module({
   imports: [
@@ -55,7 +57,9 @@ import { ChatModule } from './modules/chat/chat.module';
         Row,
         TaskBadges,
         Tasks,
-        UserTasks
+        UserTasks,
+        Channel,
+        Message
       ],
       synchronize: true,
     }),

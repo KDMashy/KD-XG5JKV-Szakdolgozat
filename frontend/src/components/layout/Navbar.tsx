@@ -18,7 +18,7 @@ function Navbar() {
   });
 
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
   }, [user]);
 
   const MenuButtons = () => {

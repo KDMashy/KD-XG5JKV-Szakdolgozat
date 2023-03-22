@@ -6,11 +6,14 @@ import { useRouter } from "next/router";
 import { useDarkMode } from "../../hooks/useDarkMode";
 import Avatar from "../common/Avatar";
 import Button from "../common/Button";
+import { useChatContext } from "../../contexts/ChatProvider";
 
 function Navbar() {
   const { darkMode } = useDarkMode();
 
   const router = useRouter();
+
+  const { redirectPage } = useChatContext();
 
   const { user, logout } = useAuth({
     middleware: "guest",
@@ -42,11 +45,13 @@ function Navbar() {
             <Button
               key={index}
               label={button?.label}
-              route={button?.url}
+              // route={button?.url}
               type={darkMode ? "dark" : "light"}
               buttonType="menu_log"
               clickHandler={
-                button?.label === "Logout" ? () => logout() : () => {}
+                button?.label === "Logout"
+                  ? () => logout()
+                  : () => redirectPage(button?.url)
               }
             />
           );

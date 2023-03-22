@@ -15,6 +15,7 @@ interface ValueTypes {
   socket: any;
   typeIndicator: boolean;
   setTypeIndicator: React.Dispatch<React.SetStateAction<boolean>>;
+  redirectPage: any;
 }
 interface Channel {
   id?: number | string;
@@ -40,6 +41,7 @@ const defaultValue: ValueTypes = {
   socket: null,
   typeIndicator: false,
   setTypeIndicator: () => {},
+  redirectPage: () => {},
 };
 
 const ChatContext = React.createContext(defaultValue);
@@ -78,23 +80,20 @@ export function ChatProvider({ children }) {
         sender: user?.username,
       });
     await socket.removeAllListeners(currentChannel?.channel);
-    setCurrentChannel({
+    await setCurrentChannel({
       username: user?.username,
       channel: room,
     });
   };
 
-  const removeListener = async () => {
+  const redirectPage = async (path) => {
     await socket.removeAllListeners(currentChannel?.channel);
-    setCurrentChannel(defaultChannel);
+    await setCurrentChannel(defaultChannel);
+    router.push(path);
   };
 
   useEffect(() => {
-    removeListener();
-  }, [router.asPath]);
-
-  useEffect(() => {
-    if (currentChannel?.channel !== defaultChannel?.channel)
+    if (currentChannel?.channel)
       socket.emit("message", {
         message: "CONNECT",
         channel: currentChannel?.channel,
@@ -116,6 +115,7 @@ export function ChatProvider({ children }) {
         socket,
         typeIndicator,
         setTypeIndicator,
+        redirectPage,
       }}
     >
       {children}

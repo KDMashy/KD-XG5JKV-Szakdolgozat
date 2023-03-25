@@ -6,11 +6,14 @@ import { User } from './entity/user.entity';
 import { UserService } from './service/user.service';
 import { jwtConfig } from '../auth/utils/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
+import { Friend } from './entity/friends.entity';
+import { ChatModule } from '../chat/chat.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
-    JwtModule.registerAsync(jwtConfig)
+    TypeOrmModule.forFeature([User, Friend]),
+    JwtModule.registerAsync(jwtConfig),
+    ChatModule
   ],
   providers: [UserService],
   controllers: [UserController],

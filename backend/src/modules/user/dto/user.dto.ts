@@ -38,6 +38,7 @@ export interface IUser {
     first_name?: string;
     last_name?: string;
     status?: string;
+    active_notifications?: string;
 }
 
 export class SerialisedUser {

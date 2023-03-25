@@ -52,7 +52,7 @@ export class Message extends BaseEntity {
     @CreateDateColumn({ select: false })
     created_at: string;
 
-    @UpdateDateColumn({ type: "timestamp", select: false})
+    @UpdateDateColumn({ type: "timestamp"})
     updated_at: number;
 
     @ManyToOne(() => Channel, channel => channel.messages)

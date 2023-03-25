@@ -9,13 +9,20 @@ export class CreateMessageDto {
 
     @IsNotEmpty()
     @IsNumber()
-    channel: number;
+    channelId: number;
     
     @IsNotEmpty()
     @IsNumber()
-    sender: number;
+    senderId: number;
 
+    id?: number;
     need_moderation?: string;
+    reported?: string;
+    edited?: string;
+    deleted?: string;
+    admin_notification?: string;
+    readed?: string;
+    updated_at?: any;
 }
 
 export interface IMessage {

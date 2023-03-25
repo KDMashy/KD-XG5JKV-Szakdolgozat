@@ -14,7 +14,9 @@ export class CreateChannelDto {
     @IsNumber()
     second_user: number;
 
-    send_notifications?: string
+    id?: number;
+    send_notifications?: string;
+    is_active?: string;
 }
 
 export interface IChannel {

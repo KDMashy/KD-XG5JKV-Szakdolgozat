@@ -25,6 +25,7 @@ import { AdminSession } from './modules/admin/entity/admin_session.entity';
 import { ChatModule } from './modules/chat/chat.module';
 import { Channel } from './modules/chat/entity/channel.entity';
 import { Message } from './modules/chat/entity/message.entity';
+import { Friend } from './modules/user/entity/friends.entity';
 
 @Module({
   imports: [
@@ -59,7 +60,8 @@ import { Message } from './modules/chat/entity/message.entity';
         Tasks,
         UserTasks,
         Channel,
-        Message
+        Message,
+        Friend
       ],
       synchronize: true,
     }),

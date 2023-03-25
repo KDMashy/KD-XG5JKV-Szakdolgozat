@@ -31,9 +31,9 @@ function ChatPage() {
   useEffect(() => {
     socket.on(currentChannel?.channel, (data) => {
       console.log("get", data);
-      if (data?.message === "TYPING") {
+      if (data?.message_content === "TYPING") {
         setTypeIndicator(true);
-      } else if (data?.message === "ENDTYPING") setTypeIndicator(false);
+      } else if (data?.message_content === "ENDTYPING") setTypeIndicator(false);
     });
   }, [currentChannel]);
 
@@ -51,15 +51,27 @@ function ChatPage() {
   useEffect(() => {
     if (typing) {
       socket.emit("message", {
-        message: "TYPING",
+        channelId: currentChannel?.id,
+        senderId: user?.id,
+        message_content: "TYPING",
         channel: currentChannel?.channel,
         sender: user?.username,
+        is_active: currentChannel?.is_active,
+        send_notifications: currentChannel?.send_notifications,
+        firstUserId: currentChannel?.firstUserId,
+        secondUserId: currentChannel?.secondUserId,
       });
     } else
       socket.emit("message", {
-        message: "ENDTYPING",
+        channelId: currentChannel?.id,
+        senderId: user?.id,
+        message_content: "ENDTYPING",
         channel: currentChannel?.channel,
         sender: user?.username,
+        is_active: currentChannel?.is_active,
+        send_notifications: currentChannel?.send_notifications,
+        firstUserId: currentChannel?.firstUserId,
+        secondUserId: currentChannel?.secondUserId,
       });
   }, [typing]);
 
@@ -67,8 +79,17 @@ function ChatPage() {
     <div>
       <div className="flex flex-row">
         <Button
-          label="sabalabadu"
-          clickHandler={() => switchRoom("sabalabadu")}
+          label="MashyxCyrous"
+          clickHandler={() =>
+            switchRoom({
+              id: 2,
+              message_channel: "MashyxCyrous.Cyrous",
+              is_active: "true",
+              send_notifications: "true",
+              firstUserId: 1,
+              secondUserId: 2,
+            })
+          }
         />
         <Button label="sadge" clickHandler={() => switchRoom("sadge")} />
         {currentChannel?.channel && (

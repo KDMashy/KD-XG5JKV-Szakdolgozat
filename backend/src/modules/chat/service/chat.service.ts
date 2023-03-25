@@ -1,4 +1,128 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateChannelDto } from '../dto/channel.dto';
+import { CreateMessageDto, IMessage } from '../dto/message.dto';
+import { Channel } from '../entity/channel.entity';
+import { Message } from '../entity/message.entity';
 
 @Injectable()
-export class ChatService {}
+export class ChatService {
+    constructor (
+        @InjectRepository(Channel)
+        private readonly channelModel: Repository<Channel>,
+        @InjectRepository(Message)
+        private readonly messageModel: Repository<Message>
+    ) {}
+
+    async GetChannels (user) {
+        return await this.channelModel
+            .createQueryBuilder('channel')
+            .where('channel.first_user = :id', {id: user?.id})
+            .orWhere('channel.second_user = :id', {id: user?.id})
+            .getMany();
+    }
+
+    async GetMessages (options) {
+        return await this.messageModel.find({
+            where: {
+                channel: parseInt(options.id)
+            },
+            skip: options.offset,
+            take: options.limit,
+        })
+    }
+
+    //CREATE
+    async CreateChannel (newChannel: CreateChannelDto) {
+        let newChannelRecord = await this.channelModel.create(newChannel);
+        return await newChannelRecord.save();
+    }
+
+    //CREATE
+    async CreateMessage (newMessage: CreateMessageDto) {
+        let newMessageRecord = await this.messageModel.create({
+            message_content: newMessage?.message_content,
+            need_moderation: newMessage?.need_moderation,
+            reported: newMessage?.reported,
+            edited: newMessage?.edited,
+            deleted: newMessage?.deleted,
+            admin_notification: newMessage?.admin_notification,
+            readed: newMessage?.readed,
+            channel: newMessage?.channelId,
+            sender: newMessage?.senderId
+        });
+        
+        return await newMessageRecord.save();
+    }
+
+    //EDIT,MODERATE
+    async EditMessage (editMessage: CreateMessageDto) {
+        let foundMessage = await this.messageModel.findOne({
+            where: {id: editMessage?.id}
+        })
+        if(foundMessage) {
+            editMessage.edited = 'true'
+            let edited = await this.messageModel.create(editMessage);
+            return await this.messageModel.update(
+                foundMessage?.id,
+                edited
+            );
+        }
+        return HttpStatus.CONFLICT;
+    }
+
+    //EDIT CHANNEL
+    async EditChannel (editChannel: CreateChannelDto) {
+        let foundChannel = await this.channelModel.findOne({
+            where: {id: editChannel?.id}
+        });
+        if(foundChannel) {
+            let edited = await this.channelModel.create(foundChannel);
+            return await this.channelModel.update(
+                foundChannel?.id,
+                edited
+            );
+        }
+        return HttpStatus.CONFLICT;
+    }
+
+    //REMOVE SOFT MESSAGE
+    async DeleteMessage (message: CreateMessageDto) {
+        let foundMessage = await this.messageModel.findOne({
+            where: {id: message?.id}
+        })
+        if(!foundMessage) return HttpStatus.BAD_REQUEST;
+
+        foundMessage.deleted = 'true';
+        return await foundMessage.save();
+    }
+
+    //REMOVE HARD CHANNEL
+    async DeleteChannel (channel: CreateChannelDto) {
+        let foundChannel = await this.channelModel.findOne({
+            where: {id: channel?.id}
+        })
+        if(!foundChannel) return HttpStatus.BAD_REQUEST;
+
+        return await this.channelModel.remove(foundChannel);
+    }
+
+    //REMOVE HARD
+    // async DeleteChatComponent (id, model){
+    //     if(!model || !id) return HttpStatus.BAD_REQUEST;
+    //     let modelType = null
+    //     if(model === "channel"){
+    //         modelType = this.channelModel
+    //     } else modelType = this.messageModel
+
+    //     let found = await modelType.findOne({
+    //         where: {
+    //             id: id
+    //         }
+    //     })
+    //     if (!found) return HttpStatus.CONFLICT;
+
+    //     return await modelType.remove(found)
+    // }
+}

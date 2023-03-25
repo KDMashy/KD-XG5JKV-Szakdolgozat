@@ -22,6 +22,11 @@ interface Channel {
   username?: string;
   channel?: string;
   sender?: string;
+  message_channel?: string;
+  is_active?: string;
+  send_notifications?: string;
+  firstUserId?: number;
+  secondUserId?: number;
 }
 
 const defaultChannel: Channel = {
@@ -65,9 +70,15 @@ export function ChatProvider({ children }) {
 
   const sendMessage = (values, setFieldValue) => {
     socket.emit("message", {
-      message: values?.message,
+      channelId: currentChannel?.id,
+      senderId: user?.id,
+      message_content: values?.message,
       channel: currentChannel?.channel,
       sender: user?.username,
+      is_active: currentChannel?.is_active,
+      send_notifications: currentChannel?.send_notifications,
+      firstUserId: currentChannel?.firstUserId,
+      secondUserId: currentChannel?.secondUserId,
     });
     setFieldValue("message", "");
   };
@@ -75,14 +86,25 @@ export function ChatProvider({ children }) {
   const switchRoom = async (room) => {
     if (currentChannel?.channel !== defaultChannel?.channel)
       socket.emit("message", {
-        message: "DISCONNECT",
+        channelId: currentChannel?.id,
+        senderId: user?.id,
+        message_content: "DISCONNECT",
         channel: currentChannel?.channel,
         sender: user?.username,
+        is_active: currentChannel?.is_active,
+        send_notifications: currentChannel?.send_notifications,
+        firstUserId: currentChannel?.firstUserId,
+        secondUserId: currentChannel?.secondUserId,
       });
     await socket.removeAllListeners(currentChannel?.channel);
     await setCurrentChannel({
+      id: room?.id,
       username: user?.username,
-      channel: room,
+      channel: room?.message_channel,
+      is_active: room?.is_active,
+      send_notifications: room?.send_notifications,
+      firstUserId: room?.firstUserId,
+      secondUserId: room?.secondUserId,
     });
   };
 
@@ -95,9 +117,15 @@ export function ChatProvider({ children }) {
   useEffect(() => {
     if (currentChannel?.channel)
       socket.emit("message", {
-        message: "CONNECT",
+        channelId: currentChannel?.id,
+        senderId: user?.id,
+        message_content: "CONNECT",
         channel: currentChannel?.channel,
         sender: user?.username,
+        is_active: currentChannel?.is_active,
+        send_notifications: currentChannel?.send_notifications,
+        firstUserId: currentChannel?.firstUserId,
+        secondUserId: currentChannel?.secondUserId,
       });
   }, [currentChannel]);
 

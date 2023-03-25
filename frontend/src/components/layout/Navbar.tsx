@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LoginTypes } from "../../constants/LoginTypes";
 import { navButtons } from "../../constants/NavButtons";
 import { useAuth } from "../../hooks/useAuth";
@@ -7,6 +7,9 @@ import { useDarkMode } from "../../hooks/useDarkMode";
 import Avatar from "../common/Avatar";
 import Button from "../common/Button";
 import { useChatContext } from "../../contexts/ChatProvider";
+import { CustomInput } from "../common/form/CustomInput";
+import { axios } from "../../lib/axios";
+import { API_URL } from "../../constants/url";
 
 function Navbar() {
   const { darkMode } = useDarkMode();
@@ -20,9 +23,79 @@ function Navbar() {
     redirectIfAuthenticated: false,
   });
 
+  const [username, setUsername] = useState("");
+  const [usersList, setUsersList] = useState([]);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const ref = useRef(null);
+
   useEffect(() => {
-    // console.log(user);
-  }, [user]);
+    const checkIfClickedOutside = (e: MouseEvent) => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      if (searchOpen && ref.current && !ref.current.contains(e.target)) {
+        setSearchOpen(false);
+      }
+    };
+
+    if (searchOpen) {
+      document.addEventListener("click", checkIfClickedOutside);
+    } else {
+      document.removeEventListener("click", checkIfClickedOutside);
+    }
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+  }, [searchOpen]);
+
+  const getUserlist = async (username) => {
+    await axios(
+      "get",
+      `${API_URL}/user/search-by-username`,
+      { string: username !== "" ? username : null },
+      null,
+      (res) => {
+        console.log(res?.data);
+
+        setUsersList(res?.data);
+      }
+    );
+  };
+
+  useEffect(() => {
+    let timer;
+    if (user) {
+      timer = setTimeout(() => {
+        getUserlist(username);
+      }, 250);
+    }
+    return () => clearInterval(timer);
+  }, [username]);
+
+  useEffect(() => {
+    if (usersList?.length > 0) {
+      setSearchOpen(true);
+    } else setSearchOpen(false);
+  }, [usersList]);
+
+  const sendFriendReq = async (found) => {
+    await axios(
+      "post",
+      `${API_URL}/user/add-new-friend`,
+      { id: found?.id },
+      null,
+      (res) => {
+        let tmp = [];
+        usersList.map((item) => {
+          if (item?.id === found.id) tmp.push(item);
+        });
+        setUsersList(tmp);
+      }
+    );
+  };
 
   const MenuButtons = () => {
     if (!user) {
@@ -64,7 +137,7 @@ function Navbar() {
       className={`flex justify-between ${
         !user
           ? "py-7 pl-7"
-          : `px-2 h-[160px] overflow-hidden mb-10 ${
+          : `px-2 h-[160px] mb-10 ${
               darkMode ? "bg-dark-700 bg-opacity-30 text-light-400" : ""
             }`
       }`}
@@ -86,7 +159,37 @@ function Navbar() {
                 </h1>
                 <h2 className="font-noto font-semibold -mt-2">{user?.email}</h2>
               </div>
-              <div className="h-[40px] w-[400px] bg-dark-100 rounded-bl-[20px] font-noto text-lg font-bold text-center items-center flex justify-center">
+              <div className="relative min-w-[250px] max-w-[300px]">
+                <CustomInput
+                  placeholder="Search by username"
+                  onChange={(e) => setUsername(e?.target?.value)}
+                  value={username}
+                />
+                <div
+                  ref={ref}
+                  className={`${
+                    searchOpen ? "absolute" : "hidden"
+                  } z-[100] md:w-[250px] max-h-[200px] rounded-md border-2 border-dark-200 bg-dark-500 overflow-y-auto top-[50px] left-0`}
+                >
+                  {usersList?.map((found) => (
+                    <div
+                      key={found?.username}
+                      className="flex justify-between items-center border-b-2 border-dark-200 py-3 px-2 w-full hover:bg-dark-400 transition-all ease-in-out"
+                    >
+                      <p className="text-dark-200 max-w-2/3">
+                        {found?.username}
+                      </p>
+                      <Button
+                        label="Add"
+                        clickHandler={() => sendFriendReq(found)}
+                        className="my-1"
+                        padding="py-2 px-5"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="h-[40px] w-[200px] bg-dark-100 rounded-bl-[20px] font-noto text-lg font-bold text-center items-center flex justify-center">
                 NOTIFICATIONS PLACEHOLDER
               </div>
             </div>

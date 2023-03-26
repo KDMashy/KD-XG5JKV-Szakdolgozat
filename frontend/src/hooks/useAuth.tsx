@@ -8,7 +8,7 @@ export const useAuth = ({
   middleware,
   redirectIfAuthenticated,
 }: {
-  middleware: string;
+  middleware: "auth" | "guest";
   redirectIfAuthenticated: boolean | string;
 }) => {
   const [login, setLogin] = useState(false);

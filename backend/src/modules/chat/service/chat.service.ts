@@ -99,13 +99,29 @@ export class ChatService {
     }
 
     //REMOVE HARD CHANNEL
-    async DeleteChannel (channel: CreateChannelDto) {
+    async DeleteChannel (channel) {
         let foundChannel = await this.channelModel.findOne({
-            where: {id: channel?.id}
+            where: {id: channel}
         })
         if(!foundChannel) return HttpStatus.BAD_REQUEST;
 
         return await this.channelModel.remove(foundChannel);
+    }
+
+    async DeleteChannelForTeamMember (member) {
+        let foundChannel = await this.channelModel.findOne({
+            where: {id: member?.sender?.id}
+        })
+        if(!foundChannel) return HttpStatus.BAD_REQUEST;
+
+        await this.channelModel.remove(member.sender)
+
+        // return await this.channelModel
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(Channel)
+        //     .where('first_user = :id', {id: member?.id})
+        //     .andWhere('message_channel = :channel', {channel: member?.sender?.message_channel})
     }
 
     //REMOVE HARD

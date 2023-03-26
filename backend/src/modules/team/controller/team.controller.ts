@@ -1,7 +1,7 @@
 import { CreateTeamDto, UpdateTeamDto } from './../dto/team.dto';
 import { Controller, Get, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Delete, Post, Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
-import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
+import { Body, Param, Req } from '@nestjs/common/decorators/http/route-params.decorator';
 import { TeamService } from '../service/team.service';
 import { AuthenticatedGuard } from 'src/modules/auth/utils/guards/local.guard';
 
@@ -27,9 +27,22 @@ export class TeamController {
         return this.teamService.getOneById(id)
     }
 
+    @UseGuards(AuthenticatedGuard)
     @Post('')
-    create(@Body() team: CreateTeamDto) {
-        return this.teamService.createTeam(team)
+    create(@Body() team: CreateTeamDto, @Req() req) {
+        return this.teamService.createTeam(team, req)
+    }
+
+    @UseGuards(AuthenticatedGuard)
+    @Post('add-member')
+    AddMember(@Req() req) {
+        return this.teamService.AddNewMemberReq(req)
+    }
+
+    @UseGuards(AuthenticatedGuard)
+    @Delete('remove-member')
+    RemoveMember(@Req() req) {
+        return this.teamService.RemoveMemberReq(req)
     }
 
     @Put(':id')

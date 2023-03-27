@@ -18,8 +18,8 @@ export class TeamController {
     }
 
     @Get(':id')
-    getAll(@Param('id', ParseIntPipe) id: number) {
-        return this.teamService.getAllForUser(id)
+    getAll(@Param('id', ParseIntPipe) id: number, @Req() req) {
+        return this.teamService.getAllForUser(id, req)
     }
 
     @Get('/user/:id')
@@ -27,19 +27,16 @@ export class TeamController {
         return this.teamService.getOneById(id)
     }
 
-    @UseGuards(AuthenticatedGuard)
     @Post('')
     create(@Body() team: CreateTeamDto, @Req() req) {
         return this.teamService.createTeam(team, req)
     }
 
-    @UseGuards(AuthenticatedGuard)
     @Post('add-member')
     AddMember(@Req() req) {
         return this.teamService.AddNewMemberReq(req)
     }
 
-    @UseGuards(AuthenticatedGuard)
     @Delete('remove-member')
     RemoveMember(@Req() req) {
         return this.teamService.RemoveMemberReq(req)

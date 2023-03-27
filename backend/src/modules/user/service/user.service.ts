@@ -212,11 +212,12 @@ export class UserService {
 
         if(!first_user || !second_user) return HttpStatus.CONFLICT
 
-        newFriendRecord.save()
+        let response = await newFriendRecord.save()
         this.chatService.CreateChannel({
             message_channel: `${first_user?.username}x${second_user?.username}.${second_user?.username}`,
             first_user: first_user?.id,
             second_user: second_user?.id,
         })
+        return response
     }
 }

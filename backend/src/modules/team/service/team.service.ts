@@ -33,7 +33,7 @@ export class TeamService {
             })
     }
 
-    async getAllForUser(id: number) {
+    async getAllForUser(id, req) {
         return await this.teamModel.find({
             where: { team_creator: id },
             relations: [
@@ -42,7 +42,9 @@ export class TeamService {
                 "projects.project",
                 "membership",
                 "membership.user"
-            ]
+            ],
+            skip: req.offset,
+            take: req.limit
         })
     }
 
@@ -144,7 +146,7 @@ export class TeamService {
     }
 
     async updateTeam(team: UpdateTeamDto, id: number) {
-        const editTeam: Team = await this.teamModel.findOne({
+        let editTeam = await this.teamModel.findOne({
             where: { id: id }
         })
         editTeam.team_name = team.team_name

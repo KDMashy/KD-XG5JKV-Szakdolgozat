@@ -9,6 +9,7 @@ import { AdminSession } from 'src/modules/admin/entity/admin_session.entity';
 import { Channel } from 'src/modules/chat/entity/channel.entity';
 import { Message } from 'src/modules/chat/entity/message.entity';
 import { Friend } from './friends.entity';
+import { Notification } from 'src/modules/chat/entity/notification.entity';
 @Entity('users')
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -101,4 +102,7 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Friend, friend => friend.second_user, {onDelete: 'CASCADE'})
     friend_two: Friend[]
+
+    @OneToMany(() => Notification, notification => notification.user, {onDelete: 'CASCADE'})
+    notifications: Notification[]
 }

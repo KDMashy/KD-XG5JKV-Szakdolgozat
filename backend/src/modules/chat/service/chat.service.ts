@@ -1,10 +1,13 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/modules/user/entity/user.entity';
+import { UserService } from 'src/modules/user/service/user.service';
 import { Repository } from 'typeorm';
 import { CreateChannelDto } from '../dto/channel.dto';
 import { CreateMessageDto, IMessage } from '../dto/message.dto';
 import { Channel } from '../entity/channel.entity';
 import { Message } from '../entity/message.entity';
+import { Notification } from '../entity/notification.entity';
 
 @Injectable()
 export class ChatService {
@@ -12,7 +15,10 @@ export class ChatService {
         @InjectRepository(Channel)
         private readonly channelModel: Repository<Channel>,
         @InjectRepository(Message)
-        private readonly messageModel: Repository<Message>
+        private readonly messageModel: Repository<Message>,
+        @InjectRepository(Notification)
+        private readonly notificationModel: Repository<Notification>,
+        private userService: UserService
     ) {}
 
     async GetChannels (user) {
@@ -141,4 +147,66 @@ export class ChatService {
 
     //     return await modelType.remove(found)
     // }
+
+    async CheckIfOnline (user_id) {
+        let found:User = await this.userService.findUserById(user_id)
+        if(!found) return "404"
+        if(found?.active_notifications === "true") return true
+        return false
+    }
+
+    async GetNotifications (id) {
+        return await this.notificationModel.find({
+            where: {user: id},
+            relations: [
+                'user'
+            ]
+        })
+    }
+
+    async CreateNotification (req: {
+        user_id: number,
+        content: string;
+        type: "project" | "message"
+    }) {
+        if(!req.user_id || !req.content) return HttpStatus.BAD_REQUEST
+
+        let newNotification = await this.notificationModel.create({
+            user: req.user_id,
+            content: req.content
+        })
+
+        if(!newNotification) return HttpStatus.CONFLICT
+
+        let response = await newNotification.save()
+
+        if(!response) return HttpStatus.CONFLICT
+
+        return {
+            message: "Sent notification",
+            response: response
+        }
+    }
+
+    async RemoveNotification (req: {
+        id: number
+    }) {
+        if(!req.id) return HttpStatus.BAD_REQUEST
+
+        let found = await this.notificationModel.findOne({
+            where: {
+                id: req.id
+            }
+        })
+
+        if(!found) return HttpStatus.CONFLICT
+
+        let response = await this.notificationModel.remove(found)
+    }
+
+    async RemoveMultipleNotifications (list) {
+        list.map(async item => {
+            await this.RemoveNotification(item)
+        })
+    }
 }

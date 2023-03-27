@@ -26,6 +26,7 @@ import { ChatModule } from './modules/chat/chat.module';
 import { Channel } from './modules/chat/entity/channel.entity';
 import { Message } from './modules/chat/entity/message.entity';
 import { Friend } from './modules/user/entity/friends.entity';
+import { Notification } from './modules/chat/entity/notification.entity';
 
 @Module({
   imports: [
@@ -61,7 +62,8 @@ import { Friend } from './modules/user/entity/friends.entity';
         UserTasks,
         Channel,
         Message,
-        Friend
+        Friend,
+        Notification
       ],
       synchronize: true,
     }),

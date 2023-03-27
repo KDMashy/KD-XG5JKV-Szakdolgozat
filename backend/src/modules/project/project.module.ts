@@ -14,10 +14,12 @@ import { TaskService } from './service/task/task.service';
 import { Team } from '../team/entity/team.entity';
 import { ProjectTeams } from './entity/project_teams.entity';
 import { Row } from './entity/row.entity';
+import { ChatModule } from '../chat/chat.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Project, ProjectTeams, Team, Tasks, User, Badge, TaskBadges, Row])
+    TypeOrmModule.forFeature([Project, ProjectTeams, Team, Tasks, User, Badge, TaskBadges, Row]),
+    ChatModule
   ],
   controllers: [ProjectController, BadgeController, TaskController],
   providers: [ProjectService, BadgeService, TaskService],

@@ -13,7 +13,7 @@ import { ChatService } from './service/chat.service';
     TypeOrmModule.forFeature([
       Channel, Message, Notification
     ]),
-    UserModule
+    // UserModule
   ],
   providers: [ChatService, ChatGateway],
   controllers: [ChatController],

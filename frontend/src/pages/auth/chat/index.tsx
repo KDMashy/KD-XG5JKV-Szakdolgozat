@@ -7,6 +7,8 @@ import { CustomInput } from "../../../components/common/form/CustomInput";
 import Loading from "../../../components/common/Loading";
 import { useChatContext } from "../../../contexts/ChatProvider";
 import { useAuth } from "../../../hooks/useAuth";
+import { axios } from "../../../lib/axios";
+import { API_URL } from "../../../constants/url";
 
 function ChatPage() {
   const { user } = useAuth({
@@ -22,7 +24,49 @@ function ChatPage() {
   const [sentMessage, setSentMessage] = useState(false);
   const [typeIndicator, setTypeIndicator] = useState(false);
 
+  const [channels, setChannels] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const { currentChannel, switchRoom, sendMessage, socket } = useChatContext();
+
+  const getChannels = async () => {
+    setLoading(true);
+    await axios(
+      "get",
+      `${API_URL}/chat/channels`,
+      null,
+      null,
+      (res) => {
+        let tmp = [];
+        res?.data?.map((item) => {
+          if (
+            !tmp?.filter(
+              (tmpItem) => tmpItem?.message_channel === item?.message_channel
+            )[0]
+          )
+            tmp.push({
+              id: item?.id,
+              message_channel: item?.message_channel,
+              is_active: item?.is_active,
+              send_notifications: item?.send_notifications,
+              firstUserId: item?.first_user?.id,
+              secondUserId: item?.second_user?.id,
+            });
+        });
+        setChannels(tmp);
+      },
+      null,
+      () => setLoading(false)
+    );
+  };
+
+  useEffect(() => {
+    getChannels();
+  }, []);
+
+  useEffect(() => {
+    console.log(channels);
+  }, [channels]);
 
   useEffect(() => {
     socket.removeAllListeners();
@@ -77,20 +121,24 @@ function ChatPage() {
 
   return (
     <div>
-      <div className="flex flex-row">
-        <Button
-          label="MashyxCyrous"
-          clickHandler={() =>
-            switchRoom({
-              id: 2,
-              message_channel: "MashyxCyrous.Cyrous",
-              is_active: "true",
-              send_notifications: "true",
-              firstUserId: 1,
-              secondUserId: 2,
-            })
-          }
-        />
+      <div className="flex flex-col">
+        {channels?.map((channel) => (
+          <Button
+            key={channel?.message_channel}
+            label={channel?.message_channel?.replaceAll("_", " ").split(".")[1]}
+            clickHandler={() =>
+              switchRoom({
+                id: channel?.id,
+                message_channel: channel?.message_channel,
+                is_active: channel?.is_active,
+                send_notifications: channel?.send_notifications,
+                firstUserId: channel?.firstUserId,
+                secondUserId: channel?.secondUserId,
+              })
+            }
+          />
+        ))}
+
         <Button label="sadge" clickHandler={() => switchRoom("sadge")} />
         {currentChannel?.channel && (
           <Formik initialValues={initialValues} onSubmit={() => {}}>

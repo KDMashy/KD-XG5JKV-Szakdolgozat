@@ -18,12 +18,24 @@ export class ChatService {
         private readonly messageModel: Repository<Message>,
         @InjectRepository(Notification)
         private readonly notificationModel: Repository<Notification>,
-        private userService: UserService
+        // private userService: UserService
     ) {}
 
     async GetChannels (user) {
+        // return await this.channelModel.find({
+        //     where: [
+        //         {first_user: user?.id},
+        //         {second_user: user?.id}
+        //     ],
+        //     relations: [
+        //         'first_user',
+        //         'second_user'
+        //     ]
+        // })
         return await this.channelModel
             .createQueryBuilder('channel')
+            .innerJoinAndMapOne('channel.first_user', User, 'first_user', 'channel.first_user = first_user.id')
+            .innerJoinAndMapOne('channel.second_user', User, 'second_user', 'channel.second_user = second_user.id')
             .where('channel.first_user = :id', {id: user?.id})
             .orWhere('channel.second_user = :id', {id: user?.id})
             .getMany();
@@ -148,12 +160,12 @@ export class ChatService {
     //     return await modelType.remove(found)
     // }
 
-    async CheckIfOnline (user_id) {
-        let found:User = await this.userService.findUserById(user_id)
-        if(!found) return "404"
-        if(found?.active_notifications === "true") return true
-        return false
-    }
+    // async CheckIfOnline (user_id) {
+    //     let found:User = await this.userService.findUserById(user_id)
+    //     if(!found) return "404"
+    //     if(found?.active_notifications === "true") return true
+    //     return false
+    // }
 
     async GetNotifications (id) {
         return await this.notificationModel.find({

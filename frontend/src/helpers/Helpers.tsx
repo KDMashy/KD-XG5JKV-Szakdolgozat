@@ -33,3 +33,47 @@ export function returnEmitMessageWithDic(currentChannel, user, content) {
     secondUserId: currentChannel?.secondUserId,
   };
 }
+
+export function getIds(data) {
+  let tmp = [];
+  data?.map((item) => {
+    tmp.push({ id: item?.id });
+  });
+  return tmp;
+}
+
+export const getChannelName = (currentChannel, user) => {
+  if (currentChannel?.message_channel?.includes("group"))
+    return currentChannel?.message_channel?.replaceAll("_", " ").split(".")[0];
+
+  let names = currentChannel?.message_channel
+    ? currentChannel?.message_channel?.split(".")[0].split(";")
+    : currentChannel?.channel?.split(".")[0].split(";");
+  if (names[0] === user?.username) return names[1];
+  return names[0];
+};
+
+export function mergeFriendlist(user) {
+  if (!user) return;
+  let tmp = [];
+  user?.friend_one?.map((friend) => tmp.push(checker(friend, user)));
+  user?.friend_two?.map((friend) => {
+    if (!tmp?.filter((item) => item?.id === friend?.id))
+      tmp.push(checker(friend, user));
+  });
+  return tmp;
+}
+
+function checker(friend, user) {
+  if (friend?.first_user?.id === user?.id) return friend?.second_user;
+  return friend?.first_user;
+}
+
+export function getAvailableList(friends, members) {
+  let tmp = [];
+  friends?.map((item) => {
+    if (!members?.filter((member) => member?.id === item?.id)[0])
+      tmp.push(item);
+  });
+  return tmp;
+}

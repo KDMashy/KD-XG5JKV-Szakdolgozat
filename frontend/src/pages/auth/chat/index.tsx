@@ -11,6 +11,7 @@ import { axios } from "../../../lib/axios";
 import { API_URL } from "../../../constants/url";
 import {
   checkMessageDictionary,
+  getChannelName,
   returnEmitMessageWithDic,
 } from "../../../helpers/Helpers";
 import CustomForm from "../../../components/common/form/CustomForm";
@@ -130,16 +131,11 @@ function ChatPage() {
   }, [currentChannel]);
 
   useEffect(() => {
-    console.log(channels);
-  }, [channels]);
-
-  useEffect(() => {
     socket.removeAllListeners();
   }, []);
 
   useEffect(() => {
     socket.on(currentChannel?.channel, async (data) => {
-      console.log("get", data);
       if (data?.message_content === "TYPING") {
         setTypeIndicator(true);
       } else if (data?.message_content === "ENDTYPING") setTypeIndicator(false);
@@ -187,9 +183,7 @@ function ChatPage() {
           {channels?.map((channel) => (
             <Button
               key={channel?.message_channel}
-              label={
-                channel?.message_channel?.replaceAll("_", " ").split(".")[1]
-              }
+              label={getChannelName(channel, user)}
               clickHandler={() =>
                 switchRoom({
                   id: channel?.id,

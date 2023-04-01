@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../Button";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
+import { getChannelName } from "../../../helpers/Helpers";
 
 function MessageList({
   currentChannel,
@@ -20,7 +21,7 @@ function MessageList({
 }) {
   return (
     <div className="h-[600px] flex flex-col justify-between">
-      <h2>{currentChannel?.receiverName}</h2>
+      <h2>{getChannelName(currentChannel, user)}</h2>
       <div
         className="flex flex-col h-[500px] overflow-y-auto border-2 border-light-300 py-5 rounded-md"
         ref={chatBottom}

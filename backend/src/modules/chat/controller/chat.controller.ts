@@ -69,6 +69,6 @@ export class ChatController {
 
     @Delete('delete-multiple-notification')
     async DeleteNotifications(@Req() req) {
-        return await this.chatService.RemoveNotification(req.query.notifications)
+        return await this.chatService.RemoveMultipleNotifications(req.query.notifications)
     }
 }

@@ -62,6 +62,8 @@ export class TeamService {
     }
 
     async createTeam(team: CreateTeamDto, req) {
+        if(team.team_name.includes('group')) return HttpStatus.BAD_REQUEST
+        
         const newTeam = await this.teamModel.create({
             team_name: team.team_name,
             team_description: team.team_description,

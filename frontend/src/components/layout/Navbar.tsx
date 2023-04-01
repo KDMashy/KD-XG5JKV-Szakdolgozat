@@ -10,6 +10,7 @@ import { useChatContext } from "../../contexts/ChatProvider";
 import { CustomInput } from "../common/form/CustomInput";
 import { axios } from "../../lib/axios";
 import { API_URL } from "../../constants/url";
+import NotificationDropdown from "../common/notifications/NotificationDropdown";
 
 function Navbar() {
   const { darkMode } = useDarkMode();
@@ -18,7 +19,7 @@ function Navbar() {
 
   const { redirectPage } = useChatContext();
 
-  const { user, logout } = useAuth({
+  const { user, logout, notifications } = useAuth({
     middleware: "guest",
     redirectIfAuthenticated: false,
   });
@@ -58,8 +59,6 @@ function Navbar() {
       { string: username !== "" ? username : null },
       null,
       (res) => {
-        console.log(res?.data);
-
         setUsersList(res?.data);
       }
     );
@@ -90,7 +89,7 @@ function Navbar() {
       (res) => {
         let tmp = [];
         usersList.map((item) => {
-          if (item?.id === found.id) tmp.push(item);
+          if (item?.id !== found.id) tmp.push(item);
         });
         setUsersList(tmp);
       }
@@ -190,7 +189,7 @@ function Navbar() {
                 </div>
               </div>
               <div className="h-[40px] w-[200px] bg-dark-100 rounded-bl-[20px] font-noto text-lg font-bold text-center items-center flex justify-center">
-                NOTIFICATIONS PLACEHOLDER
+                <NotificationDropdown notifications={notifications} />
               </div>
             </div>
             <div className="flex justify-between mb-5">{MenuButtons()}</div>

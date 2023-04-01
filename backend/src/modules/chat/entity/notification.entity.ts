@@ -6,6 +6,7 @@ export class Notification extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column()
     @ManyToOne(() => User, user => user.notifications)
     user: number
 

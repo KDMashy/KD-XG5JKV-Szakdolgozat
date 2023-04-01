@@ -42,9 +42,15 @@ const newColumnValidation = yup.object().shape({
   row_name: yup.string().required("Column name is required"),
 });
 
+const newTeamValidation = yup.object().shape({
+  team_name: yup.string().required("Team name is required"),
+  team_description: yup.string().required("Team description is required"),
+});
+
 export {
   registrationValidation,
   loginValidation,
   newProjectValidation,
   newColumnValidation,
+  newTeamValidation,
 };

@@ -43,11 +43,11 @@ export class ChatGateway{
                     sender: message?.sender
                 })
             } else {
-                if(!message.channel.includes("group")){
+                if(!message.channel.includes("group")){    
                     await this.chatService.CreateNotification({
-                        user_id: message?.firstUserId !== createdMessage?.sender ?
-                            message?.firstUserId : message?.secondUserId,
-                        content: `${message?.username} sent a message`,
+                        user_id: message?.firstUserId === message?.senderId ?
+                            message?.secondUserId : message?.firstUserId,
+                        content: `${message?.username ?? message?.sender} sent a message`,
                         type: "message"
                     })
                 }

@@ -140,6 +140,12 @@ export class UserService {
                     'team_member',
                     'team_member.team',
                     'tasks',
+                    'friend_one',
+                    'friend_two',
+                    'friend_one.first_user',
+                    'friend_two.first_user',
+                    'friend_one.second_user',
+                    'friend_two.second_user'
                 ]
             })
     }
@@ -214,7 +220,7 @@ export class UserService {
 
         let response = await newFriendRecord.save()
         this.chatService.CreateChannel({
-            message_channel: `${first_user?.username}x${second_user?.username}.${second_user?.username}`,
+            message_channel: `${first_user?.username};${second_user?.username}.${second_user?.username}`,
             first_user: first_user?.id,
             second_user: second_user?.id,
         })

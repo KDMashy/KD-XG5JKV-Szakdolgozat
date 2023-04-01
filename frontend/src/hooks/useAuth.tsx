@@ -16,6 +16,26 @@ export const useAuth = ({
   const router = useRouter();
 
   const {
+    data: notifications,
+    error: notiError,
+    mutate: notiMutate,
+  } = useSWR(`${API_URL}/chat/notifications`, async () => {
+    if (localStorage.getItem("JWT") && user) {
+      return await axios(
+        "get",
+        `${API_URL}/chat/notifications`,
+        {
+          id: user?.id ?? null,
+        },
+        null,
+        (res) => {
+          return res.data;
+        }
+      );
+    }
+  });
+
+  const {
     data: user,
     error,
     mutate,
@@ -26,11 +46,11 @@ export const useAuth = ({
         `${API_URL}/user`,
         null,
         null,
-        (res: any) => {
+        (res) => {
           setLogin(true);
           return res.data;
         },
-        (error: any) => {
+        (resError) => {
           localStorage.removeItem("JWT");
           router.push("/");
         }
@@ -67,6 +87,7 @@ export const useAuth = ({
 
   return {
     user,
+    notifications,
     login,
     logout,
   };

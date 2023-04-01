@@ -8,13 +8,15 @@ export const ListItem = ({
   url = "",
   id,
   darkMode = true,
+  project = true,
 }: {
   name: string;
   description: string;
-  badges: any[];
-  url: string;
+  badges?: any[];
+  url?: string;
   id: number;
   darkMode: boolean;
+  project?: boolean;
 }) => {
   return (
     <div className="bg-light-600 w-full h-[120px] rounded-2xl flex items-center my-10">
@@ -40,7 +42,7 @@ export const ListItem = ({
             <Button
               type={darkMode ? "dark" : "light"}
               label="View"
-              route={`/auth/projects/${id}`}
+              route={`/auth/${project ? "projects" : "teams"}/${id}`}
             />
           </div>
         </div>

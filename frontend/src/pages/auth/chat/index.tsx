@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import Button from "../../../components/common/Button";
 import { CustomInput } from "../../../components/common/form/CustomInput";
@@ -9,6 +9,14 @@ import { useChatContext } from "../../../contexts/ChatProvider";
 import { useAuth } from "../../../hooks/useAuth";
 import { axios } from "../../../lib/axios";
 import { API_URL } from "../../../constants/url";
+import {
+  checkMessageDictionary,
+  returnEmitMessageWithDic,
+} from "../../../helpers/Helpers";
+import CustomForm from "../../../components/common/form/CustomForm";
+import Message from "../../../components/common/chat/Message";
+import MessageInput from "../../../components/common/chat/MessageInput";
+import MessageList from "../../../components/common/chat/MessageList";
 
 function ChatPage() {
   const { user } = useAuth({
@@ -26,6 +34,17 @@ function ChatPage() {
 
   const [channels, setChannels] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
+
+  const [messages, setMessages] = useState([]);
+  const [messageCounter, setMessageCounter] = useState(0);
+
+  const [loadedMore, setLoadedMore] = useState(false);
+  const [loadedOnce, setLoadedOnce] = useState(false);
+
+  const chatBottom = useRef(null);
 
   const { currentChannel, switchRoom, sendMessage, socket } = useChatContext();
 
@@ -46,6 +65,9 @@ function ChatPage() {
           )
             tmp.push({
               id: item?.id,
+              receiverName: item?.message_channel?.includes("group")
+                ? item?.message_channel?.replaceAll("_", " ").split(".")[1]
+                : item?.second_user?.username,
               message_channel: item?.message_channel,
               is_active: item?.is_active,
               send_notifications: item?.send_notifications,
@@ -54,15 +76,58 @@ function ChatPage() {
             });
         });
         setChannels(tmp);
+        setLoadedOnce(true);
       },
       null,
       () => setLoading(false)
     );
   };
 
+  const getMessages = async (newFetch = false) => {
+    if (newFetch) {
+      await setLoadedMore(false);
+      await setMessages([]);
+    }
+    await axios(
+      "get",
+      `${API_URL}/chat/messages`,
+      {
+        id: currentChannel?.id,
+        offset: !newFetch ? offset : 0,
+        limit: limit,
+      },
+      null,
+      (res) => {
+        if (!newFetch) {
+          let tmp = res?.data?.messages;
+          messages.map((message) => {
+            tmp.push(message);
+          });
+          setLoadedMore(true);
+          setOffset(tmp?.length);
+          setMessages(tmp);
+        } else {
+          setOffset(res?.data?.messages?.length);
+          setMessages(res?.data?.messages);
+        }
+        setMessageCounter(res?.data?.counter);
+      }
+    );
+  };
+
   useEffect(() => {
-    getChannels();
-  }, []);
+    if (user && !loadedOnce) getChannels();
+  }, [user]);
+
+  useEffect(() => {
+    if (currentChannel?.channel) {
+      getMessages(true);
+    } else {
+      setMessages([]);
+      setMessageCounter(0);
+      setLoadedMore(false);
+    }
+  }, [currentChannel]);
 
   useEffect(() => {
     console.log(channels);
@@ -73,13 +138,23 @@ function ChatPage() {
   }, []);
 
   useEffect(() => {
-    socket.on(currentChannel?.channel, (data) => {
+    socket.on(currentChannel?.channel, async (data) => {
       console.log("get", data);
       if (data?.message_content === "TYPING") {
         setTypeIndicator(true);
       } else if (data?.message_content === "ENDTYPING") setTypeIndicator(false);
+
+      if (!checkMessageDictionary(data)) {
+        await setMessages((prev) => [...prev, data]);
+      }
     });
   }, [currentChannel]);
+
+  useEffect(() => {
+    let chatBottomElement = document.getElementById("CHAT_BOTTOM_ID");
+    if (chatBottomElement && !loadedMore)
+      chatBottomElement.scrollTop = chatBottomElement.scrollHeight;
+  }, [chatBottom?.current?.scrollHeight, messages]);
 
   useEffect(() => {
     let timer;
@@ -94,86 +169,65 @@ function ChatPage() {
 
   useEffect(() => {
     if (typing) {
-      socket.emit("message", {
-        channelId: currentChannel?.id,
-        senderId: user?.id,
-        message_content: "TYPING",
-        channel: currentChannel?.channel,
-        sender: user?.username,
-        is_active: currentChannel?.is_active,
-        send_notifications: currentChannel?.send_notifications,
-        firstUserId: currentChannel?.firstUserId,
-        secondUserId: currentChannel?.secondUserId,
-      });
+      socket.emit(
+        "message",
+        returnEmitMessageWithDic(currentChannel, user, "TYPING")
+      );
     } else
-      socket.emit("message", {
-        channelId: currentChannel?.id,
-        senderId: user?.id,
-        message_content: "ENDTYPING",
-        channel: currentChannel?.channel,
-        sender: user?.username,
-        is_active: currentChannel?.is_active,
-        send_notifications: currentChannel?.send_notifications,
-        firstUserId: currentChannel?.firstUserId,
-        secondUserId: currentChannel?.secondUserId,
-      });
+      socket.emit(
+        "message",
+        returnEmitMessageWithDic(currentChannel, user, "ENDTYPING")
+      );
   }, [typing]);
 
   return (
     <div>
-      <div className="flex flex-col">
-        {channels?.map((channel) => (
-          <Button
-            key={channel?.message_channel}
-            label={channel?.message_channel?.replaceAll("_", " ").split(".")[1]}
-            clickHandler={() =>
-              switchRoom({
-                id: channel?.id,
-                message_channel: channel?.message_channel,
-                is_active: channel?.is_active,
-                send_notifications: channel?.send_notifications,
-                firstUserId: channel?.firstUserId,
-                secondUserId: channel?.secondUserId,
-              })
-            }
-          />
-        ))}
-
-        <Button label="sadge" clickHandler={() => switchRoom("sadge")} />
-        {currentChannel?.channel && (
-          <Formik initialValues={initialValues} onSubmit={() => {}}>
-            {({ values, setFieldValue }) => {
-              return (
-                <>
-                  <CustomInput
-                    value={values?.message}
-                    onChange={(e) => {
-                      setTexting(e?.target?.value);
-                      setFieldValue("message", e?.target?.value);
-                    }}
-                  />
-                  <Button
-                    label="Send message"
-                    clickHandler={() => {
-                      sendMessage(
-                        {
-                          message: values?.message,
-                          channel: currentChannel?.channel,
-                          sender: user?.username,
-                        },
-                        setFieldValue
-                      );
-                      setTexting("");
-                      setSentMessage(true);
-                    }}
-                  />
-                </>
-              );
-            }}
-          </Formik>
-        )}
+      <div className="flex flex-row">
+        <div className="w-1/3 flex flex-col max-h-[700px] overflow-y-auto">
+          {channels?.map((channel) => (
+            <Button
+              key={channel?.message_channel}
+              label={
+                channel?.message_channel?.replaceAll("_", " ").split(".")[1]
+              }
+              clickHandler={() =>
+                switchRoom({
+                  id: channel?.id,
+                  receiverName: channel?.receiverName,
+                  message_channel: channel?.message_channel,
+                  is_active: channel?.is_active,
+                  send_notifications: channel?.send_notifications,
+                  firstUserId: channel?.firstUserId,
+                  secondUserId: channel?.secondUserId,
+                })
+              }
+              className="my-3"
+            />
+          ))}
+        </div>
+        <div className="w-2/3 flex flex-col px-5">
+          {currentChannel?.channel ? (
+            <MessageList
+              chatBottom={chatBottom}
+              currentChannel={currentChannel}
+              getMessages={getMessages}
+              initialValues={initialValues}
+              messageCounter={messageCounter}
+              messages={messages}
+              offset={offset}
+              sendMessage={sendMessage}
+              setLoadedMore={setLoadedMore}
+              setSentMessage={setSentMessage}
+              setTexting={setTexting}
+              typeIndicator={typeIndicator}
+              user={user}
+            />
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
-      <Loading loading={typeIndicator} />
+      {/* <Loading loading={typeIndicator} /> */}
     </div>
   );
 }

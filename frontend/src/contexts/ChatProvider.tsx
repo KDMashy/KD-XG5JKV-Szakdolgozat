@@ -2,6 +2,7 @@ import { useRouter } from "next/dist/client/router";
 import React, { SetStateAction, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "../hooks/useAuth";
+import { returnEmitMessageWithDic } from "../helpers/Helpers";
 
 interface ValueTypes {
   currentChannel: Channel;
@@ -27,6 +28,7 @@ interface Channel {
   send_notifications?: string;
   firstUserId?: number;
   secondUserId?: number;
+  receiverName?: string;
 }
 
 const defaultChannel: Channel = {
@@ -69,33 +71,19 @@ export function ChatProvider({ children }) {
   const [typeIndicator, setTypeIndicator] = useState(false);
 
   const sendMessage = (values, setFieldValue) => {
-    socket.emit("message", {
-      channelId: currentChannel?.id,
-      senderId: user?.id,
-      message_content: values?.message,
-      channel: currentChannel?.channel,
-      sender: user?.username,
-      is_active: currentChannel?.is_active,
-      send_notifications: currentChannel?.send_notifications,
-      firstUserId: currentChannel?.firstUserId,
-      secondUserId: currentChannel?.secondUserId,
-    });
+    socket.emit(
+      "message",
+      returnEmitMessageWithDic(currentChannel, user, values?.message)
+    );
     setFieldValue("message", "");
   };
 
   const switchRoom = async (room) => {
     if (currentChannel?.channel !== defaultChannel?.channel)
-      socket.emit("message", {
-        channelId: currentChannel?.id,
-        senderId: user?.id,
-        message_content: "DISCONNECT",
-        channel: currentChannel?.channel,
-        sender: user?.username,
-        is_active: currentChannel?.is_active,
-        send_notifications: currentChannel?.send_notifications,
-        firstUserId: currentChannel?.firstUserId,
-        secondUserId: currentChannel?.secondUserId,
-      });
+      socket.emit(
+        "message",
+        returnEmitMessageWithDic(currentChannel, user, "DISCONNECT")
+      );
     await socket.removeAllListeners(currentChannel?.channel);
     await setCurrentChannel({
       id: room?.id,
@@ -105,6 +93,7 @@ export function ChatProvider({ children }) {
       send_notifications: room?.send_notifications,
       firstUserId: room?.firstUserId,
       secondUserId: room?.secondUserId,
+      receiverName: room?.receiverName,
     });
   };
 
@@ -116,17 +105,10 @@ export function ChatProvider({ children }) {
 
   useEffect(() => {
     if (currentChannel?.channel)
-      socket.emit("message", {
-        channelId: currentChannel?.id,
-        senderId: user?.id,
-        message_content: "CONNECT",
-        channel: currentChannel?.channel,
-        sender: user?.username,
-        is_active: currentChannel?.is_active,
-        send_notifications: currentChannel?.send_notifications,
-        firstUserId: currentChannel?.firstUserId,
-        secondUserId: currentChannel?.secondUserId,
-      });
+      socket.emit(
+        "message",
+        returnEmitMessageWithDic(currentChannel, user, "CONNECT")
+      );
   }, [currentChannel]);
 
   return (

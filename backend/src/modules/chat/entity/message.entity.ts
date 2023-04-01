@@ -54,7 +54,8 @@ export class Message extends BaseEntity {
 
     @UpdateDateColumn({ type: "timestamp"})
     updated_at: number;
-
+    
+    @Column()
     @ManyToOne(() => Channel, channel => channel.messages)
     channel: number;
 

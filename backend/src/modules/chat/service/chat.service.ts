@@ -42,19 +42,57 @@ export class ChatService {
     }
 
     async GetMessages (options) {
-        return await this.messageModel.find({
+        let messages =  await this.messageModel.find({
             where: {
-                channel: parseInt(options.id)
+                channel: await this.CheckIfHasMultipleReferences({
+                    channelId: options.id
+                })
+            },
+            order: {
+                id: 'DESC'
             },
             skip: options.offset,
             take: options.limit,
+            relations: [
+                'sender'
+            ]
         })
+
+        let count = await this.messageModel
+            .createQueryBuilder('messages')
+            .where('messages.channel = :id', {
+                    id: await 
+                        this.CheckIfHasMultipleReferences({channelId: options.id})
+            })
+            .getCount()
+        return {
+            messages: messages.sort((a, b) => {
+                if (a.id < b.id) return -1;
+                if (a.id > b.id) return 1;
+              }),
+            counter: count
+        }
     }
 
     //CREATE
     async CreateChannel (newChannel: CreateChannelDto) {
         let newChannelRecord = await this.channelModel.create(newChannel);
         return await newChannelRecord.save();
+    }
+
+    async CheckIfHasMultipleReferences (messageContent) {
+        let checker = await this.channelModel.findOne({
+            where: {id: messageContent?.channelId}
+        })
+
+        let models = await this.channelModel.find({
+            where: {
+                message_channel: checker?.message_channel
+            }
+        })
+
+        if(models?.length > 1) return models[0]?.id
+        return messageContent?.channelId
     }
 
     //CREATE
@@ -67,11 +105,19 @@ export class ChatService {
             deleted: newMessage?.deleted,
             admin_notification: newMessage?.admin_notification,
             readed: newMessage?.readed,
-            channel: newMessage?.channelId,
+            channel: await this.CheckIfHasMultipleReferences(newMessage),
             sender: newMessage?.senderId
         });
+        let saved = await newMessageRecord.save();
         
-        return await newMessageRecord.save();
+        return await this.messageModel.findOne({
+            where: {
+                id: saved?.id
+            },
+            relations: [
+                'sender'
+            ]
+        });
     }
 
     //EDIT,MODERATE

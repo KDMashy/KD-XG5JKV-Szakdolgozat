@@ -5,7 +5,7 @@ import CustomForm from "../form/CustomForm";
 import { Formik } from "formik";
 import { newTaskValidation } from "../../../validations";
 
-function AddNewTask({ submit, loading, setIsOpen }) {
+function AddNewTask({ submit, loading, setIsOpen, typeInfo }) {
   const initialValues = {
     task_name: "",
   };
@@ -15,7 +15,7 @@ function AddNewTask({ submit, loading, setIsOpen }) {
       <Formik
         initialValues={initialValues}
         validationSchema={newTaskValidation}
-        onSubmit={(values) => submit(values)}
+        onSubmit={(values) => submit(values, typeInfo)}
       >
         {({
           handleChange,
@@ -30,7 +30,8 @@ function AddNewTask({ submit, loading, setIsOpen }) {
             <CustomForm handleSubmit={() => handleSubmit()}>
               <div className="text-left w-[calc(100%-30%)] mx-auto">
                 <CustomInput
-                  label="Column Name"
+                  label="Task description"
+                  textArea
                   value={values?.task_name ?? ""}
                   onChange={(e) => {
                     setFieldValue("task_name", e?.target?.value);

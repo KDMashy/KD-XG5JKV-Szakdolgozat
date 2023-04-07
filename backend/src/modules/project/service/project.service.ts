@@ -46,6 +46,7 @@ export class ProjectService {
                 'project_creator',
                 'tasks',
                 'tasks.row',
+                'tasks.badge',
                 'badges',
                 'teams',
                 'teams.team',

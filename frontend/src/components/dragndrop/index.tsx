@@ -179,7 +179,11 @@ function DragNDropTable({
             <NewListItem
               clickHandler={() => {
                 setIsOpen(true);
-                setType("item");
+                setType({
+                  type: "item",
+                  col: item,
+                  tasks: item?.tasks,
+                });
               }}
             />
           </div>

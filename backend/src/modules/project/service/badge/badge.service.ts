@@ -67,6 +67,21 @@ export class BadgeService {
         })
     }
 
+    async addOrDeleteBadgeFromTask (type: "add" | "delete", req) {
+        if (type === "add") {
+            await this.taskBadgesModel.create({
+                task: req.task,
+                badge: req.id
+            }).save()
+        } else {
+            let connection = await this.taskBadgesModel.findOne({
+                where: {id: req?.id}
+            })
+            if(!connection) return HttpStatus.BAD_REQUEST
+            await this.taskBadgesModel.remove(connection)
+        }
+    }
+
     async updateBadge(badge: UpdateBadgeDto, id: number) {
         const editBadge: Badge = await this.badgeModel.findOne({
             where: { id: id },

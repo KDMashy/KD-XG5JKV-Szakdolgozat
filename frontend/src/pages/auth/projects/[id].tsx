@@ -11,6 +11,7 @@ import { API_URL } from "../../../constants/url";
 import { useAuth } from "../../../hooks/useAuth";
 import { useDarkMode } from "../../../hooks/useDarkMode";
 import { axios } from "../../../lib/axios";
+import AddNewTask from "../../../components/common/modal/AddNewTask";
 
 function ProjectPage() {
   const { darkMode } = useDarkMode();
@@ -26,10 +27,11 @@ function ProjectPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const [projectData, setProjectData] = useState<any>(null);
+  const [projectData, setProjectData] = useState(null);
 
-  const [cols, setCols] = useState<any>([]);
-  const [tasks, setTasks] = useState<any>([]);
+  const [cols, setCols] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [badges, setBadges] = useState([]);
 
   const [hidden, setHidden] = useState(true);
   const [hideTimer, setHideTimer] = useState(false);
@@ -72,7 +74,101 @@ function ProjectPage() {
     }
   }, [projectData]);
 
-  const addNewTask = async (values) => {};
+  const deleteFunc = async (type: "task" | "col", index) => {
+    await axios(
+      "delete",
+      `${API_URL}/${type === "task" ? `task` : `project/row`}/${index}`,
+      null,
+      null,
+      (res) => {
+        let tmp = [];
+        if (type === "task") {
+          tmp = tasks?.filter((task) => task?.id !== index);
+          setTasks(tmp);
+        } else {
+          tmp = cols?.filter((col) => col?.id !== index);
+          setCols(tmp);
+        }
+        NotifyMessage(
+          "success",
+          `Successfully deleted a ${type === "task" ? "Task" : "Column"}`
+        );
+      },
+      (error) => {
+        NotifyMessage(
+          "error",
+          `Couldn't delete ${type === "task" ? "Task" : "Column"}`
+        );
+      }
+    );
+  };
+
+  const editFunc = async (type: "task" | "col", values) => {
+    setModalLoad(true);
+    await axios(
+      "put",
+      `${API_URL}/${type === "task" ? `task` : `project/row`}/${values?.id}`,
+      null,
+      values,
+      (res) => {
+        if (type === "task") {
+          setTasks(changeListData(tasks, values, res?.data));
+        } else {
+          setCols(changeListData(cols, values, res?.data));
+        }
+        NotifyMessage(
+          "success",
+          `Successfully updated ${type === "task" ? "Task" : "Column"}`
+        );
+      },
+      (error) =>
+        NotifyMessage(
+          "error",
+          `Couldn't update ${type === "task" ? "Task" : "Column"}`
+        ),
+      () => {
+        setModalLoad(false);
+        setIsOpen(false);
+      }
+    );
+  };
+
+  const changeListData = (tmp, values, res) => {
+    tmp?.map((item) => {
+      if (item?.id === values?.id) {
+        item = res?.data;
+      }
+    });
+    return tmp;
+  };
+
+  const addNewTask = async (values, typeInfo) => {
+    setModalLoad(true);
+    await axios(
+      "post",
+      `${API_URL}/task`,
+      null,
+      {
+        task_name: values?.task_name,
+        task_creator: user?.id,
+        project_id: projectData?.id ?? null,
+        task_only_creator: 1,
+        row: typeInfo?.col?.id,
+        count: typeInfo?.tasks?.length + 1,
+      },
+      (res) => {
+        setTasks((prev) => [...prev, res?.data]);
+        NotifyMessage("success", "Successfully created new Task");
+      },
+      (error) => {
+        NotifyMessage("error", "Couldn't create new Task");
+      },
+      () => {
+        setModalLoad(false);
+        setIsOpen(false);
+      }
+    );
+  };
 
   const addNewCol = async (values) => {
     setModalLoad(true);
@@ -96,6 +192,98 @@ function ProjectPage() {
         setModalLoad(false);
         setIsOpen(false);
       }
+    );
+  };
+
+  const createNewBadge = async (values, taskInfo = null) => {
+    setModalLoad(true);
+    await axios(
+      "post",
+      `${API_URL}/badge`,
+      null,
+      {
+        badge_label: values?.label,
+        badge_creator: user?.id,
+        badge_only_creator: 1,
+        badge_color: values?.color,
+        project: projectData?.id,
+        task: taskInfo ? taskInfo?.id : null,
+      },
+      (res) => {
+        setBadges((prev) => [...prev, res?.data]);
+        NotifyMessage("success", "Successfully created Badge");
+      },
+      (error) => NotifyMessage("error", "Couldn't create Badge"),
+      () => {
+        setModalLoad(false);
+        setIsOpen(false);
+      }
+    );
+  };
+
+  const editOrDeleteBadge = async (values, type: "edit" | "delete") => {
+    setModalLoad(true);
+    await axios(
+      type === "edit" ? "put" : "delete",
+      `${API_URL}/${values?.id}`,
+      null,
+      type === "edit" ? values : null,
+      (res) => {
+        if (type === "edit") {
+          let tmp = badges;
+          tmp?.map((item) => {
+            if (item?.id === values?.id) item = res?.data;
+          });
+          setBadges(tmp);
+        }
+        NotifyMessage(
+          "success",
+          `Successfully ${type === "edit" ? "edited" : "deleted"} Badge`
+        );
+      },
+      (error) =>
+        NotifyMessage(
+          "error",
+          `Coulnd't ${type === "edit" ? "edit" : "delete"} Badge`
+        )
+    );
+  };
+
+  const addOrDeleteBadgeFromTask = async (
+    type: "add" | "delete",
+    badge,
+    task = null,
+    connection = null
+  ) => {
+    await axios(
+      type === "add" ? "post" : "put",
+      `${API_URL}/badge/${
+        type === "add" ? "add-for-task" : "remove-from-task"
+      }`,
+      null,
+      type === "add"
+        ? {
+            task: task?.id,
+            id: badge?.id,
+          }
+        : {
+            id: connection,
+          },
+      (res) => {
+        NotifyMessage(
+          "success",
+          `Successfully ${
+            type === "add" ? "added badge for" : "removed badge from"
+          } task`
+        );
+      },
+      (error) =>
+        NotifyMessage(
+          "error",
+          `Couldn't ${
+            type === "add" ? "add badge for" : "remove badge from"
+          } task`
+        )
     );
   };
 
@@ -142,7 +330,12 @@ function ProjectPage() {
                 loading={modalLoad}
               />
             ) : (
-              <></>
+              <AddNewTask
+                typeInfo={type}
+                submit={addNewTask}
+                setIsOpen={setIsOpen}
+                loading={modalLoad}
+              />
             )
           }
         />

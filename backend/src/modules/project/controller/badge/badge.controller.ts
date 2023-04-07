@@ -26,9 +26,19 @@ export class BadgeController {
         return this.badgeService.createBadge(badge)
     }
 
+    @Post('add-for-task')
+    addForTask(@Body() info) {
+        return this.badgeService.addOrDeleteBadgeFromTask("add", info)
+    }
+
     @Put(':id')
     update(@Body() badge: UpdateBadgeDto, @Param('id', ParseIntPipe) id: number) {
         return this.badgeService.updateBadge(badge, id)
+    }
+
+    @Put('remove-from-task')
+    deleteFromTask(@Body() info) {
+        return this.badgeService.addOrDeleteBadgeFromTask("delete", info)
     }
 
     @Delete(':id')

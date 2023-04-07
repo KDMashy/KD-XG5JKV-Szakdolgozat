@@ -47,10 +47,15 @@ const newTeamValidation = yup.object().shape({
   team_description: yup.string().required("Team description is required"),
 });
 
+const newTaskValidation = yup.object().shape({
+  task_name: yup.string().required("Task name is required"),
+});
+
 export {
   registrationValidation,
   loginValidation,
   newProjectValidation,
   newColumnValidation,
   newTeamValidation,
+  newTaskValidation,
 };

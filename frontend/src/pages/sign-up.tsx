@@ -98,7 +98,7 @@ function SignUp() {
                       label="Email"
                       value={values?.email}
                       onChange={(e) => {
-                        setFieldValue("email", e?.targeT?.value);
+                        setFieldValue("email", e?.target?.value);
                         setFieldTouched("email", true);
                       }}
                       touched={touched?.email}

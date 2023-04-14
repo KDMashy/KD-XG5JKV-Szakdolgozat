@@ -56,7 +56,7 @@ export class Message extends BaseEntity {
     updated_at: number;
     
     @Column()
-    @ManyToOne(() => Channel, channel => channel.messages)
+    @ManyToOne(() => Channel, channel => channel.messages, {onDelete: "CASCADE"})
     channel: number;
 
     @ManyToOne(() => User, user => user.messages)

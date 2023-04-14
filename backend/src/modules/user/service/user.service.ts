@@ -4,16 +4,21 @@ import { Statuses } from './../../constants/Statuses.enum';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { encodePassword } from 'src/modules/utils/bcrypt';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from '../dto/user.dto';
+import { Like, Repository } from 'typeorm';
+import { CreateUserDto, IUser } from '../dto/user.dto';
 import { User } from '../entity/user.entity';
 import { Inject } from '@nestjs/common/decorators';
+import { Friend } from '../entity/friends.entity';
+import { ChatService } from 'src/modules/chat/service/chat.service';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User)
         private userModel: Repository<User>,
+        @InjectRepository(Friend)
+        private friendModel: Repository<Friend>,
+        private chatService: ChatService,
         private readonly JwtService: JwtService
     ) {}
 
@@ -72,8 +77,10 @@ export class UserService {
         try{
             await this.userModel
                 .createQueryBuilder()
-                .delete()
-                .from(User)
+                .update(User)
+                .set({
+                    status: Statuses.CLOSED
+                })
                 .where("id = :id", { id: id })
                 .execute();
             return HttpStatus.OK;
@@ -133,8 +140,25 @@ export class UserService {
                     'team_member',
                     'team_member.team',
                     'tasks',
+                    'friend_one',
+                    'friend_two',
+                    'friend_one.first_user',
+                    'friend_two.first_user',
+                    'friend_one.second_user',
+                    'friend_two.second_user'
                 ]
             })
+    }
+
+    async EditProfile (user: IUser) {
+        try {
+            return await this.userModel.update(
+                user?.id,
+                user
+            )
+        } catch(err) {
+            return HttpStatus.BAD_REQUEST;
+        }
     }
 
     getProfile(user: User){
@@ -147,5 +171,82 @@ export class UserService {
             status: user.status
         };
         return serialized;
+    }
+
+    async searchUser (search, user) {
+        let users = await this.userModel.find({
+            where: {
+                username: Like(`%${search ? search.toString().toLowerCase() : ""}%`)
+            },
+            relations: [
+                'friend_one',
+                'friend_two',
+                'friend_one.first_user',
+                'friend_two.first_user',
+                'friend_one.second_user',
+                'friend_two.second_user',
+            ]
+        })
+
+        if(!users) return HttpStatus.CONFLICT;
+        let returnUsers = []
+
+        users?.map((item) => {
+            let check = false
+            let firsts = JSON.parse(JSON.stringify(item?.friend_one))
+            let seconds = JSON.parse(JSON.stringify(item?.friend_two))
+            if(
+                firsts?.filter(fu => fu?.first_user?.id === item?.id)[0] ||
+                seconds?.filter(su => su?.second_user?.id === item?.id)[0]
+            ) check = true
+            if(!check) returnUsers.push(item)
+        })
+
+        return returnUsers
+    }
+
+    async addNewFriend (newFriend, user) {
+        if(!newFriend) return HttpStatus.BAD_REQUEST
+
+        let newFriendRecord = await this.friendModel.create({
+            first_user: user?.id,
+            second_user: newFriend
+        })
+
+        let first_user = await this.findUserById(user?.id)
+        let second_user = await this.findUserById(newFriend)
+
+        if(!first_user || !second_user) return HttpStatus.CONFLICT
+
+        let response = await newFriendRecord.save()
+        this.chatService.CreateChannel({
+            message_channel: `${first_user?.username};${second_user?.username}.${second_user?.username}`,
+            first_user: first_user?.id,
+            second_user: second_user?.id,
+        })
+        return response
+    }
+
+    async removeFriend (friendId, channelId, user) {
+        if(!friendId) return HttpStatus.BAD_REQUEST
+        let friendRecords = await this.friendModel.find({
+                where: {
+                    first_user: user?.id
+                }
+            })
+        let friendRecord = null
+        for(let i = 0; i < friendRecords?.length; i++){
+            console.log(friendRecords[i]?.second_user === friendId, friendId, friendRecords[i]?.second_user);
+            
+            if(friendRecords[i]?.second_user === parseInt(friendId)) {
+                friendRecord = friendRecords[i]
+                break;
+            }
+        }
+
+        if(!friendRecord) return HttpStatus.CONFLICT
+
+        await this.friendModel.remove(friendRecord)
+        await this.chatService.DeleteChannel(channelId)
     }
 }

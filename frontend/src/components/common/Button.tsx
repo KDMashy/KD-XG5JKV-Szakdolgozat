@@ -23,6 +23,7 @@ interface Props {
   target?: "_blank" | "_self" | "_parent" | "_top";
   buttonType?: "menu_nolog" | "menu_log" | "default";
   clickType?: "button" | "submit";
+  padding?: string;
 }
 
 function Button({
@@ -39,6 +40,7 @@ function Button({
   target = "_self",
   buttonType = "default",
   clickType = "button",
+  padding = "md:px-3 md:py-3",
 }: Props) {
   const colorize = () => {
     switch (color) {
@@ -74,7 +76,7 @@ function Button({
       case "default":
         return ``;
       case "menu_nolog":
-        return `2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px] text-dark-100`;
+        return `2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px] text-dark-100 `;
       case "menu_log":
         return `xl:w-[200px] lg:w-[160px] md:w-[120px] w-[100px] h-[50px] text-lg rounded-md bg-dark-100 text-light-400 text-center`;
       default:
@@ -95,7 +97,11 @@ function Button({
     return (
       <button
         className={`${
-          icon || circular ? "p-0.5" : "md:px-10 md:py-3"
+          icon || circular
+            ? "p-0.5"
+            : buttonType === "menu_log"
+            ? padding
+            : "py-3 px-5"
         } ${className} ${colorize()}  ${
           loading || disabled ? "bg-dark-400 text-dark-600" : ""
         } ${
@@ -104,7 +110,7 @@ function Button({
               ? "rounded-md"
               : "rounded-full"
             : "rounded-md"
-        } ${getButtonType()} transition ease-in-out delay-150 hover:bg-opacity-50 hover:text-light-200`}
+        } ${getButtonType()} transition ease-in-out delay-150 hover:bg-opacity-50 hover:text-light-200 text-center`}
         onMouseDown={clickHandler && handleClick}
         disabled={disabled || loading}
         type={clickType}

@@ -3,9 +3,10 @@ import { CreateTeamDto, UpdateTeamDto } from './../dto/team.dto';
 import { User } from 'src/modules/user/entity/user.entity';
 import { Teams } from './../entity/teams.entity';
 import { Team } from './../entity/team.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ChatService } from 'src/modules/chat/service/chat.service';
 
 @Injectable()
 export class TeamService {
@@ -15,7 +16,8 @@ export class TeamService {
         @InjectRepository(Teams)
         private teamsModel: Repository<Teams>,
         @InjectRepository(User)
-        private userModel: Repository<User>
+        private userModel: Repository<User>,
+        private chatService: ChatService
     ) {}
 
     async index() {
@@ -31,7 +33,7 @@ export class TeamService {
             })
     }
 
-    async getAllForUser(id: number) {
+    async getAllForUser(id, req) {
         return await this.teamModel.find({
             where: { team_creator: id },
             relations: [
@@ -40,7 +42,9 @@ export class TeamService {
                 "projects.project",
                 "membership",
                 "membership.user"
-            ]
+            ],
+            skip: req.offset,
+            take: req.limit
         })
     }
 
@@ -57,7 +61,9 @@ export class TeamService {
         })
     }
 
-    async createTeam(team: CreateTeamDto) {
+    async createTeam(team: CreateTeamDto, req) {
+        if(team.team_name.includes('group')) return HttpStatus.BAD_REQUEST
+        
         const newTeam = await this.teamModel.create({
             team_name: team.team_name,
             team_description: team.team_description,
@@ -68,10 +74,20 @@ export class TeamService {
         let response: Team = await newTeam.save()
 
         if(response) {
-            await this.teamsModel.create({
-                user: team.team_creator,
-                team: response.id
-            }).save()
+            try {
+                await this.teamsModel.create({
+                    user: team.team_creator,
+                    team: response.id
+                }).save()
+    
+                req.query?.members?.map(async member => {
+                    await this.AddNewMemberFunc(response, req.user, member)
+                })
+            } catch (err) {
+                console.log(err);
+                
+                return HttpStatus.CONFLICT
+            }
         }
 
         return await this.teamModel.findOne({
@@ -82,8 +98,57 @@ export class TeamService {
         })
     }
 
+    async AddNewMemberReq (req) {
+        if(!req.query.team_id || !req.query.members) return HttpStatus.BAD_REQUEST
+
+        let team = await this.teamModel.findOne({
+            where: {id: req.query.team_id}
+        })
+
+        req.query.members?.map(async member => {
+            await this.AddNewMemberFunc(team, req.user, member)
+        })
+    }
+
+    async RemoveMemberReq (req) {
+        if(!req.query.member || ! req.query.team) return HttpStatus.BAD_REQUEST
+
+        let foundMember = await this.userModel.findOne({
+            where: {id: req.query.member},
+            relations: [
+                'team_member',
+                'sender'
+            ]
+        })
+
+        if(!foundMember) return HttpStatus.CONFLICT
+
+        // await this.teamsModel
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(Teams)
+        //     .where('user = :id', {id: req.query.member})
+        //     .andWhere('team = :id', {id: req.query.team})
+        //     .execute()
+        await this.teamsModel.remove(foundMember.team_member)
+    
+        await this.chatService.DeleteChannelForTeamMember(foundMember)
+    }
+
+    async AddNewMemberFunc (team, user, member) {
+        await this.teamsModel.create({
+            user: member,
+            team: team.id
+        }).save()
+        await this.chatService.CreateChannel({
+            message_channel: `${team.team_name}.${team.team_name}group`,
+            first_user: member,
+            second_user: user?.id
+        })
+    }
+
     async updateTeam(team: UpdateTeamDto, id: number) {
-        const editTeam: Team = await this.teamModel.findOne({
+        let editTeam = await this.teamModel.findOne({
             where: { id: id }
         })
         editTeam.team_name = team.team_name

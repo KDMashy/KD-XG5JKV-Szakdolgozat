@@ -26,8 +26,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Navbar />
       <ChatProvider>
+        <Navbar />
         <Content>
           <Component {...pageProps} />
         </Content>

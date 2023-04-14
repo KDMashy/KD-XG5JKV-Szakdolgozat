@@ -23,9 +23,9 @@ export class AdminController {
     }
 
     @UseGuards(AuthenticatedGuard)
-    @Get('test')
+    @Get('check-info')
     @HttpCode(200)
     async test(@Request() req) {     
-        return "hmp"
+        return await this.adminService.checkIfHasLogin(req);
     }
 }

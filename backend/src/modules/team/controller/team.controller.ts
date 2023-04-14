@@ -1,7 +1,7 @@
 import { CreateTeamDto, UpdateTeamDto } from './../dto/team.dto';
 import { Controller, Get, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { Delete, Post, Put } from '@nestjs/common/decorators/http/request-mapping.decorator';
-import { Body, Param } from '@nestjs/common/decorators/http/route-params.decorator';
+import { Body, Param, Req } from '@nestjs/common/decorators/http/route-params.decorator';
 import { TeamService } from '../service/team.service';
 import { AuthenticatedGuard } from 'src/modules/auth/utils/guards/local.guard';
 
@@ -18,8 +18,8 @@ export class TeamController {
     }
 
     @Get(':id')
-    getAll(@Param('id', ParseIntPipe) id: number) {
-        return this.teamService.getAllForUser(id)
+    getAll(@Param('id', ParseIntPipe) id: number, @Req() req) {
+        return this.teamService.getAllForUser(id, req)
     }
 
     @Get('/user/:id')
@@ -28,8 +28,18 @@ export class TeamController {
     }
 
     @Post('')
-    create(@Body() team: CreateTeamDto) {
-        return this.teamService.createTeam(team)
+    create(@Body() team: CreateTeamDto, @Req() req) {
+        return this.teamService.createTeam(team, req)
+    }
+
+    @Post('add-member')
+    AddMember(@Req() req) {
+        return this.teamService.AddNewMemberReq(req)
+    }
+
+    @Put('remove-member')
+    RemoveMember(@Req() req) {
+        return this.teamService.RemoveMemberReq(req)
     }
 
     @Put(':id')

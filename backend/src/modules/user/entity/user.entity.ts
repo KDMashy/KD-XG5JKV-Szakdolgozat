@@ -1,11 +1,15 @@
 import { UserTasks } from './../../project/entity/user_task.entity';
 import { Teams } from './../../team/entity/teams.entity';
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Project } from 'src/modules/project/entity/project.entity';
 import { Team } from 'src/modules/team/entity/team.entity';
 import { Tasks } from 'src/modules/project/entity/tasks.entity';
 import { Badge } from 'src/modules/project/entity/badge.entity';
 import { AdminSession } from 'src/modules/admin/entity/admin_session.entity';
+import { Channel } from 'src/modules/chat/entity/channel.entity';
+import { Message } from 'src/modules/chat/entity/message.entity';
+import { Friend } from './friends.entity';
+import { Notification } from 'src/modules/chat/entity/notification.entity';
 @Entity('users')
 export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -48,7 +52,14 @@ export class User extends BaseEntity {
     @Column({
         type: 'varchar',
     })
-    status: string
+    status: string;
+
+    @Column({
+        type: "varchar",
+        default: "false",
+        select: false
+    })
+    active_notifications: string;
 
     @CreateDateColumn({select: false})
     created_at: string
@@ -76,4 +87,22 @@ export class User extends BaseEntity {
 
     @OneToMany(() => AdminSession, session => session.user)
     sessions: AdminSession[]
+
+    @OneToMany(() => Channel, channel => channel.first_user, {onDelete: 'CASCADE'})
+    sender: Channel[]
+
+    @OneToMany(() => Channel, channel => channel.second_user, {onDelete: 'CASCADE'})
+    receiver: Channel[]
+
+    @OneToMany(() => Message, message => message.sender, {onDelete: 'CASCADE'})
+    messages: Message[]
+
+    @OneToMany(() => Friend, friend => friend.first_user, {onDelete: 'CASCADE'})
+    friend_one: Friend[]
+
+    @OneToMany(() => Friend, friend => friend.second_user, {onDelete: 'CASCADE'})
+    friend_two: Friend[]
+
+    @OneToMany(() => Notification, notification => notification.user, {onDelete: 'CASCADE'})
+    notifications: Notification[]
 }

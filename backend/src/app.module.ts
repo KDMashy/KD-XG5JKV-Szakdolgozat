@@ -19,16 +19,21 @@ import { Row } from './modules/project/entity/row.entity';
 import { TaskBadges } from './modules/project/entity/task_badge.entity';
 import { Tasks } from './modules/project/entity/tasks.entity';
 import { UserTasks } from './modules/project/entity/user_task.entity';
-import { ChatGateway } from './chat.gateway';
 import { AdminModule } from './modules/admin/admin.module';
 import { Admin } from './modules/admin/entity/admin.entity';
 import { AdminSession } from './modules/admin/entity/admin_session.entity';
+import { ChatModule } from './modules/chat/chat.module';
+import { Channel } from './modules/chat/entity/channel.entity';
+import { Message } from './modules/chat/entity/message.entity';
+import { Friend } from './modules/user/entity/friends.entity';
+import { Notification } from './modules/chat/entity/notification.entity';
 
 @Module({
   imports: [
 
     UserModule,
     ProjectModule,
+    ChatModule,
     TeamModule,
 
     ConfigModule.forRoot({
@@ -54,7 +59,11 @@ import { AdminSession } from './modules/admin/entity/admin_session.entity';
         Row,
         TaskBadges,
         Tasks,
-        UserTasks
+        UserTasks,
+        Channel,
+        Message,
+        Friend,
+        Notification
       ],
       synchronize: true,
     }),
@@ -66,6 +75,6 @@ import { AdminSession } from './modules/admin/entity/admin_session.entity';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway],
+  providers: [AppService],
 })
 export class AppModule {}

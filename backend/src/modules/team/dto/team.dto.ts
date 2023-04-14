@@ -16,6 +16,8 @@ export class CreateTeamDto {
     team_only_creator: number
 
     project?: number
+
+    team_status?: string
 }
 
 export class UpdateTeamDto {

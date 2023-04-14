@@ -9,6 +9,7 @@ import { Team } from 'src/modules/team/entity/team.entity';
 import { ProjectTeams } from '../entity/project_teams.entity';
 import { Row } from '../entity/row.entity';
 import { CreateRowDto, UpdateRowDto } from '../dto/row.dto';
+import { ChatService } from 'src/modules/chat/service/chat.service';
 
 @Injectable()
 export class ProjectService {
@@ -22,7 +23,8 @@ export class ProjectService {
         @InjectRepository(ProjectTeams)
         private projectTeamsModel: Repository<ProjectTeams>,
         @InjectRepository(Row)
-        private rowModel: Repository<Row>
+        private rowModel: Repository<Row>,
+        private chatService: ChatService
     ) {}
 
     async getAll() {
@@ -44,6 +46,7 @@ export class ProjectService {
                 'project_creator',
                 'tasks',
                 'tasks.row',
+                'tasks.badge',
                 'badges',
                 'teams',
                 'teams.team',
@@ -59,7 +62,17 @@ export class ProjectService {
             project: row.project,
             row_count: row.count
         })
+        let project = await this.projectModel.findOne({
+            where: {
+                id: newRow.project
+            }
+        })
         let response: Row = await newRow.save()
+        await this.chatService.CreateNotification({
+            user_id: project.project_creator,
+            content: `${row.row_name} was created`,
+            type: "project"
+        })
 
         return await this.rowModel.findOne({
             where: {id: response.id},
@@ -71,8 +84,15 @@ export class ProjectService {
     }
 
     async updateRow(column: UpdateRowDto, id:number) {
-        const editCol: Row = await this.rowModel.findOne({ where: { id: id}})
-        if(!editCol) 
+        const editCol: Row = await this.rowModel.findOne({ 
+            where: { id: id},
+        })
+        let project = await this.projectModel.findOne({
+            where: {
+                id: editCol.project
+            }
+        })
+        if(!editCol || !project) 
             throw new HttpException({
                 message: 'The given id is not valid',
                 status: HttpStatus.BAD_REQUEST
@@ -81,16 +101,36 @@ export class ProjectService {
         editCol.project = column.project
         editCol.row_count = column.count
         let response = await editCol.save()
+        await this.chatService.CreateNotification({
+            user_id: project.project_creator,
+            content: `${column.row_name} was edited`,
+            type: "project"
+        })
         return response
     }
 
     async deleteRow(id: number) {
-        return await this.rowModel
-            .createQueryBuilder()
-            .delete()
-            .from(Project)
-            .where('id = :id', { id: id })
-            .execute()
+        let found = await this.rowModel.findOne({
+            where: {id: id}
+        })
+        let project = await this.projectModel.findOne({
+            where: {
+                id: found.project
+            }
+        })
+        if(!found || !project) return HttpStatus.BAD_REQUEST
+        await this.rowModel.remove(found)
+        // await this.rowModel
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(Project)
+        //     .where('id = :id', { id: id })
+        //     .execute()
+        await this.chatService.CreateNotification({
+            user_id: project.project_creator,
+            content: `${found.row_name} was removed`,
+            type: "project"
+        })
     }
 
     async createProject (project: CreateProjectDto) {
@@ -115,14 +155,14 @@ export class ProjectService {
     }
 
     async addProjectTeam (req: any) {
-        const teamSearch = await this.teamModel.find({ where: {id: req.team}})
+        const teamSearch = await this.teamModel.findOne({ where: {id: req.team}})
         if(!teamSearch) 
             throw new HttpException({
                 message: 'The given team id is not valid',
                 status: HttpStatus.BAD_REQUEST
             }, HttpStatus.BAD_REQUEST)
         
-        const projectSearch = await this.projectModel.find({ where: {id: req.project}})
+        const projectSearch = await this.projectModel.findOne({ where: {id: req.project}})
         if(!projectSearch) 
             throw new HttpException({
                 message: 'The given project id is not valid',
@@ -133,6 +173,12 @@ export class ProjectService {
             project: req.project,
             team: req.team
         }).save()
+
+        await this.chatService.CreateNotification({
+            user_id: projectSearch.project_creator,
+            content: `${teamSearch.team_name} was added to ${projectSearch.project_name}`,
+            type: "project"
+        })
 
         return response
     }
@@ -145,16 +191,31 @@ export class ProjectService {
         if(project.project_creator) editProject.project_creator = project.project_creator
         if(project.status) editProject.project_status = project.status === "open" ? Statuses.OPEN : Statuses.CLOSED
         let response = await editProject.save()
+        await this.chatService.CreateNotification({
+            user_id: editProject.project_creator,
+            content: `${editProject.project_name} was edited`,
+            type: "project"
+        })
         return response
     }
 
     async deleteProject(id: number) {
-        return await this.projectModel
+        let project = await this.projectModel.findOne({
+            where: {id: id}
+        })
+        if(!project) return HttpStatus.BAD_REQUEST
+
+        await this.projectModel
             .createQueryBuilder()
             .delete()
             .from(Project)
             .where('id = :id', { id: id })
             .execute()
+        await this.chatService.CreateNotification({
+            user_id: project.project_creator,
+            content: `${project.project_name} was removed`,
+            type: "project"
+        })
     }
 
     async getAllUserInfoById(id: number) {

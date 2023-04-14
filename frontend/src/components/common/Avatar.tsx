@@ -8,6 +8,7 @@ interface Props {
   image_url?: string;
   user_data?: any; // TODO
   route?: string;
+  className?: string;
 }
 
 function Avatar({
@@ -17,24 +18,22 @@ function Avatar({
   image_url = "",
   user_data = null,
   route,
+  className = "",
 }: Props) {
   return (
     <div
       className={`${width} ${height} ${
         circular && "rounded-full overflow-hidden"
-      } transition ease-in-out delay-150 hover:opacity-80`}
+      } transition ease-in-out delay-150 hover:opacity-80 ${className}`}
     >
       {user_data ? (
         <Link href={user_data?.id}>
           <a>
             <AvatarImage
               key={"user_data_image"}
-              src={
-                image_url === ""
-                  ? "/assets/images/avatar_placeholder.png"
-                  : image_url
-              }
+              src={image_url === "" ? "/assets/images/png_fox.png" : image_url}
               alt={user_data?.user_name}
+              className="w-[70%]"
             />
           </a>
         </Link>
@@ -43,24 +42,18 @@ function Avatar({
           <a>
             <AvatarImage
               key={"avatar_noData_image"}
-              src={
-                image_url === ""
-                  ? "/assets/images/avatar_placeholder.png"
-                  : image_url
-              }
+              src={image_url === "" ? "/assets/images/png_fox.png" : image_url}
               alt={"Avatar_image"}
+              className="w-[70%]"
             />
           </a>
         </Link>
       ) : (
         <AvatarImage
           key={"avatar_noData_image"}
-          src={
-            image_url === ""
-              ? "/assets/images/avatar_placeholder.png"
-              : image_url
-          }
+          src={image_url === "" ? "/assets/images/png_fox.png" : image_url}
           alt={"Avatar_image"}
+          className="w-[70%]"
         />
       )}
     </div>

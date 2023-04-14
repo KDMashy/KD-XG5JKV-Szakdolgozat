@@ -12,6 +12,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { axios } from "../lib/axios";
 import { registrationValidation } from "../validations";
+import { NotifyMessage } from "../components/common/ToastNotification";
 
 function SignUp() {
   const { darkMode } = useDarkMode();
@@ -48,9 +49,12 @@ function SignUp() {
         values.email = "";
         values.password = "";
         values.confirmation = "";
+        NotifyMessage("success", "Successfully registrated");
         router.push("sign-in");
       },
-      null,
+      (error) => {
+        NotifyMessage("error", "Something went wrong");
+      },
       setLoading(false)
     );
   };
@@ -59,7 +63,7 @@ function SignUp() {
     <div className="container relative">
       <Container type={darkMode ? "dark" : "light"}>
         <>
-          <PageTitle type={darkMode ? "dark" : "light"} title="Register" />
+          <PageTitle type={darkMode ? "dark" : "light"} title="Regisztráció" />
           <Formik
             initialValues={initialValues}
             validationSchema={registrationValidation}
@@ -81,7 +85,7 @@ function SignUp() {
                 >
                   <div className="col-span-2 row-start-1">
                     <CustomInput
-                      label="Username"
+                      label="Felhasználónév"
                       value={values?.username}
                       onChange={(e) => {
                         setFieldValue("username", e?.target?.value);
@@ -98,7 +102,7 @@ function SignUp() {
                       label="Email"
                       value={values?.email}
                       onChange={(e) => {
-                        setFieldValue("email", e?.targeT?.value);
+                        setFieldValue("email", e?.target?.value);
                         setFieldTouched("email", true);
                       }}
                       touched={touched?.email}
@@ -107,7 +111,7 @@ function SignUp() {
                   </div>
                   <div className="col-span-3 row-start-2">
                     <CustomInput
-                      label="First name"
+                      label="Keresztnév"
                       value={values?.first_name}
                       onChange={(e) => {
                         setFieldValue("first_name", e?.target?.value);
@@ -119,7 +123,7 @@ function SignUp() {
                   </div>
                   <div className="col-span-3 row-start-2">
                     <CustomInput
-                      label="Last name"
+                      label="Vezetéknév"
                       value={values?.last_name}
                       onChange={(e) => {
                         setFieldValue("last_name", e?.target?.value);
@@ -131,7 +135,7 @@ function SignUp() {
                   </div>
                   <div className="col-span-3 row-start-3">
                     <CustomInput
-                      label="Password"
+                      label="Jelszó"
                       value={values?.password}
                       onChange={(e) => {
                         setFieldValue("password", e?.target?.value);
@@ -144,7 +148,7 @@ function SignUp() {
                   </div>
                   <div className="col-span-3 row-start-4">
                     <CustomInput
-                      label="Password Confirmation"
+                      label="Jelszó megerősítése"
                       value={values?.confirmation}
                       onChange={(e) => {
                         setFieldValue("confirmation", e?.target?.value);
@@ -160,7 +164,7 @@ function SignUp() {
                   </div>
                   <div className="col-span-3 mx-auto">
                     <Button
-                      label="Register"
+                      label="Regisztálok"
                       clickHandler={() => handleSubmit()}
                       type={darkMode ? "dark" : "light"}
                       clickType="submit"

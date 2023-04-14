@@ -4,6 +4,7 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import Button from "../Button";
 import Container from "../../Container";
 import ProjectPageSideBar from "./ProjectPageSideBar";
+import TeamPageSideBar from "./TeamMemberSideBar";
 
 function SideBar({
   darkMode,
@@ -13,6 +14,7 @@ function SideBar({
   setHidden,
   containerClassName = "",
   page = "project",
+  setOpenModal = null,
 }) {
   const [hideStart, setHideStart] = useState(false);
   const [showClose, setShowClose] = useState(false);
@@ -52,6 +54,8 @@ function SideBar({
     switch (page) {
       case "project":
         return <ProjectPageSideBar onShow={onShow} />;
+      case "team":
+        return <TeamPageSideBar onShow={onShow} setOpenModal={setOpenModal} />;
     }
   }
 

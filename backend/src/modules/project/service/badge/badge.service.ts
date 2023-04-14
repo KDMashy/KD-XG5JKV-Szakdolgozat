@@ -1,7 +1,7 @@
 import { CreateBadgeDto, UpdateBadgeDto } from './../../dto/badge.dto';
 import { TaskBadges } from './../../entity/task_badge.entity';
 import { Badge } from './../../entity/badge.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -14,8 +14,10 @@ export class BadgeService {
         private taskBadgesModel: Repository<TaskBadges>,
     ) {}
 
-    async index() {
+    async index(id) {
+        if(!id) return HttpStatus.BAD_REQUEST
         return await this.badgeModel.find({
+            where: {project: id},
             relations: [
                 'badge_creator',
                 'project',
@@ -63,6 +65,21 @@ export class BadgeService {
                 'task.task'
             ]
         })
+    }
+
+    async addOrDeleteBadgeFromTask (type: "add" | "delete", req) {
+        if (type === "add") {
+            await this.taskBadgesModel.create({
+                task: req.task,
+                badge: req.id
+            }).save()
+        } else {
+            let connection = await this.taskBadgesModel.findOne({
+                where: {id: req?.id}
+            })
+            if(!connection) return HttpStatus.BAD_REQUEST
+            await this.taskBadgesModel.remove(connection)
+        }
     }
 
     async updateBadge(badge: UpdateBadgeDto, id: number) {

@@ -183,6 +183,7 @@ function ChatPage() {
         <div className="w-1/3 flex flex-col max-h-[700px] overflow-y-auto">
           {channels?.map((channel) => (
             <ChannelTab
+              key={channel?.message_channel}
               channel={channel}
               switchRoom={switchRoom}
               user={user}

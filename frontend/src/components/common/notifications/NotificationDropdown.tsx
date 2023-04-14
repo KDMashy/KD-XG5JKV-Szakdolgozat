@@ -63,7 +63,7 @@ function NotificationDropdown({ notifications }) {
           ))
         ) : (
           <p className={`text-[rgb(40,60,105)] text-sm text-center py-2 px-1`}>
-            No notifications right now...
+            Nincsenek értesítései...
           </p>
         )}
       </div>
@@ -86,7 +86,7 @@ const NotificationIndicator = ({ has }) => {
           has ? "text-[rgb(40,120,105)]" : "text-[rgb(40,60,105)]"
         }`}
       >
-        Notifications
+        Értesítések
       </p>
     </div>
   );

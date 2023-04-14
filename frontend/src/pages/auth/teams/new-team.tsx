@@ -80,7 +80,7 @@ function NewTeam() {
       >
         <div className="">
           <PageTitle
-            title="Create New Team"
+            title="Új csapat létrehozása"
             type={darkMode ? "dark" : "light"}
             className="row-start-1 col-span-2"
           />
@@ -103,14 +103,14 @@ function NewTeam() {
                 >
                   <div className="grid grid-rows-2 col-span-2 gap-9">
                     <CustomInput
-                      label="Team name"
+                      label="Csapat neve"
                       value={values?.team_name}
                       onChange={handleChange("team_name")}
                       touched
                       error={errors?.team_name}
                     />
                     <CustomInput
-                      label="Team description"
+                      label="Csapat leírása"
                       value={values?.team_description}
                       onChange={handleChange("team_description")}
                       touched
@@ -133,10 +133,10 @@ function NewTeam() {
                             );
                           }}
                         />
-                        <Label label="Only creator can modify" />
+                        <Label label="Csak a létrehozó módosíthatja" />
                       </div>
                       <Button
-                        label="Create Team"
+                        label="Csapat létrehozása"
                         clickHandler={() => handleSubmit()}
                         type={darkMode ? "dark" : "light"}
                         clickType="submit"
@@ -147,7 +147,7 @@ function NewTeam() {
                     <div className="border-2 border-dark-200 min-h-[250px] w-full mt-5 px-3 py-2 overflow-y-auto relative">
                       <div className="flex w-full text-center justify-center items-center">
                         <Button
-                          label="New member"
+                          label="Új csapattag"
                           clickHandler={() => {
                             setOpenModal(true);
                           }}
@@ -196,7 +196,7 @@ function NewTeam() {
                             ))}
                             <div className="flex justify-between w-1/2 mx-auto">
                               <Button
-                                label="Cancel"
+                                label="Vissza"
                                 color="error"
                                 clickHandler={() => {
                                   setSelectedUsers([]);
@@ -204,7 +204,7 @@ function NewTeam() {
                                 }}
                               />
                               <Button
-                                label="Add selected to embers"
+                                label="Kiválasztottak hozzáadása"
                                 color="succes"
                                 clickHandler={() => {
                                   setMembers((prev) => [

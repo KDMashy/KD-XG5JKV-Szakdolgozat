@@ -35,7 +35,7 @@ function MessageInput({
           >
             <div className="w-[65%]">
               <CustomInput
-                placeholder="Enter your message"
+                placeholder="Írja ide az üzenetét"
                 value={values?.message}
                 onChange={(e) => {
                   setTexting(e?.target?.value);
@@ -46,7 +46,7 @@ function MessageInput({
             <div className="w-[30%] flex justify-end items-center">
               <div>
                 <Button
-                  label="Send message"
+                  label="Üzenet elküldése"
                   clickHandler={() => {
                     sendMessage(
                       {

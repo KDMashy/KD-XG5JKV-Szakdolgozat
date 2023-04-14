@@ -18,6 +18,7 @@ import CustomForm from "../../../components/common/form/CustomForm";
 import Message from "../../../components/common/chat/Message";
 import MessageInput from "../../../components/common/chat/MessageInput";
 import MessageList from "../../../components/common/chat/MessageList";
+import ChannelTab from "../../../components/common/chat/ChannelTab";
 
 function ChatPage() {
   const { user } = useAuth({
@@ -181,21 +182,11 @@ function ChatPage() {
       <div className="flex flex-row">
         <div className="w-1/3 flex flex-col max-h-[700px] overflow-y-auto">
           {channels?.map((channel) => (
-            <Button
-              key={channel?.message_channel}
-              label={getChannelName(channel, user)}
-              clickHandler={() =>
-                switchRoom({
-                  id: channel?.id,
-                  receiverName: channel?.receiverName,
-                  message_channel: channel?.message_channel,
-                  is_active: channel?.is_active,
-                  send_notifications: channel?.send_notifications,
-                  firstUserId: channel?.firstUserId,
-                  secondUserId: channel?.secondUserId,
-                })
-              }
-              className="my-3"
+            <ChannelTab
+              channel={channel}
+              switchRoom={switchRoom}
+              user={user}
+              getChannels={getChannels}
             />
           ))}
         </div>

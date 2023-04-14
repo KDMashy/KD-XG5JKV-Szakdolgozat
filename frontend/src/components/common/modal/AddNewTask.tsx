@@ -11,7 +11,7 @@ function AddNewTask({ submit, loading, setIsOpen, typeInfo }) {
   };
   return (
     <div className="text-light-400 font-semibold">
-      <h2 className="text-lg">Add New Column</h2>
+      <h2 className="text-lg">Új feladat hozzáadása</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={newTaskValidation}
@@ -30,7 +30,7 @@ function AddNewTask({ submit, loading, setIsOpen, typeInfo }) {
             <CustomForm handleSubmit={() => handleSubmit()}>
               <div className="text-left w-[calc(100%-30%)] mx-auto">
                 <CustomInput
-                  label="Task description"
+                  label="Feladat leírása"
                   textArea
                   value={values?.task_name ?? ""}
                   onChange={(e) => {
@@ -42,14 +42,14 @@ function AddNewTask({ submit, loading, setIsOpen, typeInfo }) {
                 />
                 <div className="flex justify-between mt-10">
                   <Button
-                    label="Cancel"
+                    label="Vissza"
                     type="dark"
                     color="error"
                     loading={loading}
                     clickHandler={() => setIsOpen(false)}
                   />
                   <Button
-                    label="Create"
+                    label="Létrehozás"
                     type="dark"
                     color="primary"
                     loading={loading}

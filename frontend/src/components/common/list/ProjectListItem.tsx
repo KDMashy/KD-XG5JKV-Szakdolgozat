@@ -20,10 +20,10 @@ export const ListItem = ({
 }) => {
   return (
     <div className="bg-light-600 w-full h-[120px] rounded-2xl flex items-center my-10">
-      <div className="w-[130px] flex justify-center">
+      {/* <div className="w-[130px] flex justify-center">
         <Avatar image_url={url} width="w-[90px]" height="h-[90px]" />
-      </div>
-      <div className="w-full flex flex-col">
+      </div> */}
+      <div className="w-full flex flex-col pl-10">
         <div className="flex">
           <div className="w-1/2 text-center">
             <h2 className="font-noto font-bold text-light-400 text-lg">
@@ -41,7 +41,7 @@ export const ListItem = ({
           <div className="w-[20%]">
             <Button
               type={darkMode ? "dark" : "light"}
-              label="View"
+              label="Megtekint"
               route={`/auth/${project ? "projects" : "teams"}/${id}`}
             />
           </div>

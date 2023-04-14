@@ -35,6 +35,12 @@ export class UserController {
         return this.userService.addNewFriend(req.query?.id, req.user)
     }
 
+    @UseGuards(AuthenticatedGuard)
+    @Post('remove-friend')
+    removeFriend(@Req() req) {
+        return this.userService.removeFriend(req.query?.friend, req.query?.channel, req.user)
+    }
+
     // @UseGuards(AuthenticatedGuard)
     // @Get('search-by-username')
     // removeFriend(@Req() req) {

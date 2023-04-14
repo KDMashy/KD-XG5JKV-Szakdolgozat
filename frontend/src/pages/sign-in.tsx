@@ -55,7 +55,7 @@ function SignIn() {
     <div className="container relative">
       <Container type={darkMode ? "dark" : "light"}>
         <>
-          <PageTitle type={darkMode ? "dark" : "light"} title="Login" />
+          <PageTitle type={darkMode ? "dark" : "light"} title="Bejelentkezés" />
           <Formik
             validationSchema={loginValidation}
             initialValues={initialValues}
@@ -89,7 +89,7 @@ function SignIn() {
                   </div>
                   <div className="col-span-2 row-start-1">
                     <CustomInput
-                      label="Password"
+                      label="Jelszó"
                       value={values?.password}
                       onChange={(e) => {
                         setFieldValue("password", e?.target?.value);
@@ -102,7 +102,7 @@ function SignIn() {
                   </div>
                   <div className="col-span-6 row-start-2 mx-auto">
                     <Button
-                      label="Login"
+                      label="Bejelentkezés"
                       clickHandler={() => handleSubmit()}
                       type={darkMode ? "dark" : "light"}
                       clickType="submit"

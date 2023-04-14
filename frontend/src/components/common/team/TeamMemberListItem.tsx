@@ -7,7 +7,7 @@ function TeamMemberListItem({ member, setMembers, members }) {
       <p>{member?.username}</p>
       <Button
         className="px-3 py-1"
-        label="Remove"
+        label="Törlés"
         color="error"
         clickHandler={() => {
           let tmp = members?.filter((item) => item?.id !== member?.id);

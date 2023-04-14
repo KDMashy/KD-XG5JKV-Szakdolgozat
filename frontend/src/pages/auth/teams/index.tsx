@@ -89,18 +89,18 @@ function Teams() {
         >
           <div className="flex flex-col">
             <Button
-              label="New Team"
+              label="Új csapat"
               type={darkMode ? "dark" : "light"}
               className="bg-dark-100 text-light-400 h-[70px] mb-10 w-full"
               route="/auth/teams/new-team"
             />
             {/* NO CHECKBOXES YET */}
-            <Button
+            {/* <Button
               label="Remove Selected"
               type={darkMode ? "dark" : "light"}
               className="h-[70px]"
               disabled={true}
-            />
+            /> */}
           </div>
         </Container>
         <Container

@@ -5,10 +5,9 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import { sendColData, sendTaskData } from "../../api/ProjectTable";
 import NewListItem from "./NewListItem";
-import Modal from "../common/modal/Modal";
 import NewList from "./NewList";
 import { useScrollContainer } from "react-indiana-drag-scroll";
-import AddNewList from "../common/modal/AddNewList";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 function DragNDropTable({
   cols,
@@ -17,6 +16,8 @@ function DragNDropTable({
   setType,
   setIsOpen,
   setTaskData,
+  removeTask,
+  removeCol,
 }) {
   const dragItem = useRef<any>(null);
   const dragOverItem = useRef<any>(null);
@@ -148,12 +149,22 @@ function DragNDropTable({
               disabled={index <= 0}
             />
             {item?.row_name}
-            <Button
-              icon={<ArrowCircleRightIcon />}
-              circular
-              clickHandler={() => sortCols("after", index)}
-              disabled={index >= cols?.length - 1}
-            />
+            <div>
+              <Button
+                icon={<ArrowCircleRightIcon />}
+                circular
+                clickHandler={() => sortCols("after", index)}
+                disabled={index >= cols?.length - 1}
+              />
+
+              <Button
+                icon={<CancelIcon />}
+                circular
+                color="error"
+                clickHandler={() => removeCol(item)}
+                className="ml-5"
+              />
+            </div>
           </div>
           <div>
             {returnSortedCol(item?.tasks).map((task: any, index: number) => (
@@ -170,6 +181,7 @@ function DragNDropTable({
                 setIsOpen={setIsOpen}
                 setTaskData={setTaskData}
                 task={task}
+                removeFunc={removeTask}
                 // bindDrag={bindDrag}
                 // springStyle={{ x, y }}
               />

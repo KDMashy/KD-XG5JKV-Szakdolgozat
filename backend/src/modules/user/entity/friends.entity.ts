@@ -6,9 +6,11 @@ export class Friend extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
     
+    @Column()
     @ManyToOne(() => User, user => user.friend_one)
     first_user: number;
 
+    @Column()
     @ManyToOne(() => User, user => user.friend_two)
     second_user: number;
     

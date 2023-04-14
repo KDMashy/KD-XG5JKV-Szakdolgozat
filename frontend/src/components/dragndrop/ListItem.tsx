@@ -1,5 +1,6 @@
 import { animated, useSpring } from "react-spring";
-import { useDrag } from "react-use-gesture";
+import Button from "../common/Button";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 export function ListItem({
   id,
@@ -15,6 +16,7 @@ export function ListItem({
   setIsOpen,
   setTaskData,
   task,
+  removeFunc,
 }: {
   id?: number;
   name?: string;
@@ -29,6 +31,7 @@ export function ListItem({
   setIsOpen?: any;
   setTaskData?: any;
   task?: any;
+  removeFunc?: any;
 }) {
   return (
     <animated.div
@@ -44,12 +47,20 @@ export function ListItem({
       onDragOver={(e) => e.preventDefault()}
       className="bg-slate-100 text-light-900 h-[50px] my-3 flex justify-center items-center text-center hover:bg-slate-200 transition-all ease-in-out delay-100 rounded-md hover:cursor-pointer"
       onClick={() => {
-        setType("task");
-        setIsOpen(true);
+        // setType("task");
+        // setIsOpen(true);
         setTaskData(task);
       }}
     >
-      {name}
+      <div className="flex justify-between items-center w-full px-4">
+        <p>{name}</p>
+        <Button
+          icon={<CancelIcon />}
+          circular
+          color="error"
+          clickHandler={() => removeFunc(task)}
+        />
+      </div>
     </animated.div>
   );
 }

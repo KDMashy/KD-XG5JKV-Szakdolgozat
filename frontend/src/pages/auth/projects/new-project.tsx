@@ -59,7 +59,7 @@ function NewProject() {
       >
         <div className="">
           <PageTitle
-            title="Create New Project"
+            title="Új projekt létrehozása"
             type={darkMode ? "dark" : "light"}
             className="row-start-1 col-span-2"
           />
@@ -82,14 +82,14 @@ function NewProject() {
                 >
                   <div className="grid grid-rows-2 col-span-2 gap-9">
                     <CustomInput
-                      label="Project name"
+                      label="Projekt neve"
                       value={values?.project_name}
                       onChange={handleChange("project_name")}
                       touched
                       error={errors?.project_name}
                     />
                     <CustomInput
-                      label="Project description"
+                      label="Projekt leírása"
                       value={values?.project_description}
                       onChange={handleChange("project_description")}
                       touched
@@ -112,10 +112,10 @@ function NewProject() {
                             );
                           }}
                         />
-                        <Label label="Only creator can modify" />
+                        <Label label="Csak a létrehozó módosíthatja" />
                       </div>
                       <Button
-                        label="Create Project"
+                        label="Projekt létrehozása"
                         clickHandler={() => handleSubmit()}
                         type={darkMode ? "dark" : "light"}
                         clickType="submit"

@@ -2,37 +2,37 @@ import { LoginTypes } from "./LoginTypes";
 
 export const navButtons = [
   {
-    label: "About us",
+    label: "Az oldalról",
     url: "/",
     type: LoginTypes.No_Login,
   },
   {
-    label: "Register",
+    label: "Regisztráció",
     url: "/sign-up",
     type: LoginTypes.No_Login,
   },
   {
-    label: "Login",
+    label: "Bejelentkezés",
     url: "/sign-in",
     type: LoginTypes.No_Login,
   },
   {
-    label: "Projects",
+    label: "Projektek",
     url: "/auth/projects",
     type: LoginTypes.Login,
   },
   {
-    label: "Teams",
+    label: "Csapatok",
     url: "/auth/teams",
     type: LoginTypes.Login,
   },
+  // {
+  //   label: "Profile",
+  //   url: "/auth/profile",
+  //   type: LoginTypes.Login,
+  // },
   {
-    label: "Profile",
-    url: "/auth/profile",
-    type: LoginTypes.Login,
-  },
-  {
-    label: "Settings",
+    label: "Beállítások",
     url: "/auth/settings",
     type: LoginTypes.Login,
   },
@@ -42,7 +42,7 @@ export const navButtons = [
     type: LoginTypes.Login,
   },
   {
-    label: "Logout",
+    label: "Kijelentkezés",
     url: "/",
     type: LoginTypes.Login,
   },

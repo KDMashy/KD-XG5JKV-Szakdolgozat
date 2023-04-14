@@ -37,7 +37,7 @@ export class TeamController {
         return this.teamService.AddNewMemberReq(req)
     }
 
-    @Delete('remove-member')
+    @Put('remove-member')
     RemoveMember(@Req() req) {
         return this.teamService.RemoveMemberReq(req)
     }

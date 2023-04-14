@@ -119,12 +119,13 @@ export class ProjectService {
             }
         })
         if(!found || !project) return HttpStatus.BAD_REQUEST
-        await this.rowModel
-            .createQueryBuilder()
-            .delete()
-            .from(Project)
-            .where('id = :id', { id: id })
-            .execute()
+        await this.rowModel.remove(found)
+        // await this.rowModel
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(Project)
+        //     .where('id = :id', { id: id })
+        //     .execute()
         await this.chatService.CreateNotification({
             user_id: project.project_creator,
             content: `${found.row_name} was removed`,

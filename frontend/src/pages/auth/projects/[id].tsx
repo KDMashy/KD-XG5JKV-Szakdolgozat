@@ -157,7 +157,7 @@ function ProjectPage() {
         count: typeInfo?.tasks?.length + 1,
       },
       (res) => {
-        setTasks((prev) => [...prev, res?.data]);
+        getProjectData(id);
         NotifyMessage("success", "Successfully created new Task");
       },
       (error) => {
@@ -166,6 +166,22 @@ function ProjectPage() {
       () => {
         setModalLoad(false);
         setIsOpen(false);
+      }
+    );
+  };
+
+  const removeTask = async (taskInfo) => {
+    await axios(
+      "delete",
+      `${API_URL}/task/${taskInfo?.id}`,
+      null,
+      null,
+      (res) => {
+        getProjectData(id);
+        NotifyMessage("success", "Successfully removed Task");
+      },
+      (error) => {
+        NotifyMessage("error", "Couldn't remove Task");
       }
     );
   };
@@ -191,6 +207,23 @@ function ProjectPage() {
       () => {
         setModalLoad(false);
         setIsOpen(false);
+      }
+    );
+  };
+
+  const removeCol = async (colInfo) => {
+    await axios(
+      "delete",
+      `${API_URL}/project/row/${colInfo?.id}`,
+      null,
+      null,
+      (res) => {
+        let tmp = cols?.filter((item) => item?.id !== colInfo?.id);
+        setCols(tmp);
+        NotifyMessage("success", "Successfully removed Task");
+      },
+      (error) => {
+        NotifyMessage("error", "Couldn't remove Task");
       }
     );
   };
@@ -316,6 +349,8 @@ function ProjectPage() {
             setIsOpen={setIsOpen}
             setType={setType}
             setTaskData={setTaskData}
+            removeTask={removeTask}
+            removeCol={removeCol}
           />
         </Container>
         <Modal

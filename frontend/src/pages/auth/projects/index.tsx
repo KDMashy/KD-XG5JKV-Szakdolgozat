@@ -78,18 +78,18 @@ function Projects() {
         >
           <div className="flex flex-col">
             <Button
-              label="New Project"
+              label="Új projekt"
               type={darkMode ? "dark" : "light"}
               className="bg-dark-100 text-light-400 h-[70px] mb-10 w-full"
               route="/auth/projects/new-project"
             />
             {/* NO CHECKBOXES YET */}
-            <Button
+            {/* <Button
               label="Remove Selected"
               type={darkMode ? "dark" : "light"}
               className="h-[70px]"
               disabled={true}
-            />
+            /> */}
           </div>
         </Container>
         <Container

@@ -38,7 +38,7 @@ function Footer() {
       <div className="flex items-center h-full px-5">
         <Avatar width="w-[130px]" height="h-[130px]" circular route="/" />
         <div className="flex flex-col ml-10 pt-2">
-          <span
+          {/* <span
             className={`h-[50px] ${
               darkMode
                 ? "bg-dark-700 text-dark-200"
@@ -46,7 +46,7 @@ function Footer() {
             }`}
           >
             Links
-          </span>
+          </span> */}
           <span
             className={`h-[50px] ${
               darkMode
@@ -54,7 +54,7 @@ function Footer() {
                 : "bg-dark-200 text-light-400"
             }`}
           >
-            CopyRight
+            CopyRight - Klepe Dominik, 2023
           </span>
           {/* <Button
             label={darkMode ? "Dark mode" : "Light mode"}

@@ -226,4 +226,27 @@ export class UserService {
         })
         return response
     }
+
+    async removeFriend (friendId, channelId, user) {
+        if(!friendId) return HttpStatus.BAD_REQUEST
+        let friendRecords = await this.friendModel.find({
+                where: {
+                    first_user: user?.id
+                }
+            })
+        let friendRecord = null
+        for(let i = 0; i < friendRecords?.length; i++){
+            console.log(friendRecords[i]?.second_user === friendId, friendId, friendRecords[i]?.second_user);
+            
+            if(friendRecords[i]?.second_user === parseInt(friendId)) {
+                friendRecord = friendRecords[i]
+                break;
+            }
+        }
+
+        if(!friendRecord) return HttpStatus.CONFLICT
+
+        await this.friendModel.remove(friendRecord)
+        await this.chatService.DeleteChannel(channelId)
+    }
 }

@@ -11,7 +11,7 @@ function AddNewList({ submit, loading, setIsOpen }) {
   };
   return (
     <div className="text-light-400 font-semibold">
-      <h2 className="text-lg">Add New Column</h2>
+      <h2 className="text-lg">Új oszlop hozzáadása</h2>
       <Formik
         initialValues={initialValues}
         validationSchema={newColumnValidation}
@@ -30,7 +30,7 @@ function AddNewList({ submit, loading, setIsOpen }) {
             <CustomForm handleSubmit={() => handleSubmit()}>
               <div className="text-left w-[calc(100%-30%)] mx-auto">
                 <CustomInput
-                  label="Column Name"
+                  label="Oszlop neve"
                   value={values?.row_name ?? ""}
                   onChange={(e) => {
                     setFieldValue("row_name", e?.target?.value);
@@ -41,14 +41,14 @@ function AddNewList({ submit, loading, setIsOpen }) {
                 />
                 <div className="flex justify-between mt-10">
                   <Button
-                    label="Cancel"
+                    label="Vissza"
                     type="dark"
                     color="error"
                     loading={loading}
                     clickHandler={() => setIsOpen(false)}
                   />
                   <Button
-                    label="Create"
+                    label="Létrehozás"
                     type="dark"
                     color="primary"
                     loading={loading}

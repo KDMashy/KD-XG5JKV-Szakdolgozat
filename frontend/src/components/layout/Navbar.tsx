@@ -121,7 +121,7 @@ function Navbar() {
               type={darkMode ? "dark" : "light"}
               buttonType="menu_log"
               clickHandler={
-                button?.label === "Logout"
+                button?.label === "Kijelentkezés"
                   ? () => logout()
                   : () => redirectPage(button?.url)
               }
@@ -144,7 +144,13 @@ function Navbar() {
       <>
         {!user ? (
           <>
-            <Avatar width="w-[130px]" height="w-[130px]" circular route="/" />
+            <Avatar
+              width="w-[130px]"
+              height="w-[130px]"
+              circular
+              route="/"
+              className="-mt-5"
+            />
             <div className="2xl:w-[100vh] xl:w-[90vh] lg:w-[80vh] w-[70vh] bg-dark-100 xl:pl-24 xl:pr-8 pl-20 pr-5 max-h-[80px] rounded-tl-[50px] rounded-bl-[200px] flex items-center justify-between">
               {MenuButtons()}
             </div>
@@ -160,7 +166,7 @@ function Navbar() {
               </div>
               <div className="relative min-w-[250px] max-w-[300px]">
                 <CustomInput
-                  placeholder="Search by username"
+                  placeholder="keresés felhasználónév szerint"
                   onChange={(e) => setUsername(e?.target?.value)}
                   value={username}
                 />
@@ -179,7 +185,7 @@ function Navbar() {
                         {found?.username}
                       </p>
                       <Button
-                        label="Add"
+                        label="Hozzáadás"
                         clickHandler={() => sendFriendReq(found)}
                         className="my-1"
                         padding="py-2 px-5"

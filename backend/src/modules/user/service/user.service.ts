@@ -236,8 +236,6 @@ export class UserService {
             })
         let friendRecord = null
         for(let i = 0; i < friendRecords?.length; i++){
-            console.log(friendRecords[i]?.second_user === friendId, friendId, friendRecords[i]?.second_user);
-            
             if(friendRecords[i]?.second_user === parseInt(friendId)) {
                 friendRecord = friendRecords[i]
                 break;

@@ -51,6 +51,11 @@ const newTaskValidation = yup.object().shape({
   task_name: yup.string().required("Feladat név szükséges"),
 });
 
+const saveAccountValidation = yup.object().shape({
+  first_name: yup.string().required("Keresztnév szükséges"),
+  last_name: yup.string().required("Vezetéknév szükséges"),
+});
+
 export {
   registrationValidation,
   loginValidation,
@@ -58,4 +63,5 @@ export {
   newColumnValidation,
   newTeamValidation,
   newTaskValidation,
+  saveAccountValidation,
 };

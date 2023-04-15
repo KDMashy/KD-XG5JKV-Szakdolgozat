@@ -41,11 +41,13 @@ function ProjectPage() {
   const [modalLoad, setModalLoad] = useState(false);
   const [taskData, setTaskData] = useState(null);
 
-  useEffect(() => {
-    if (id) getProjectData(id);
-  }, [id]);
+  const [deleteAble, setDeleteAble] = useState(false);
 
-  const getProjectData = async (id: any) => {
+  useEffect(() => {
+    if (id && user) getProjectData(id);
+  }, [id, user]);
+
+  const getProjectData = async (id: any, callBack = null) => {
     if (!id) return;
 
     setLoading(true);
@@ -54,7 +56,11 @@ function ProjectPage() {
       `${API_URL}/project/${id}`,
       null,
       null,
-      (res) => setProjectData(res?.data),
+      (res) => {
+        setProjectData(res?.data);
+        if (user && user?.id === res?.data?.project_creator?.id)
+          setDeleteAble(true);
+      },
       null,
       setLoading(false)
     );
@@ -324,11 +330,10 @@ function ProjectPage() {
     <div className="relative">
       <div className="grid md:grid-cols-9 grid-cols-1 gap-9">
         <SideBar
+          deleteAble={deleteAble}
           darkMode={darkMode}
-          hidden={hidden}
-          hideTimer={hideTimer}
-          setHidden={setHidden}
-          setHideTimer={setHideTimer}
+          pageData={projectData}
+          refreshData={getProjectData}
           containerClassName={`md:col-span-2 col-span-1 md:row-start-1`}
         />
         <Container

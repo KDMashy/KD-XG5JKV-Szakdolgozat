@@ -8,73 +8,50 @@ import TeamPageSideBar from "./TeamMemberSideBar";
 
 function SideBar({
   darkMode,
-  hidden,
-  hideTimer,
-  setHideTimer,
-  setHidden,
+  deleteAble = false,
   containerClassName = "",
   page = "project",
   setOpenModal = null,
+  pageData = null,
+  refreshData = null,
 }) {
-  const [hideStart, setHideStart] = useState(false);
-  const [showClose, setShowClose] = useState(false);
-  const [showData, setShowData] = useState(false);
-  const [onShow, setOnShow] = useState(false);
-
-  useEffect(() => {
-    if (hideTimer)
-      setTimeout(() => {
-        setHideTimer(false);
-        setHideStart(false);
-        setShowClose(false);
-        setShowData(false);
-      }, 100);
-  }, [hideTimer]);
-
-  useEffect(() => {
-    if (!hidden)
-      setTimeout(() => {
-        setShowClose(true);
-      }, 10);
-  }, [hidden]);
-
-  useEffect(() => {
-    if (showClose) setShowData(true);
-  }, [showClose]);
-
-  useEffect(() => {
-    if (showData)
-      setTimeout(() => {
-        setOnShow(true);
-      }, 100);
-    if (!showData) setOnShow(false);
-  }, [showData]);
+  const [showData, setShowData] = useState(true);
 
   function GetPageSideBar() {
     switch (page) {
       case "project":
-        return <ProjectPageSideBar onShow={onShow} />;
+        return (
+          <ProjectPageSideBar
+            onShow={showData}
+            deleteAble={deleteAble}
+            pageData={pageData}
+            refreshData={refreshData}
+          />
+        );
       case "team":
-        return <TeamPageSideBar onShow={onShow} setOpenModal={setOpenModal} />;
+        return (
+          <TeamPageSideBar
+            onShow={showData}
+            deleteAble={deleteAble}
+            setOpenModal={setOpenModal}
+          />
+        );
     }
   }
 
   return (
     <Container
       type={darkMode ? "dark" : "light"}
-      className={`${
-        hidden
-          ? `w-[0px] transition-all ease-in-out delay-75 ${
-              hideTimer && containerClassName
-            }`
-          : `w-full transition-all ease-in-out delay-75 ${containerClassName}`
-      } max-h-[300px] overflow-y-scroll`}
-      padding={`${hidden ? "" : "p-6"}`}
+      className={`w-full transition-all ease-in-out delay-75 ${containerClassName} max-h-[300px] overflow-y-scroll`}
+      padding={`${!showData ? "" : "p-6"}`}
     >
-      <div className={`${hidden ? "" : ""}`}>
+      <h2 className="mx-auto text-center text-lg font-semibold -mt-3 mb-3">
+        Funkciók
+      </h2>
+      {/* <div className={`${!showData ? "" : ""}`}>
         <div
-          onClick={() => setHidden(false)}
-          className={`${!hidden && !setHideTimer && "hidden"}`}
+          onClick={() => setShowData(false)}
+          className={`${!showData && "hidden"}`}
         >
           <KeyboardDoubleArrowRightIcon
             className={`absolute top-[10px] ${
@@ -85,13 +62,9 @@ function SideBar({
         </div>
         <div
           onClick={() => {
-            setHidden(true);
-            setHideTimer(true);
-            setHideStart(true);
+            setShowData(false);
           }}
-          className={`${
-            !showClose || (hidden && setHideTimer && !hideStart) ? "hidden" : ""
-          }`}
+          className={`${!showData ? "hidden" : ""}`}
         >
           <KeyboardDoubleArrowLeftIcon
             className={`absolute top-[10px] ${
@@ -100,7 +73,7 @@ function SideBar({
             fontSize="large"
           />
         </div>
-      </div>
+      </div> */}
       {showData && (
         <div className={` transition-all ease-in-out delay-100 relative pt-8`}>
           {GetPageSideBar()}

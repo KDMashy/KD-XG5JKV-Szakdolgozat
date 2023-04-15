@@ -34,6 +34,7 @@ function TeamPage() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [modalLoad, setModalLoad] = useState(false);
   const [newlyAdded, setNewlyAdded] = useState([]);
+  const [deleteAble, setDeleteAble] = useState(false);
 
   useEffect(() => {
     if (user) setFriends(getAvailableList(mergeFriendlist(user), members));
@@ -52,19 +53,19 @@ function TeamPage() {
       `${API_URL}/team/user/${id}`,
       null,
       null,
-      (res) => setTeamData(res?.data),
+      (res) => {
+        setTeamData(res?.data);
+        if (user && user?.id === res?.data?.team_creator?.id)
+          setDeleteAble(true);
+      },
       null,
       setLoading(false)
     );
   };
 
   useEffect(() => {
-    console.log(members);
-  }, [members]);
-
-  useEffect(() => {
-    if (id) getTeamData(id);
-  }, [id]);
+    if (id && user) getTeamData(id);
+  }, [id, user]);
 
   useEffect(() => {
     console.log(teamData);
@@ -107,11 +108,8 @@ function TeamPage() {
     <div className="relative">
       <div className="grid md:grid-cols-9 grid-cols-1 gap-9">
         <SideBar
+          deleteAble={deleteAble}
           darkMode={darkMode}
-          hidden={hidden}
-          hideTimer={hideTimer}
-          setHidden={setHidden}
-          setHideTimer={setHideTimer}
           page="team"
           setOpenModal={setOpenModal}
           containerClassName={`md:col-span-2 col-span-1 md:row-start-1`}
@@ -143,6 +141,7 @@ function TeamPage() {
                 username={member?.username}
                 email={member?.email}
                 key={member?.email}
+                deleteAble={deleteAble}
               />
             ))}
           </>

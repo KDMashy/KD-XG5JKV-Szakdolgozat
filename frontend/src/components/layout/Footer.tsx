@@ -32,7 +32,7 @@ function Footer() {
   return !user ? (
     <footer
       className={`relative w-full h-[180px] mt-20 ${
-        darkMode ? "bg-dark-700" : "bg-dark-200"
+        darkMode ? "bg-dark-700" : "bg-dark-700"
       }`}
     >
       <div className="flex items-center h-full px-5">

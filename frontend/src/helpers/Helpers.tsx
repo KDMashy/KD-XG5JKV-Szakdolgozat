@@ -77,3 +77,22 @@ export function getAvailableList(friends, members) {
   });
   return tmp;
 }
+
+export function getAvailableAndAddedTeams(projectTeams, teams) {
+  let added = {
+    project: [],
+    teams: [],
+  };
+
+  if (projectTeams?.length > 0) {
+    projectTeams?.map((projTeam) => {
+      teams?.map((team) => {
+        if (team?.id === projTeam?.id) {
+          added?.project?.push(team);
+        } else added?.teams?.push(team);
+      });
+    });
+  } else added.teams = [...added.teams, ...teams];
+
+  return added;
+}

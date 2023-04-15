@@ -65,13 +65,29 @@ function Teams() {
   const getData = async (cancelToken: any) => {
     setLoading(true);
     await axios
-      .get(`${API_URL}/team/${user.id}`, {
+      .get(`${API_URL}/user`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("JWT")}` },
         withCredentials: true,
         cancelToken: cancelToken.token,
       })
       .then((res) => {
-        setTeams(res?.data);
+        res.data?.created_teams.map((item: any) => {
+          setTeams((prev: any) => [...prev, item]);
+        });
+        res.data?.team_member.map((membership: any) => {
+          let found = false;
+
+          for (let item of res.data?.created_teams) {
+            if (item?.id === membership?.team?.id) {
+              found = true;
+              break;
+            }
+          }
+
+          if (!found) {
+            setTeams((prev: any) => [...prev, membership?.team]);
+          }
+        });
       })
       .catch((error) => {
         if (axios.isCancel(error)) return;

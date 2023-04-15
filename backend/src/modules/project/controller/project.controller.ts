@@ -38,6 +38,11 @@ export class ProjectController {
         return this.projectService.addProjectTeam(req.query)
     }
 
+    @Delete('remove-team/:id')
+    removeTeamFromProject(@Param('id', ParseIntPipe) id: number) {
+        return this.projectService.deleteProjectTeam(id)
+    }
+
     @Post('row')
     addRowForProject(@Body() row: CreateRowDto) {
         return this.projectService.createRow(row)

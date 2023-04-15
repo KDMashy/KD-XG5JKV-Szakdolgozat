@@ -183,6 +183,19 @@ export class ProjectService {
         return response
     }
 
+    async deleteProjectTeam (id) {
+        if(!id) return HttpStatus.BAD_REQUEST
+        const connectionSearch = await this.projectTeamsModel.findOne({
+            where: {
+                id: id
+            }
+        })
+
+        if(!connectionSearch) return HttpStatus.CONFLICT
+        
+        await this.projectTeamsModel.remove(connectionSearch)
+    }
+
     async updateProject(project: UpdateProjectDto, id:number) {
         const editProject: Project = await this.projectModel.findOne({ where: { id: id}})
         editProject.project_name = project.project_name

@@ -13,6 +13,7 @@ function TeamMemberItem({
   setMembers,
   teamData,
   newlyAdded,
+  deleteAble = false,
 }) {
   const removeTeamMember = async () => {
     await axios(
@@ -40,12 +41,14 @@ function TeamMemberItem({
       </div>
       {newlyAdded?.filter((item) => item?.username === username)[0] ? (
         <></>
-      ) : (
+      ) : deleteAble ? (
         <Button
           label="Törlés a csapatból"
           color="error"
           clickHandler={() => removeTeamMember()}
         />
+      ) : (
+        <></>
       )}
     </div>
   );

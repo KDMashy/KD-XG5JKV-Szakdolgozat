@@ -84,7 +84,7 @@ const NotificationIndicator = ({ has }) => {
       <p
         className={`ml-3 ${
           has ? "text-[rgb(40,120,105)]" : "text-[rgb(40,60,105)]"
-        }`}
+        } md:flex hidden`}
       >
         Értesítések
       </p>

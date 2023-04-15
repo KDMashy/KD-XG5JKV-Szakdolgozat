@@ -25,20 +25,20 @@ export const ListItem = ({
       </div> */}
       <div className="w-full flex flex-col pl-10">
         <div className="flex">
-          <div className="w-1/2 text-center">
+          <div className=" text-center">
             <h2 className="font-noto font-bold text-light-400 text-lg">
               {name}
             </h2>
           </div>
-          <div className="w-1/2">{/* BADGES */}</div>
+          {/* <div className="w-1/2">BADGES</div> */}
         </div>
-        <div className="flex">
-          <div className="w-[80%]">
+        <div className="flex justify-between sm:flex-row flex-col items-center">
+          <div className="">
             <p className="font-noto font-semibold text-light-400 text-base">
               {description}
             </p>
           </div>
-          <div className="w-[20%]">
+          <div className="mr-10">
             <Button
               type={darkMode ? "dark" : "light"}
               label="Megtekint"

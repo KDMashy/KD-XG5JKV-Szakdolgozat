@@ -136,7 +136,7 @@ function Navbar() {
       className={`flex justify-between ${
         !user
           ? "py-7 pl-7"
-          : `px-2 h-[160px] mb-10 ${
+          : `px-2 md:h-[160px] h-[200px] mb-10 ${
               darkMode ? "bg-dark-700 bg-opacity-30 text-light-400" : ""
             }`
       }`}
@@ -157,12 +157,14 @@ function Navbar() {
           </>
         ) : (
           <div className="flex flex-col w-full">
-            <div className="h-[40px] mb-10 flex justify-between">
-              <div className="h-[40px] w-[330px] bg-dark-100 pl-3 rounded-br-[20px]">
-                <h1 className="text-lg font-noto font-bold -mt-1">
+            <div className="md:h-[40px] mb-10 flex items-center justify-between">
+              <div className="md:h-[40px] h-[80px] w-[330px] bg-dark-100 pl-3 rounded-br-[20px] md:rounded-bl-none rounded-bl-[20px] transition-all ease-in-out duration-150">
+                <h1 className="md:text-lg text-sm font-noto font-bold md:-mt-1">
                   {user?.username} - {`${user?.first_name} ${user?.last_name}`}
                 </h1>
-                <h2 className="font-noto font-semibold -mt-2">{user?.email}</h2>
+                <h2 className="font-noto font-semibold md:text-base text-xs md:-mt-2">
+                  {user?.email}
+                </h2>
               </div>
               <div className="relative min-w-[250px] max-w-[300px]">
                 <CustomInput
@@ -194,7 +196,7 @@ function Navbar() {
                   ))}
                 </div>
               </div>
-              <div className="h-[40px] w-[200px] bg-dark-100 rounded-bl-[20px] font-noto text-lg font-bold text-center items-center flex justify-center">
+              <div className="md:h-[40px] h-[80px] w-[200px] bg-dark-100 rounded-bl-[20px] md:rounded-br-none rounded-br-[20px] font-noto text-lg font-bold text-center items-center flex justify-center transition-all ease-in-out duration-150">
                 <NotificationDropdown notifications={notifications} />
               </div>
             </div>

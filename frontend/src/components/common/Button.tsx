@@ -110,7 +110,7 @@ function Button({
               ? "rounded-md"
               : "rounded-full"
             : "rounded-md"
-        } ${getButtonType()} transition ease-in-out delay-150 hover:bg-opacity-50 hover:text-light-200 text-center`}
+        } ${getButtonType()} transition ease-in-out delay-150 hover:bg-opacity-50 hover:text-light-200 text-center md:text-base text-sm`}
         onMouseDown={clickHandler && handleClick}
         disabled={disabled || loading}
         type={clickType}

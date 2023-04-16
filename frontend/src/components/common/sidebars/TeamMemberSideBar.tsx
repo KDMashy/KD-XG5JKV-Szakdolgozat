@@ -25,7 +25,7 @@ function TeamPageSideBar({ onShow, setOpenModal, deleteAble }) {
   };
 
   return (
-    <div className="min-h-[175px] max-h-[200px] overflow-y-scroll flex flex-col">
+    <div className="min-h-[175px] max-h-[200px] overflow-y-auto flex flex-col">
       {deleteAble ? (
         <>
           <Button

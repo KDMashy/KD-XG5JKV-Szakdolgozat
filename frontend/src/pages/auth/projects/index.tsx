@@ -8,6 +8,7 @@ import Container from "../../../components/Container";
 import { API_URL } from "../../../constants/url";
 import { useAuth } from "../../../hooks/useAuth";
 import { useDarkMode } from "../../../hooks/useDarkMode";
+import HeadMetaData from "../../../components/HeadMetaData";
 
 function Projects() {
   const { darkMode } = useDarkMode();
@@ -71,6 +72,7 @@ function Projects() {
 
   return (
     <div className="container relative">
+      <HeadMetaData title="Follofox - Projektek" />
       <div className="grid grid-cols-7 gap-9">
         <Container
           type={darkMode ? "dark" : "light"}

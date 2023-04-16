@@ -13,6 +13,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useDarkMode } from "../../../hooks/useDarkMode";
 import { newProjectValidation } from "../../../validations";
 import { useRouter } from "next/router";
+import HeadMetaData from "../../../components/HeadMetaData";
 
 function NewProject() {
   const { darkMode } = useDarkMode();
@@ -53,6 +54,7 @@ function NewProject() {
 
   return (
     <div className="container relative max-w-[1500px] w-full mx-auto">
+      <HeadMetaData title="Follofox - Új projekt létrehozása" />
       <Container
         type={darkMode ? "dark" : "light"}
         className="overflow-hidden h-[500px]"

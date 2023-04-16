@@ -13,6 +13,7 @@ import { getAvailableList, mergeFriendlist } from "../../../helpers/Helpers";
 import { CustomInput } from "../../../components/common/form/CustomInput";
 import Button from "../../../components/common/Button";
 import { NotifyMessage } from "../../../components/common/ToastNotification";
+import HeadMetaData from "../../../components/HeadMetaData";
 
 function TeamPage() {
   const router = useRouter();
@@ -106,13 +107,14 @@ function TeamPage() {
 
   return (
     <div className="relative">
+      <HeadMetaData title={`Follofox - ${teamData?.team_name ?? "Csapat"}`} />
       <div className="grid md:grid-cols-9 grid-cols-1 gap-9">
         <SideBar
           deleteAble={deleteAble}
           darkMode={darkMode}
           page="team"
           setOpenModal={setOpenModal}
-          containerClassName={`md:col-span-2 col-span-1 md:row-start-1`}
+          containerClassName={`md:col-span-3 col-span-1 md:row-start-1`}
         />
         <Container
           type={darkMode ? "dark" : "light"}

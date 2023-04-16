@@ -151,6 +151,7 @@ function Navbar() {
               route="/"
               className="-mt-5"
             />
+            <h1 className=" text-2xl font-semibold">Follofox</h1>
             <div className="2xl:w-[100vh] xl:w-[90vh] lg:w-[80vh] w-[70vh] bg-dark-100 xl:pl-24 xl:pr-8 pl-20 pr-5 max-h-[80px] rounded-tl-[50px] rounded-bl-[200px] flex items-center justify-between">
               {MenuButtons()}
             </div>

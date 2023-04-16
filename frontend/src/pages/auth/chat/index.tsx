@@ -19,11 +19,12 @@ import Message from "../../../components/common/chat/Message";
 import MessageInput from "../../../components/common/chat/MessageInput";
 import MessageList from "../../../components/common/chat/MessageList";
 import ChannelTab from "../../../components/common/chat/ChannelTab";
+import HeadMetaData from "../../../components/HeadMetaData";
 
 function ChatPage() {
   const { user } = useAuth({
     middleware: "auth",
-    redirectIfAuthenticated: false,
+    redirectIfAuthenticated: true,
   });
   const initialValues = {
     message: "",
@@ -179,6 +180,7 @@ function ChatPage() {
 
   return (
     <div>
+      <HeadMetaData title="Follofox - Chat" />
       <div className="flex flex-row">
         <div className="w-1/3 flex flex-col max-h-[700px] overflow-y-auto">
           {channels?.map((channel) => (

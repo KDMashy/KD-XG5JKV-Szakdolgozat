@@ -8,6 +8,7 @@ import Container from "../components/Container";
 import { useAuth } from "../hooks/useAuth";
 import { useDarkMode } from "../hooks/useDarkMode";
 import Link from "next/link";
+import HeadMetaData from "../components/HeadMetaData";
 
 const Home: NextPage = () => {
   const { darkMode } = useDarkMode();
@@ -43,56 +44,59 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="rounded-lg p-10 text-lg font-noto grid grid-cols-11">
-      <Container
-        type={darkMode ? "dark" : "light"}
-        className="col-start-1 col-span-7"
-      >
-        <>
-          <PageTitle
-            type={darkMode ? "dark" : "light"}
-            title="A szakdolgozatom projektjéről"
-          />
-          <Paragraph
-            type={darkMode ? "dark" : "light"}
-            text="Az oldal egy szakdolgozat része ként készült el."
-            className="mt-3"
-          />
-          <Paragraph
-            type={darkMode ? "dark" : "light"}
-            text="A célja, hogy egyesítse a projekt feladatainak menedzselését az egyéb feladatokkal, mint például csapatok kialakítása illetve csapaton és egyénileg lefolytatott beszélgetésével."
-            className="mt-3"
-          />
-          <Paragraph
-            type={darkMode ? "dark" : "light"}
-            text="Rólam további információk az információk oldalsávban találhatóak"
-            className="mt-3"
-          />
-        </>
-      </Container>
-      <Container
-        type={darkMode ? "dark" : "light"}
-        className="col-start-9 col-span-3"
-      >
-        <>
-          <PageSubTitle
-            type={darkMode ? "dark" : "light"}
-            tag="h2"
-            title="Információk"
-            className="text-xl"
-          />
-          {GenerateInformations(informations, "info")}
-          <Divider placement="middle" />
-          <PageSubTitle
-            type={darkMode ? "dark" : "light"}
-            tag="h2"
-            title="Média linkek"
-            className="text-xl"
-          />
-          {GenerateInformations(socials, "social")}
-        </>
-      </Container>
-    </div>
+    <>
+      <HeadMetaData title="Follofox - Az oldalról" />
+      <div className="rounded-lg p-10 text-lg font-noto grid grid-cols-11">
+        <Container
+          type={darkMode ? "dark" : "light"}
+          className="col-start-1 col-span-7"
+        >
+          <>
+            <PageTitle
+              type={darkMode ? "dark" : "light"}
+              title="A szakdolgozatom projektjéről"
+            />
+            <Paragraph
+              type={darkMode ? "dark" : "light"}
+              text="Az oldal egy szakdolgozat része ként készült el."
+              className="mt-3"
+            />
+            <Paragraph
+              type={darkMode ? "dark" : "light"}
+              text="A célja, hogy egyesítse a projekt feladatainak menedzselését az egyéb feladatokkal, mint például csapatok kialakítása illetve csapaton és egyénileg lefolytatott beszélgetésével."
+              className="mt-3"
+            />
+            <Paragraph
+              type={darkMode ? "dark" : "light"}
+              text="Rólam további információk az információk oldalsávban találhatóak"
+              className="mt-3"
+            />
+          </>
+        </Container>
+        <Container
+          type={darkMode ? "dark" : "light"}
+          className="col-start-9 col-span-3"
+        >
+          <>
+            <PageSubTitle
+              type={darkMode ? "dark" : "light"}
+              tag="h2"
+              title="Információk"
+              className="text-xl"
+            />
+            {GenerateInformations(informations, "info")}
+            <Divider placement="middle" />
+            <PageSubTitle
+              type={darkMode ? "dark" : "light"}
+              tag="h2"
+              title="Média linkek"
+              className="text-xl"
+            />
+            {GenerateInformations(socials, "social")}
+          </>
+        </Container>
+      </div>
+    </>
   );
 };
 

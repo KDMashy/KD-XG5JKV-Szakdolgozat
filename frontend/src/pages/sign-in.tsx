@@ -12,6 +12,7 @@ import { useDarkMode } from "../hooks/useDarkMode";
 import { API_URL } from "../constants/url";
 import { useAuth } from "../hooks/useAuth";
 import { axios } from "../lib/axios";
+import HeadMetaData from "../components/HeadMetaData";
 
 function SignIn() {
   const { darkMode } = useDarkMode();
@@ -52,71 +53,77 @@ function SignIn() {
   };
 
   return (
-    <div className="container relative">
-      <Container type={darkMode ? "dark" : "light"}>
-        <>
-          <PageTitle type={darkMode ? "dark" : "light"} title="Bejelentkezés" />
-          <Formik
-            validationSchema={loginValidation}
-            initialValues={initialValues}
-            onSubmit={(values) => submit(values)}
-          >
-            {({
-              handleChange,
-              handleSubmit,
-              errors,
-              values,
-              setFieldValue,
-              setFieldTouched,
-              touched,
-            }) => {
-              return (
-                <CustomForm
-                  className="container grid grid-cols-6 grid-rows-2 gap-9"
-                  handleSubmit={() => handleSubmit()}
-                >
-                  <div className="col-span-4 row-start-1">
-                    <CustomInput
-                      label="Email"
-                      value={values?.username}
-                      onChange={(e) => {
-                        setFieldValue("username", e?.target?.value);
-                        setFieldTouched("username", true);
-                      }}
-                      touched={touched?.username}
-                      error={errors?.username}
-                    />
-                  </div>
-                  <div className="col-span-2 row-start-1">
-                    <CustomInput
-                      label="Jelszó"
-                      value={values?.password}
-                      onChange={(e) => {
-                        setFieldValue("password", e?.target?.value);
-                        setFieldTouched("password", true);
-                      }}
-                      touched={touched?.password}
-                      error={errors?.password}
-                      type={"password"}
-                    />
-                  </div>
-                  <div className="col-span-6 row-start-2 mx-auto">
-                    <Button
-                      label="Bejelentkezés"
-                      clickHandler={() => handleSubmit()}
-                      type={darkMode ? "dark" : "light"}
-                      clickType="submit"
-                      loading={loading}
-                    />
-                  </div>
-                </CustomForm>
-              );
-            }}
-          </Formik>
-        </>
-      </Container>
-      <Loading loading={loading} />
-    </div>
+    <>
+      <HeadMetaData title="Follofox - Bejelentezés" />
+      <div className="container relative">
+        <Container type={darkMode ? "dark" : "light"}>
+          <>
+            <PageTitle
+              type={darkMode ? "dark" : "light"}
+              title="Bejelentkezés"
+            />
+            <Formik
+              validationSchema={loginValidation}
+              initialValues={initialValues}
+              onSubmit={(values) => submit(values)}
+            >
+              {({
+                handleChange,
+                handleSubmit,
+                errors,
+                values,
+                setFieldValue,
+                setFieldTouched,
+                touched,
+              }) => {
+                return (
+                  <CustomForm
+                    className="container grid grid-cols-6 grid-rows-2 gap-9"
+                    handleSubmit={() => handleSubmit()}
+                  >
+                    <div className="col-span-4 row-start-1">
+                      <CustomInput
+                        label="Email"
+                        value={values?.username}
+                        onChange={(e) => {
+                          setFieldValue("username", e?.target?.value);
+                          setFieldTouched("username", true);
+                        }}
+                        touched={touched?.username}
+                        error={errors?.username}
+                      />
+                    </div>
+                    <div className="col-span-2 row-start-1">
+                      <CustomInput
+                        label="Jelszó"
+                        value={values?.password}
+                        onChange={(e) => {
+                          setFieldValue("password", e?.target?.value);
+                          setFieldTouched("password", true);
+                        }}
+                        touched={touched?.password}
+                        error={errors?.password}
+                        type={"password"}
+                      />
+                    </div>
+                    <div className="col-span-6 row-start-2 mx-auto">
+                      <Button
+                        label="Bejelentkezés"
+                        clickHandler={() => handleSubmit()}
+                        type={darkMode ? "dark" : "light"}
+                        clickType="submit"
+                        loading={loading}
+                      />
+                    </div>
+                  </CustomForm>
+                );
+              }}
+            </Formik>
+          </>
+        </Container>
+        <Loading loading={loading} />
+      </div>
+    </>
   );
 }
 

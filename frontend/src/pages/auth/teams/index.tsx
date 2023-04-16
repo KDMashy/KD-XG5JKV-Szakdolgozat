@@ -7,6 +7,7 @@ import Container from "../../../components/Container";
 import Button from "../../../components/common/Button";
 import { ListItem } from "../../../components/common/list/ProjectListItem";
 import Loading from "../../../components/common/Loading";
+import HeadMetaData from "../../../components/HeadMetaData";
 
 function Teams() {
   const { darkMode } = useDarkMode();
@@ -98,6 +99,7 @@ function Teams() {
 
   return (
     <div className="container relative">
+      <HeadMetaData title="Follofox - Csapatok" />
       <div className="grid grid-cols-7 gap-9">
         <Container
           type={darkMode ? "dark" : "light"}

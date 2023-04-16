@@ -12,6 +12,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useDarkMode } from "../../../hooks/useDarkMode";
 import { axios } from "../../../lib/axios";
 import AddNewTask from "../../../components/common/modal/AddNewTask";
+import HeadMetaData from "../../../components/HeadMetaData";
 
 function ProjectPage() {
   const { darkMode } = useDarkMode();
@@ -328,6 +329,9 @@ function ProjectPage() {
 
   return (
     <div className="relative">
+      <HeadMetaData
+        title={`Follofox - ${projectData?.project_name ?? "Project"}`}
+      />
       <div className="grid md:grid-cols-9 grid-cols-1 gap-9">
         <SideBar
           deleteAble={deleteAble}

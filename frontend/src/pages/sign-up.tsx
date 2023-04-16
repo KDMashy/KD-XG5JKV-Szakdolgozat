@@ -13,6 +13,7 @@ import { useDarkMode } from "../hooks/useDarkMode";
 import { axios } from "../lib/axios";
 import { registrationValidation } from "../validations";
 import { NotifyMessage } from "../components/common/ToastNotification";
+import HeadMetaData from "../components/HeadMetaData";
 
 function SignUp() {
   const { darkMode } = useDarkMode();
@@ -60,125 +61,131 @@ function SignUp() {
   };
 
   return (
-    <div className="container relative">
-      <Container type={darkMode ? "dark" : "light"}>
-        <>
-          <PageTitle type={darkMode ? "dark" : "light"} title="Regisztráció" />
-          <Formik
-            initialValues={initialValues}
-            validationSchema={registrationValidation}
-            onSubmit={(values) => submit(values)}
-          >
-            {({
-              handleChange,
-              handleSubmit,
-              errors,
-              values,
-              setFieldValue,
-              setFieldTouched,
-              touched,
-            }) => {
-              return (
-                <CustomForm
-                  className="container grid grid-cols-6 grid-rows-5 gap-9"
-                  handleSubmit={() => handleSubmit()}
-                >
-                  <div className="col-span-2 row-start-1">
-                    <CustomInput
-                      label="Felhasználónév"
-                      value={values?.username}
-                      onChange={(e) => {
-                        setFieldValue("username", e?.target?.value);
-                        setFieldTouched("username", true);
-                      }}
-                      touched={touched?.username}
-                      error={errors?.username}
-                      minLength={5}
-                      maxLength={16}
-                    />
-                  </div>
-                  <div className="col-span-4 row-start-1">
-                    <CustomInput
-                      label="Email"
-                      value={values?.email}
-                      onChange={(e) => {
-                        setFieldValue("email", e?.target?.value);
-                        setFieldTouched("email", true);
-                      }}
-                      touched={touched?.email}
-                      error={errors?.email}
-                    />
-                  </div>
-                  <div className="col-span-3 row-start-2">
-                    <CustomInput
-                      label="Keresztnév"
-                      value={values?.first_name}
-                      onChange={(e) => {
-                        setFieldValue("first_name", e?.target?.value);
-                        setFieldTouched("first_name", true);
-                      }}
-                      touched={touched?.first_name}
-                      error={errors?.first_name}
-                    />
-                  </div>
-                  <div className="col-span-3 row-start-2">
-                    <CustomInput
-                      label="Vezetéknév"
-                      value={values?.last_name}
-                      onChange={(e) => {
-                        setFieldValue("last_name", e?.target?.value);
-                        setFieldTouched("last_name", true);
-                      }}
-                      touched={touched?.last_name}
-                      error={errors?.last_name}
-                    />
-                  </div>
-                  <div className="col-span-3 row-start-3">
-                    <CustomInput
-                      label="Jelszó"
-                      value={values?.password}
-                      onChange={(e) => {
-                        setFieldValue("password", e?.target?.value);
-                        setFieldTouched("password", true);
-                      }}
-                      touched={touched?.password}
-                      error={errors?.password}
-                      type={"password"}
-                    />
-                  </div>
-                  <div className="col-span-3 row-start-4">
-                    <CustomInput
-                      label="Jelszó megerősítése"
-                      value={values?.confirmation}
-                      onChange={(e) => {
-                        setFieldValue("confirmation", e?.target?.value);
-                        setFieldTouched("confirmation", true);
-                      }}
-                      touched={touched?.confirmation}
-                      error={errors?.confirmation}
-                      type={"password"}
-                    />
-                  </div>
-                  <div className="col-span-3 row-start-3 row-span-2">
-                    {/* ReCaptCHa */}
-                  </div>
-                  <div className="col-span-3 mx-auto">
-                    <Button
-                      label="Regisztálok"
-                      clickHandler={() => handleSubmit()}
-                      type={darkMode ? "dark" : "light"}
-                      clickType="submit"
-                      loading={loading}
-                    />
-                  </div>
-                </CustomForm>
-              );
-            }}
-          </Formik>
-        </>
-      </Container>
-      <Loading loading={loading} />
-    </div>
+    <>
+      <HeadMetaData title="Follofox - Regisztráció" />
+      <div className="container relative">
+        <Container type={darkMode ? "dark" : "light"}>
+          <>
+            <PageTitle
+              type={darkMode ? "dark" : "light"}
+              title="Regisztráció"
+            />
+            <Formik
+              initialValues={initialValues}
+              validationSchema={registrationValidation}
+              onSubmit={(values) => submit(values)}
+            >
+              {({
+                handleChange,
+                handleSubmit,
+                errors,
+                values,
+                setFieldValue,
+                setFieldTouched,
+                touched,
+              }) => {
+                return (
+                  <CustomForm
+                    className="container grid grid-cols-6 grid-rows-5 gap-9"
+                    handleSubmit={() => handleSubmit()}
+                  >
+                    <div className="col-span-2 row-start-1">
+                      <CustomInput
+                        label="Felhasználónév"
+                        value={values?.username}
+                        onChange={(e) => {
+                          setFieldValue("username", e?.target?.value);
+                          setFieldTouched("username", true);
+                        }}
+                        touched={touched?.username}
+                        error={errors?.username}
+                        minLength={5}
+                        maxLength={16}
+                      />
+                    </div>
+                    <div className="col-span-4 row-start-1">
+                      <CustomInput
+                        label="Email"
+                        value={values?.email}
+                        onChange={(e) => {
+                          setFieldValue("email", e?.target?.value);
+                          setFieldTouched("email", true);
+                        }}
+                        touched={touched?.email}
+                        error={errors?.email}
+                      />
+                    </div>
+                    <div className="col-span-3 row-start-2">
+                      <CustomInput
+                        label="Keresztnév"
+                        value={values?.first_name}
+                        onChange={(e) => {
+                          setFieldValue("first_name", e?.target?.value);
+                          setFieldTouched("first_name", true);
+                        }}
+                        touched={touched?.first_name}
+                        error={errors?.first_name}
+                      />
+                    </div>
+                    <div className="col-span-3 row-start-2">
+                      <CustomInput
+                        label="Vezetéknév"
+                        value={values?.last_name}
+                        onChange={(e) => {
+                          setFieldValue("last_name", e?.target?.value);
+                          setFieldTouched("last_name", true);
+                        }}
+                        touched={touched?.last_name}
+                        error={errors?.last_name}
+                      />
+                    </div>
+                    <div className="col-span-3 row-start-3">
+                      <CustomInput
+                        label="Jelszó"
+                        value={values?.password}
+                        onChange={(e) => {
+                          setFieldValue("password", e?.target?.value);
+                          setFieldTouched("password", true);
+                        }}
+                        touched={touched?.password}
+                        error={errors?.password}
+                        type={"password"}
+                      />
+                    </div>
+                    <div className="col-span-3 row-start-4">
+                      <CustomInput
+                        label="Jelszó megerősítése"
+                        value={values?.confirmation}
+                        onChange={(e) => {
+                          setFieldValue("confirmation", e?.target?.value);
+                          setFieldTouched("confirmation", true);
+                        }}
+                        touched={touched?.confirmation}
+                        error={errors?.confirmation}
+                        type={"password"}
+                      />
+                    </div>
+                    <div className="col-span-3 row-start-3 row-span-2">
+                      {/* ReCaptCHa */}
+                    </div>
+                    <div className="col-span-3 mx-auto">
+                      <Button
+                        label="Regisztálok"
+                        clickHandler={() => handleSubmit()}
+                        type={darkMode ? "dark" : "light"}
+                        clickType="submit"
+                        loading={loading}
+                      />
+                    </div>
+                  </CustomForm>
+                );
+              }}
+            </Formik>
+          </>
+        </Container>
+        <Loading loading={loading} />
+      </div>
+    </>
   );
 }
 

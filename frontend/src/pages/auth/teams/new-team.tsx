@@ -17,6 +17,7 @@ import TeamMemberListItem from "../../../components/common/team/TeamMemberListIt
 import Modal from "../../../components/common/modal/Modal";
 import { getAvailableList, getIds } from "../../../helpers/Helpers";
 import { mergeFriendlist } from "../../../helpers/Helpers";
+import HeadMetaData from "../../../components/HeadMetaData";
 
 function NewTeam() {
   const { darkMode } = useDarkMode();
@@ -74,6 +75,7 @@ function NewTeam() {
 
   return (
     <div className="container relative max-w-[1500px] w-full mx-auto">
+      <HeadMetaData title="Follofox - Új csapat létrehozása" />
       <Container
         type={darkMode ? "dark" : "light"}
         className="overflow-hidden h-[500px]"

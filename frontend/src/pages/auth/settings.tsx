@@ -11,12 +11,13 @@ import { saveAccountValidation } from "../../validations";
 import { axios } from "../../lib/axios";
 import { API_URL } from "../../constants/url";
 import { NotifyMessage } from "../../components/common/ToastNotification";
+import HeadMetaData from "../../components/HeadMetaData";
 
 function Settings() {
   const { darkMode } = useDarkMode();
   const { user } = useAuth({
     middleware: "auth",
-    redirectIfAuthenticated: false,
+    redirectIfAuthenticated: true,
   });
 
   const [data, setData] = useState(false);
@@ -53,6 +54,7 @@ function Settings() {
 
   return (
     <div>
+      <HeadMetaData title="Follofox - Fiók beállítások" />
       <Container type={darkMode ? "dark" : "light"}>
         <>
           <PageTitle

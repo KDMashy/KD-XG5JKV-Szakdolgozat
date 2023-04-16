@@ -10,6 +10,7 @@ import Footer from "../components/layout/Footer";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { ChatProvider } from "../contexts/ChatProvider";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const toastContext = {
@@ -26,6 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        <title>Follofox</title>
+      </Head>
       <ChatProvider>
         <Navbar />
         <Content>

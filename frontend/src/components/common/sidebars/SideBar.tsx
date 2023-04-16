@@ -42,7 +42,7 @@ function SideBar({
   return (
     <Container
       type={darkMode ? "dark" : "light"}
-      className={`w-full transition-all ease-in-out delay-75 ${containerClassName} max-h-[300px] overflow-y-scroll`}
+      className={`w-full transition-all ease-in-out delay-75 ${containerClassName} max-h-[400px] overflow-y-auto`}
       padding={`${!showData ? "" : "p-6"}`}
     >
       <h2 className="mx-auto text-center text-lg font-semibold -mt-3 mb-3">

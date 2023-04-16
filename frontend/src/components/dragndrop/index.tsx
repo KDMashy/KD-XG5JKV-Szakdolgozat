@@ -56,7 +56,7 @@ function DragNDropTable({
       searchedTask.row = copyCols[colIndex];
       await sendTaskData(
         searchedTask,
-        colIndex,
+        cols[colIndex]?.id - 1,
         copyCols[colIndex]?.tasks?.length,
         (res) => {
           copyCols[colIndex]?.tasks.push(searchedTask);
@@ -75,17 +75,22 @@ function DragNDropTable({
 
       await sendTaskData(
         searchedTask,
-        colIndex,
+        cols[colIndex]?.id - 1,
         newIndex,
         (res) => {},
         (error) => (fail = true)
       );
       if (!fail)
-        await sendTaskData(examples[wasIndex], colIndex, wasIndex, (res) => {
-          examples[wasIndex].count = wasIndex + 1;
-          examples[newIndex].count = newIndex + 1;
-          copyCols[colIndex].tasks = examples;
-        });
+        await sendTaskData(
+          examples[wasIndex],
+          cols[colIndex]?.id - 1,
+          wasIndex,
+          (res) => {
+            examples[wasIndex].count = wasIndex + 1;
+            examples[newIndex].count = newIndex + 1;
+            copyCols[colIndex].tasks = examples;
+          }
+        );
     }
 
     (dragItem.current = null), (dragOverItem.current = null);

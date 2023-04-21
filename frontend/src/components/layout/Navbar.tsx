@@ -179,22 +179,26 @@ function Navbar() {
                     searchOpen ? "absolute" : "hidden"
                   } z-[100] md:w-[250px] max-h-[200px] rounded-md border-2 border-dark-200 bg-dark-500 overflow-y-auto top-[50px] left-0`}
                 >
-                  {usersList?.map((found) => (
-                    <div
-                      key={found?.username}
-                      className="flex justify-between items-center border-b-2 border-dark-200 py-3 px-2 w-full hover:bg-dark-400 transition-all ease-in-out"
-                    >
-                      <p className="text-dark-200 max-w-2/3">
-                        {found?.username}
-                      </p>
-                      <Button
-                        label="Hozzáadás"
-                        clickHandler={() => sendFriendReq(found)}
-                        className="my-1"
-                        padding="py-2 px-5"
-                      />
-                    </div>
-                  ))}
+                  {usersList?.map((found) =>
+                    found?.id !== user?.id ? (
+                      <div
+                        key={found?.username}
+                        className="flex justify-between items-center border-b-2 border-dark-200 py-3 px-2 w-full hover:bg-dark-400 transition-all ease-in-out"
+                      >
+                        <p className="text-dark-200 max-w-2/3">
+                          {found?.username}
+                        </p>
+                        <Button
+                          label="Hozzáadás"
+                          clickHandler={() => sendFriendReq(found)}
+                          className="my-1"
+                          padding="py-2 px-5"
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )
+                  )}
                 </div>
               </div>
               <div className="md:h-[40px] h-[80px] w-[200px] bg-dark-100 rounded-bl-[20px] md:rounded-br-none rounded-br-[20px] font-noto text-lg font-bold text-center items-center flex justify-center transition-all ease-in-out duration-150">

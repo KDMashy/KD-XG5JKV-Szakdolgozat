@@ -30,6 +30,6 @@ export class Row extends BaseEntity {
     @OneToMany(() => Tasks, tasks => tasks.row, {onDelete: 'CASCADE'})
     tasks: Tasks[]
 
-    @ManyToOne(() => Project, project => project.rows)
+    @ManyToOne(() => Project, project => project.rows, {onDelete: 'CASCADE'})
     project: number
 }

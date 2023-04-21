@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const registrationValidation = yup.object().shape({
-  username: yup.string().min(5).max(16).required("UFelhasználónév szükséges"),
+  username: yup.string().min(5).max(16).required("Felhasználónév szükséges"),
   first_name: yup.string().required("Keresztnév szükséges"),
   last_name: yup.string().required("Vezetéknév szükséges"),
   email: yup

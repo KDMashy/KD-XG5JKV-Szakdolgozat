@@ -102,7 +102,7 @@ export const CustomInput = ({
     <div className="flex flex-col">
       <label
         className={`${labelClass} ${
-          darkMode === "dark" ? "text-dark-200" : ""
+          darkMode === "dark" ? "text-dark-200" : " text-light-200"
         }`}
       >
         {label}

@@ -153,7 +153,7 @@ function DragNDropTable({
               clickHandler={() => sortCols("before", index)}
               disabled={index <= 0}
             />
-            {item?.row_name}
+            <h3 className="text-light-200">{item?.row_name}</h3>
             <div>
               <Button
                 icon={<ArrowCircleRightIcon />}

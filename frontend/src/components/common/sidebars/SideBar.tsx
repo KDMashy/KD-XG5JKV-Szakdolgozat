@@ -45,7 +45,7 @@ function SideBar({
       className={`w-full transition-all ease-in-out delay-75 ${containerClassName} max-h-[400px] overflow-y-auto`}
       padding={`${!showData ? "" : "p-6"}`}
     >
-      <h2 className="mx-auto text-center text-lg font-semibold -mt-3 mb-3">
+      <h2 className="mx-auto text-center text-lg font-semibold -mt-3 mb-3 text-light-200">
         Funkciók
       </h2>
       {/* <div className={`${!showData ? "" : ""}`}>

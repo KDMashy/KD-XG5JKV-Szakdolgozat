@@ -76,7 +76,7 @@ function Button({
       case "default":
         return ``;
       case "menu_nolog":
-        return `2xl:px-24 xl:px-20 px-14 rounded-tl-[200px] rounded-bl-[50px] rounded-tr-[50px] rounded-br-[200px] text-dark-100 `;
+        return `2xl:px-24 xl:px-20 md:px-14 md:rounded-tl-[200px] md:rounded-bl-[50px] md:rounded-tr-[50px] md:rounded-br-[200px] rounded-md text-dark-100 `;
       case "menu_log":
         return `xl:w-[200px] lg:w-[160px] md:w-[120px] w-[100px] h-[50px] text-lg rounded-md bg-dark-100 text-light-400 text-center`;
       default:

@@ -9,7 +9,8 @@ export class Team extends BaseEntity {
     id: number
 
     @Column({
-        type: 'varchar'
+        type: 'varchar',
+        unique: true
     })
     team_name: string
 

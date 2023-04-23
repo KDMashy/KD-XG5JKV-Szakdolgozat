@@ -2,7 +2,7 @@ import { LoginTypes } from "./LoginTypes";
 
 export const navButtons = [
   {
-    label: "Az oldalról",
+    label: "Oldalról",
     url: "/",
     type: LoginTypes.No_Login,
   },

@@ -51,10 +51,10 @@ function Footer() {
             className={`h-[50px] ${
               darkMode
                 ? "bg-dark-700 text-dark-200"
-                : "bg-dark-200 text-light-400"
+                : "bg-dark-700 text-dark-200"
             }`}
           >
-            CopyRight - Klepe Dominik, 2023
+            CopyRight - XG5JKV, Klepe Dominik, 2023
           </span>
           {/* <Button
             label={darkMode ? "Dark mode" : "Light mode"}

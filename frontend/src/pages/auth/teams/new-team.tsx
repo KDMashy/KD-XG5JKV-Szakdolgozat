@@ -18,6 +18,7 @@ import Modal from "../../../components/common/modal/Modal";
 import { getAvailableList, getIds } from "../../../helpers/Helpers";
 import { mergeFriendlist } from "../../../helpers/Helpers";
 import HeadMetaData from "../../../components/HeadMetaData";
+import { NotifyMessage } from "../../../components/common/ToastNotification";
 
 function NewTeam() {
   const { darkMode } = useDarkMode();
@@ -66,7 +67,8 @@ function NewTeam() {
         team_only_creator: values?.team_only_creator ? 1 : 0,
       },
       (res) => {
-        console.log(res.data);
+        NotifyMessage("success", "Sikeresen létrehoztad a csapatod");
+        router.push(`/auth/teams/${res?.data?.id}`);
       },
       null,
       () => setLoading(false)

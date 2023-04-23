@@ -149,10 +149,10 @@ function Navbar() {
               height="w-[130px]"
               circular
               route="/"
-              className="-mt-5"
+              className="-mt-5 md:flex hidden"
             />
-            <h1 className=" text-2xl font-semibold">Follofox</h1>
-            <div className="2xl:w-[100vh] xl:w-[90vh] lg:w-[80vh] w-[70vh] bg-dark-100 xl:pl-24 xl:pr-8 pl-20 pr-5 max-h-[80px] rounded-tl-[50px] rounded-bl-[200px] flex items-center justify-between">
+            <h1 className=" text-2xl font-semibold md:flex hidden">Follofox</h1>
+            <div className="2xl:w-[100vh] xl:w-[90vh] lg:w-[80vh] md:w-[70vh] w-[90vh] bg-dark-100 xl:pl-24 xl:pr-8 md:pl-20 md:pr-5 px-5 max-h-[80px]md:h-[80px] h-[80px] md:rounded-tl-[50px] md:rounded-bl-[200px] md:rounded-tr-none md:rounded-br-none rounded-md flex items-center justify-between ">
               {MenuButtons()}
             </div>
           </>

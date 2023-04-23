@@ -161,11 +161,29 @@ export class TeamService {
     }
 
     async deleteTeam(id: number) {
-        return await this.teamModel
-            .createQueryBuilder()
-            .delete()
-            .from(Team)
-            .where('id = :id', { id: id })
-            .execute()
+        let team = await this.teamModel.findOne({
+            where: {id: id},
+            relations: [
+                "team_creator"
+            ]
+        })
+        if(!team) return HttpStatus.CONFLICT
+        let user: any = team?.team_creator
+        let channels = await this.chatService.GetChannels(user);
+        if(channels) {
+            channels?.map(async channel => {
+                if(channel?.message_channel?.includes(`${team?.team_name}.${team?.team_name}group`)){
+                    await this.chatService.DeleteChannel(channel?.id)
+                }
+            })
+        }
+        return await this.teamModel.remove(team)
+
+        // return await this.teamModel
+        //     .createQueryBuilder()
+        //     .delete()
+        //     .from(Team)
+        //     .where('id = :id', { id: id })
+        //     .execute()
     }
 }

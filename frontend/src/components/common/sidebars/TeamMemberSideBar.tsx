@@ -16,11 +16,15 @@ function TeamPageSideBar({ onShow, setOpenModal, deleteAble }) {
       null,
       null,
       (res) => {
-        NotifyMessage("success", "Successfully deleted Team");
+        NotifyMessage("success", "Sikeresen törölted a csapatod");
         router.push("/auth/teams");
       },
       (error) =>
-        NotifyMessage("error", "Something went wrong while removing your Team")
+        NotifyMessage(
+          "error",
+          "Valami hiba történt",
+          "A csapat törlése nem lehetséges"
+        )
     );
   };
 

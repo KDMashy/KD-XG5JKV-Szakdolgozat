@@ -94,9 +94,16 @@ function TeamPage() {
       (res) => {
         setMembers((prev) => [...prev, ...selectedUsers]);
         setNewlyAdded((prev) => [...prev, ...selectedUsers]);
-        NotifyMessage("success", "Successfully added new users to the team");
+        NotifyMessage(
+          "success",
+          "Sikeresen hozzáadtad a felhasználókat a csapathoz"
+        );
       },
-      (error) => NotifyMessage("error", "Couldn't add new users"),
+      (error) =>
+        NotifyMessage(
+          "error",
+          "Nem sikerült hozzáadni a felhasználókat a csapathoz"
+        ),
       () => {
         setModalLoad(false);
         setSelectedUsers([]);

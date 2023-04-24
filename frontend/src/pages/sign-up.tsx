@@ -50,11 +50,19 @@ function SignUp() {
         values.email = "";
         values.password = "";
         values.confirmation = "";
-        NotifyMessage("success", "Successfully registrated");
+        NotifyMessage(
+          "success",
+          "Sikeresen regisztráltál",
+          "Át leszel irányítva a bejelentkezéshez"
+        );
         router.push("sign-in");
       },
       (error) => {
-        NotifyMessage("error", "Something went wrong");
+        NotifyMessage(
+          "error",
+          "Valami hiba történt",
+          "Valamilyen adat hibásan lett megadva, vagy valamilyen hiba történt nálunk..."
+        );
       },
       setLoading(false)
     );

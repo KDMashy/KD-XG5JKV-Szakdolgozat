@@ -21,7 +21,7 @@ function ChannelTab({ channel, switchRoom, user, getChannels }) {
       },
       null,
       (res) => {
-        NotifyMessage("success", "Successfully removed friend");
+        NotifyMessage("success", "Sikeresen törölve lett az ismerős");
         getChannels();
         switchRoom({
           id: "default",
@@ -31,7 +31,12 @@ function ChannelTab({ channel, switchRoom, user, getChannels }) {
           updated: "",
         });
       },
-      (error) => NotifyMessage("error", "Couldn't remove friend")
+      (error) =>
+        NotifyMessage(
+          "error",
+          "Valami hiba történt törlés közben",
+          "Nem lehetséges törölni az ismerőst"
+        )
     );
   };
 

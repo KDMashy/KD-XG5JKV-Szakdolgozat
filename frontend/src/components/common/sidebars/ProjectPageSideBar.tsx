@@ -25,13 +25,14 @@ function ProjectPageSideBar({
       null,
       null,
       (res) => {
-        NotifyMessage("success", "Successfully deleted project");
+        NotifyMessage("success", "Sikeresen törölted a projekted");
         router.push("/auth/projects");
       },
       (error) =>
         NotifyMessage(
           "error",
-          "Something went wrong while removing your project"
+          "Valami hiba történt a törlés közben",
+          "Nem lehetséges a projekt törlése"
         )
     );
   };

@@ -98,13 +98,17 @@ function ProjectPage() {
         }
         NotifyMessage(
           "success",
-          `Successfully deleted a ${type === "task" ? "Task" : "Column"}`
+          `Sikeresen törölted a(z) ${
+            type === "task" ? "Feladatot" : "Oszlopot"
+          }`
         );
       },
       (error) => {
         NotifyMessage(
           "error",
-          `Couldn't delete ${type === "task" ? "Task" : "Column"}`
+          `Nem lehetséges a(z) ${
+            type === "task" ? "Feladat" : "Oszlop"
+          } törlése`
         );
       }
     );
@@ -125,13 +129,17 @@ function ProjectPage() {
         }
         NotifyMessage(
           "success",
-          `Successfully updated ${type === "task" ? "Task" : "Column"}`
+          `Sikeresen frissítetted a(z) ${
+            type === "task" ? "Feladatot" : "Oszlopot"
+          }`
         );
       },
       (error) =>
         NotifyMessage(
           "error",
-          `Couldn't update ${type === "task" ? "Task" : "Column"}`
+          `Nem lehetséges a(z) ${
+            type === "task" ? "Feladat" : "Oszlop"
+          } frissítése`
         ),
       () => {
         setModalLoad(false);
@@ -165,10 +173,10 @@ function ProjectPage() {
       },
       (res) => {
         getProjectData(id);
-        NotifyMessage("success", "Successfully created new Task");
+        NotifyMessage("success", "Sikeresen létrehoztál egy új Feladatot");
       },
       (error) => {
-        NotifyMessage("error", "Couldn't create new Task");
+        NotifyMessage("error", "Nem sikerült létrehozni a Feladatot");
       },
       () => {
         setModalLoad(false);
@@ -185,10 +193,10 @@ function ProjectPage() {
       null,
       (res) => {
         getProjectData(id);
-        NotifyMessage("success", "Successfully removed Task");
+        NotifyMessage("success", "Sikeresen törölted a Feladatot");
       },
       (error) => {
-        NotifyMessage("error", "Couldn't remove Task");
+        NotifyMessage("error", "Nem sikerült törölni a Feladatot");
       }
     );
   };
@@ -206,10 +214,10 @@ function ProjectPage() {
       },
       (res) => {
         setCols((prev) => [...prev, res?.data]);
-        NotifyMessage("success", "Successfully created new Column");
+        NotifyMessage("success", "Sikeresen létrehoztál egy új Oszlopot");
       },
       (error) => {
-        NotifyMessage("error", "Couldn't create new Column");
+        NotifyMessage("error", "Nem sikerült az új Oszlop létrehozása");
       },
       () => {
         setModalLoad(false);
@@ -227,10 +235,10 @@ function ProjectPage() {
       (res) => {
         let tmp = cols?.filter((item) => item?.id !== colInfo?.id);
         setCols(tmp);
-        NotifyMessage("success", "Successfully removed Task");
+        NotifyMessage("success", "Sikeresen törölted az Oszlopot");
       },
       (error) => {
-        NotifyMessage("error", "Couldn't remove Task");
+        NotifyMessage("error", "Nem sikerült törölni az Oszlopot");
       }
     );
   };
@@ -251,9 +259,10 @@ function ProjectPage() {
       },
       (res) => {
         setBadges((prev) => [...prev, res?.data]);
-        NotifyMessage("success", "Successfully created Badge");
+        NotifyMessage("success", "Sikeresen létrehoztál egy új Jelzést");
       },
-      (error) => NotifyMessage("error", "Couldn't create Badge"),
+      (error) =>
+        NotifyMessage("error", "Nem sikerült létrehozni egy új Jelzést"),
       () => {
         setModalLoad(false);
         setIsOpen(false);
@@ -278,13 +287,13 @@ function ProjectPage() {
         }
         NotifyMessage(
           "success",
-          `Successfully ${type === "edit" ? "edited" : "deleted"} Badge`
+          `Sikeresen ${type === "edit" ? "módosítottad" : "törölted"} a Jelzést`
         );
       },
       (error) =>
         NotifyMessage(
           "error",
-          `Coulnd't ${type === "edit" ? "edit" : "delete"} Badge`
+          `Nem lehetett ${type === "edit" ? "módosítani" : "törölni"} a Jelzést`
         )
     );
   };
@@ -312,17 +321,21 @@ function ProjectPage() {
       (res) => {
         NotifyMessage(
           "success",
-          `Successfully ${
-            type === "add" ? "added badge for" : "removed badge from"
-          } task`
+          `Sikeresen ${
+            type === "add"
+              ? "hozzáadtad a jelzést a feladathoz"
+              : "törölted a jelzést a feladattól"
+          }`
         );
       },
       (error) =>
         NotifyMessage(
           "error",
-          `Couldn't ${
-            type === "add" ? "add badge for" : "remove badge from"
-          } task`
+          `Nem sikerült ${
+            type === "add"
+              ? "hozzáadni a jelzést a feladathoz"
+              : "törölni a jelzést a feladatról"
+          }`
         )
     );
   };

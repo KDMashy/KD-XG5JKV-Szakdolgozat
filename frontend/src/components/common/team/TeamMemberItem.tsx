@@ -25,11 +25,19 @@ function TeamMemberItem({
       },
       null,
       (res) => {
-        NotifyMessage("success", "Successfully removed team member");
+        NotifyMessage(
+          "success",
+          "Sikeresen törölted a kiválasztott csapattagot"
+        );
         let tmp = members?.filter((item) => item?.id !== memberId);
         setMembers(tmp);
       },
-      (error) => NotifyMessage("error", "Couldn't remove team member")
+      (error) =>
+        NotifyMessage(
+          "error",
+          "Valami hiba történt törlés közben",
+          "A csapattag törlése nem lehetséges"
+        )
     );
   };
 

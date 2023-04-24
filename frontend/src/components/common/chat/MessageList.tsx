@@ -52,7 +52,7 @@ function MessageList({
         <div className="absolute left-3 -top-[70px] z-100">
           {typeIndicator && (
             <div className="flex justify-start w-[300px] items-center">
-              <p className="text-xs">Typing...</p>
+              <p className="text-xs text-light-200">Typing...</p>
               <img
                 src="/assets/images/hamsterLoad.gif"
                 alt="Hamster load"

@@ -9,7 +9,7 @@ function Message({ item, user }) {
         item?.sender === user?.id
           ? ""
           : ""
-      } px-5`}
+      } px-5 text-light-200`}
     >
       <p
         className={`${

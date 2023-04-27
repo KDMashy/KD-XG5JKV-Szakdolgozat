@@ -2,6 +2,10 @@
 
 A project issue tracking website with capabilities of much more than that
 
+> Készítette: Klepe Dominik
+> Neptun: XG5JKV
+> Fiókok: KDMashy, Dominik-Klepe (mindkettő saját)
+
 ## MAGYAR
 
 ### telepítési lépések:

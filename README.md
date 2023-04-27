@@ -2,9 +2,9 @@
 
 A project issue tracking website with capabilities of much more than that
 
-> Készítette: Klepe Dominik
-> Neptun: XG5JKV
-> Fiókok: KDMashy, Dominik-Klepe (mindkettő saját)
+> - Készítette: Klepe Dominik
+> - Neptun: XG5JKV
+> - Fiókok: KDMashy, Dominik-Klepe (mindkettő saját)
 
 ## MAGYAR
 
@@ -27,9 +27,9 @@ A project issue tracking website with capabilities of much more than that
 - Amikor az importálás befejeződött, ez kis időt vesz igénybe, el tudja indítani azzal, hogy a listából kiválasztja a virtuális gépet, majd rányom az indítás gombra
 - A virtuális gépen ahhoz, hogy elindítsa a környezetet a lépéseket az asztalon egy README nevű txt fájlban találja meg
 
-> felhasználó: user
-> felhasználó jelszava: thesis123
-> gyökér jelszava (máshol nemhasznált): Shiron03
+> - felhasználó: user
+> - felhasználó jelszava: thesis123
+> - gyökér jelszava (máshol nemhasznált): Shiron03
 
 #### Környezet telepítése esetén
 
@@ -84,9 +84,9 @@ A project issue tracking website with capabilities of much more than that
 - when the import is finished, it may take a little time, you can start it by selecting the virtual machine and clicking on start
 - you will find the steps for starting the project in the README file on the desktop
 
-  > user: user
-  > user password: thesis123
-  > root password (not used anywhere else): Shiron03
+  > - user: user
+  > - user password: thesis123
+  > - root password (not used anywhere else): Shiron03
 
 #### For installing the environment:
 

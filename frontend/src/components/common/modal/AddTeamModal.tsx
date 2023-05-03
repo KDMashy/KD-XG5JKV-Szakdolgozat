@@ -100,7 +100,7 @@ function AddTeamModal({ pageData = null, setOpenModal, refreshData = null }) {
     <div className="relative">
       <div className="grid grid-cols-2 gap-4">
         <div className="text-black border-x-2 border-dark-200 mb-14 mt-3 pb-10 pt-5">
-          <h3 className="text-lg font-semibold mx-auto text-center -mt-3 mb-5 text-light-200">
+          <h3 className="text-lg font-semibold mx-auto text-center -mt-3 mb-5 text-light-400">
             Választható csapatok
           </h3>
           {teams?.map((item) => (

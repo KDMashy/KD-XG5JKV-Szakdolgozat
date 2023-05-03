@@ -12,7 +12,7 @@ function NotificationItem({ notification }) {
           minute: "2-digit",
         })}
       </p>
-      <p className={`text-xs py-1 px-2`}>{notification?.content}</p>
+      <p className={`text-xs py-1 px-2 break-all`}>{notification?.content}</p>
     </div>
   );
 }

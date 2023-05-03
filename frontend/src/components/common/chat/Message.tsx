@@ -46,7 +46,7 @@ function Message({ item, user }) {
           item?.sender === user?.id
             ? "bg-light-400 float-right"
             : "bg-dark-300 float-left"
-        } text-light-200 max-w-[300px] p-2 rounded-md`}
+        } text-light-200 max-w-[300px] p-2 rounded-md break-all`}
       >
         {item?.message_content}
       </div>

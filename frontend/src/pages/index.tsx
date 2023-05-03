@@ -30,13 +30,12 @@ const Home: NextPage = () => {
       ));
     }
     return list.map((item, index) => (
-      <Link href={item}>
+      <Link href={item} key={item + index}>
         <a>
           <PageSubTitle
             type={darkMode ? "dark" : "light"}
             tag="h5"
             title={item}
-            key={item + index}
           />
         </a>
       </Link>

@@ -10,11 +10,13 @@ A project issue tracking website with capabilities of much more than that
 
 ### telepítési lépések:
 
+> jelenlegi node verzió fejlesztéskor 16.14.1
+
 #### Virtuális gépews tesztelés:
 
 - Töltse le a [Oracle VM VirtualBox-ot](https://www.virtualbox.org/wiki/Downloads)
   > Az oldalon válassza a maga rendszerének megfelelő telepítőt (windows esetén windows hosts)
-- Töltse le a [Virtuális Gáp képfájlját](https://drive.google.com/file/d/1xqBCnrHyFAnMESGdOFQx7FeFZvaNZHk3/view?usp=share_link)
+- Töltse le a [Virtuális Gáp képfájlját](https://drive.google.com/file/d/1p9sYPsOyeuWqsBbo5iQ7UsjSn4BE0vqX/view?usp=share_link)
 - Telepítse az Oracle VM VirtualBox-ot
 - A telepítés befejezése után indítsa el a programot, kattintson az eszközök fülre, és válassza az importálás opciót
 
@@ -66,6 +68,8 @@ A project issue tracking website with capabilities of much more than that
 ## ENGLISH
 
 ### installation steps:
+
+> current node version in developement 16.14.1
 
 #### For VM testing:
 

@@ -75,7 +75,7 @@ A project issue tracking website with capabilities of much more than that
 
 - download [Oracle VM VirtualBox](https://www.virtualbox.org/wiki/Downloads)
   > On the page Chose the correct installer for your system (for windows its the Windows hosts)
-- download [Virual Machine Image](https://drive.google.com/file/d/1xqBCnrHyFAnMESGdOFQx7FeFZvaNZHk3/view?usp=share_link)
+- download [Virual Machine Image](https://drive.google.com/file/d/1p9sYPsOyeuWqsBbo5iQ7UsjSn4BE0vqX/view?usp=share_link)
 - install Oracle VM VirtualBox
 - when it is installed, start it, and in the tools tab choose import
 
